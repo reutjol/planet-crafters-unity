@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df20b7372f1080942bc4ed4036ffe9ba, type: 3}
+  m_Name: PlanetLevelMapConfig
+  m_EditorClassIdentifier: 
+  planetId: 1
+  hexSize: {x: 50, y: 45, z: 50}
+  edgeY: 10
+  centerHex: {x: 1, y: 1}
+  nodes:
+  - levelId: 1
+    q: 0
+    r: 0
+  - levelId: 2
+    q: 1
+    r: 0
+  - levelId: 3
+    q: 0
+    r: 1
+  - levelId: 4
+    q: 1
+    r: 1
+  - levelId: 5
+    q: 2
+    r: 1
+  - levelId: 6
+    q: 0
+    r: 2
+  - levelId: 7
+    q: 1
+    r: 2
