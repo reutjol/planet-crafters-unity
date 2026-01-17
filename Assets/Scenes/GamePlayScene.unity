@@ -440,7 +440,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b88edeec0fd0bb499605540ba1893f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  url: http://localhost:3000/api/hex-tiles
+  url: https://planet-crafters-server.onrender.com/api/hex-tiles
 --- !u!1 &547400865
 GameObject:
   m_ObjectHideFlags: 0
@@ -900,7 +900,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 640d47b3b19e16a49867bea3104293bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseUrl: http://localhost:3000
+  baseUrl: https://planet-crafters-server.onrender.com
 --- !u!4 &1014267733
 Transform:
   m_ObjectHideFlags: 0

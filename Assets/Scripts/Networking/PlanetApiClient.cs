@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 
 public class PlanetApiClient : MonoBehaviour
 {
-    [SerializeField] private string baseUrl = "http://localhost:3000";
+    [SerializeField] private string baseUrl = "https://planet-crafters-server.onrender.com";
 
     private void Awake()
     {

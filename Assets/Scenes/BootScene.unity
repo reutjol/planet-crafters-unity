@@ -166,7 +166,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc153357676d7a7499a6eb41777f133c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseUrl: http://localhost:3000
+  baseUrl: https://planet-crafters-server.onrender.com
 --- !u!1 &1467079664
 GameObject:
   m_ObjectHideFlags: 0
@@ -196,7 +196,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ab5927e31faa14429e6d9df072a46f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseUrl: http://localhost:3000
+  baseUrl: https://planet-crafters-server.onrender.com
 --- !u!4 &1467079666
 Transform:
   m_ObjectHideFlags: 0

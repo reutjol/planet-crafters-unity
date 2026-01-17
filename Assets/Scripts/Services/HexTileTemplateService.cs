@@ -6,7 +6,7 @@ using UnityEngine.Networking;
 public class HexTileTemplateService : MonoBehaviour
 {
     [Header("Server")]
-    public string url = "http://localhost:3000/api/hex-tiles";
+    public string url = "https://planet-crafters-server.onrender.com/api/hex-tiles";
 
     public bool IsReady { get; private set; }
 
