@@ -7,7 +7,7 @@ using System.Text;
 
 public class PlanetStateApiClient : MonoBehaviour
 {
-    [SerializeField] private string baseUrl = "http://localhost:3000";
+    [SerializeField] private string baseUrl = "https://planet-crafters-server.onrender.com";
 
     // =========================
     // GET stage state

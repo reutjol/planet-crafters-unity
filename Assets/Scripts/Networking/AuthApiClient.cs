@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 
 public class AuthApiClient : MonoBehaviour
 {
-    public string baseUrl = "http://localhost:3000";
+    public string baseUrl = "https://planet-crafters-server.onrender.com";
 
     [System.Serializable]
     private class LoginBody { public string email; public string password; }

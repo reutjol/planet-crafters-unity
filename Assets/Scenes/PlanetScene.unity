@@ -460,7 +460,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc153357676d7a7499a6eb41777f133c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseUrl: http://localhost:3000
+  baseUrl: https://planet-crafters-server.onrender.com
 --- !u!4 &1088343129
 Transform:
   m_ObjectHideFlags: 0
