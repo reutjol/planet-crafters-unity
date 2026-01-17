@@ -12,6 +12,5 @@ public struct AxialCoord
         this.q = q;
         this.r = r;
     }
-
     public override string ToString() => $"({q},{r})";
 }
