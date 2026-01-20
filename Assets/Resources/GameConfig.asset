@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75bd4555945edf04f9cde943c28b06f5, type: 3}
+  m_Name: GameConfig
+  m_EditorClassIdentifier: 
+  serverBaseUrl: https://planet-crafters-server.onrender.com
+  bootSceneIndex: 0
+  loadingSceneIndex: 1
+  registrationMenuSceneIndex: 2
+  signInSceneIndex: 3
+  signUpSceneIndex: 4
+  planetSceneIndex: 5
+  stagesMapSceneIndex: 6
+  gameplaySceneIndex: 7
+  defaultDeckSize: 30
+  maxHandSize: 3
+  autoSaveDebounceDelay: 0.25
+  loadingSceneMinDuration: 1
