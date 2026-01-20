@@ -11,7 +11,6 @@ public class AppSession : MonoBehaviour
     public string RefreshToken { get; private set; }
 
     public string SelectedStageId { get; private set; }
-    public StageStateDto SelectedStageState { get; set; }
     public PlanetDto ActivePlanet { get; set; }
 
     public void SetSelectedStage(string stageId)
@@ -24,9 +23,8 @@ public class AppSession : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
 
-        ActivePlanet = null;   
+        ActivePlanet = null;
         SelectedStageId = null;
-        SelectedStageState = null;
 
         AccessToken = PlayerPrefs.GetString(AccessKey, "");
         RefreshToken = PlayerPrefs.GetString(RefreshKey, "");
@@ -58,7 +56,6 @@ public class AppSession : MonoBehaviour
         RefreshToken = "";
         ActivePlanet = null;
         SelectedStageId = null;
-        SelectedStageState = null;
         PlayerPrefs.DeleteKey(AccessKey);
         PlayerPrefs.DeleteKey(RefreshKey);
         PlayerPrefs.Save();
