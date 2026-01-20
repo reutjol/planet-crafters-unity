@@ -1,105 +1,84 @@
-﻿using System.Collections;
-using System.Text;
+﻿using System;
+using System.Collections;
 using UnityEngine;
-using UnityEngine.Networking;
-using Newtonsoft.Json;
 
-
-public class AuthApiClient : MonoBehaviour
+public class AuthApiClient : BaseApiClient
 {
-    public string baseUrl = "https://planet-crafters-server.onrender.com";
-
-    [System.Serializable]
+    [Serializable]
     private class LoginBody { public string email; public string password; }
 
-    [System.Serializable]
+    [Serializable]
     private class RegisterBody { public string name; public string email; public string userName; public string password; }
 
-    [System.Serializable]
+    [Serializable]
     private class RefreshBody { public string refreshToken; }
 
+    [Serializable]
+    private class AccessTokenWrapper { public string accessToken; }
+
     public IEnumerator Login(string email, string password,
-        System.Action<AuthResponseDto> onOk,
-        System.Action<string> onErr)
+        Action<AuthResponseDto> onSuccess,
+        Action<string> onError)
     {
-        var url = $"{baseUrl}/api/auth";
         var body = new LoginBody { email = email, password = password };
-        yield return PostJson(url, body, onOk, onErr);
+        yield return PostRequest<LoginBody, AuthResponseDto>(
+            "/api/auth",
+            body,
+            null,
+            resp =>
+            {
+                if (string.IsNullOrEmpty(resp.accessToken))
+                {
+                    onError?.Invoke("Auth failed: missing accessToken");
+                    return;
+                }
+                onSuccess?.Invoke(resp);
+            },
+            onError
+        );
     }
 
     public IEnumerator Register(string name, string email, string userName, string password,
-        System.Action<AuthResponseDto> onOk,
-        System.Action<string> onErr)
+        Action<AuthResponseDto> onSuccess,
+        Action<string> onError)
     {
-        var url = $"{baseUrl}/api/users";
         var body = new RegisterBody { name = name, email = email, userName = userName, password = password };
-        yield return PostJson(url, body, onOk, onErr);
+        yield return PostRequest<RegisterBody, AuthResponseDto>(
+            "/api/users",
+            body,
+            null,
+            resp =>
+            {
+                if (string.IsNullOrEmpty(resp.accessToken))
+                {
+                    onError?.Invoke("Auth failed: missing accessToken");
+                    return;
+                }
+                onSuccess?.Invoke(resp);
+            },
+            onError
+        );
     }
 
     public IEnumerator Refresh(string refreshToken,
-        System.Action<string> onOkAccessToken,
-        System.Action<string> onErr)
+        Action<string> onSuccess,
+        Action<string> onError)
     {
-        var url = $"{baseUrl}/api/auth/refresh";
         var body = new RefreshBody { refreshToken = refreshToken };
-
-        using var req = new UnityWebRequest(url, "POST");
-        var json = JsonConvert.SerializeObject(body);
-        req.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(json));
-        req.downloadHandler = new DownloadHandlerBuffer();
-        req.SetRequestHeader("Content-Type", "application/json");
-
-        yield return req.SendWebRequest();
-
-        if (req.result != UnityWebRequest.Result.Success)
-        {
-            onErr?.Invoke($"Refresh failed: {req.error} ({req.responseCode}) {req.downloadHandler.text}");
-            yield break;
-        }
-
-        // response: { accessToken: "..." }
-        var wrapper = JsonConvert.DeserializeObject<AccessTokenWrapper>(req.downloadHandler.text);
-        if (wrapper == null || string.IsNullOrEmpty(wrapper.accessToken))
-        {
-            onErr?.Invoke("Refresh failed: missing accessToken");
-            yield break;
-        }
-
-        onOkAccessToken?.Invoke(wrapper.accessToken);
+        yield return PostRequest<RefreshBody, AccessTokenWrapper>(
+            "/api/auth/refresh",
+            body,
+            null,
+            wrapper =>
+            {
+                if (string.IsNullOrEmpty(wrapper.accessToken))
+                {
+                    onError?.Invoke("Refresh failed: missing accessToken");
+                    return;
+                }
+                onSuccess?.Invoke(wrapper.accessToken);
+            },
+            onError
+        );
     }
-
-    [System.Serializable]
-    private class AccessTokenWrapper { public string accessToken; }
-
-    private IEnumerator PostJson(string url, object body,
-     System.Action<AuthResponseDto> onOk,
-     System.Action<string> onErr)
-    {
-        using var req = new UnityWebRequest(url, "POST");
-        var json = JsonConvert.SerializeObject(body);   // ✅ Newtonsoft
-        req.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(json));
-        req.downloadHandler = new DownloadHandlerBuffer();
-        req.SetRequestHeader("Content-Type", "application/json");
-
-        yield return req.SendWebRequest();
-
-        var raw = req.downloadHandler?.text ?? "";
-        Debug.Log($"[HTTP] {req.responseCode}: {raw}");
-
-        if (req.result != UnityWebRequest.Result.Success)
-        {
-            onErr?.Invoke($"POST failed: {req.error} ({req.responseCode}) {raw}");
-            yield break;
-        }
-
-        var resp = JsonConvert.DeserializeObject<AuthResponseDto>(raw); // ✅ Newtonsoft
-        if (resp == null || string.IsNullOrEmpty(resp.accessToken))
-        {
-            onErr?.Invoke("Auth failed: missing accessToken");
-            yield break;
-        }
-
-        onOk?.Invoke(resp);
-    }
-
 }

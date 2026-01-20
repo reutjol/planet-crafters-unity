@@ -74,7 +74,7 @@ public class MapController : MonoBehaviour
             return;
         }
 
-        ClearMapVisualOnly();     // destroy visuals + plus cells (via RemoveCell usage)
+        ClearMapVisualOnly();   
         occupied.Clear();
         placedTiles.Clear();
 
@@ -104,6 +104,10 @@ public class MapController : MonoBehaviour
                 Vector3 pos = mapManager.AxialToWorld(q, r) + Vector3.up * tileHeightY;
                 go.transform.position = pos;
                 go.transform.rotation = Quaternion.Euler(0f, t.rotation * 60f, 0f);
+
+                // Remove DraggableTile component - tiles on map should not be draggable
+                var draggable = go.GetComponent<DraggableTile>();
+                if (draggable != null) Destroy(draggable);
 
                 placedTiles.Add(t);
             }
@@ -167,6 +171,10 @@ public class MapController : MonoBehaviour
         draggedTile.transform.SetParent(MapRoot);
         draggedTile.transform.position = pos;
         draggedTile.transform.rotation = Quaternion.Euler(0f, rotation * 60f, 0f);
+
+        // Remove DraggableTile component - tiles on map should not be draggable
+        var draggable = draggedTile.GetComponent<DraggableTile>();
+        if (draggable != null) Destroy(draggable);
 
         // update server state list
         placedTiles.Add(new PlacedTileDto

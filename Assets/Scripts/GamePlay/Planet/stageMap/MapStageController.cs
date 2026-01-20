@@ -22,7 +22,15 @@ public class MapStageController : MonoBehaviour
         Debug.Log("[MapStageController] Awake");
     }
 
-    private void OnEnable() {
+    private void OnEnable()
+    {
+        // Check if GameManager exists before subscribing to events
+        if (GameManager.Instance == null)
+        {
+            Debug.LogWarning("[MapStageController] GameManager.Instance is null in OnEnable, skipping event subscription");
+            return;
+        }
+
         GameManager.Instance.OnPlanetLoaded += HandlePlanetLoaded;
         GameManager.Instance.OnUnauthorized += HandleUnauthorized;
         GameManager.Instance.OnError += HandleError;
