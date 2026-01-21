@@ -2,6 +2,11 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Data Transfer Objects for planet, stage, and game state API communication.
+/// Includes nested structures for map, hand, deck, and progress data.
+/// </summary>
+
 // ==========================================
 // Planet & Stage DTOs
 // ==========================================

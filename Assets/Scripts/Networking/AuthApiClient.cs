@@ -2,6 +2,10 @@
 using System.Collections;
 using UnityEngine;
 
+/// <summary>
+/// API client for authentication operations (login, register, token refresh).
+/// Extends BaseApiClient with auth-specific endpoints.
+/// </summary>
 public class AuthApiClient : BaseApiClient
 {
     [Serializable]

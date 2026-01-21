@@ -2,6 +2,10 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Main controller for the hex tile map gameplay.
+/// Manages tile placement, loading from server state, and placeable cell generation.
+/// </summary>
 public class MapController : MonoBehaviour
 {
     [Header("Refs")]
@@ -40,7 +44,7 @@ public class MapController : MonoBehaviour
     // ===============================
     public void LoadPlacedTilesFromServer(IEnumerable<PlacedTileDto> tiles, TileFactory factory)
     {
-        // אם אין אריחים בכלל -> יצירת פלוס ראשון ולצאת
+        // If no tiles exist, create the first plus cell and exit
         if (tiles == null)
         {
             ClearMap();
@@ -48,7 +52,7 @@ public class MapController : MonoBehaviour
             return;
         }
 
-        // להפוך ל-List כדי לבדוק Count פעם אחת
+        // Convert to List to check Count once
         var list = (tiles as IList<PlacedTileDto>) ?? new List<PlacedTileDto>(tiles);
 
         if (list.Count == 0)
@@ -206,11 +210,11 @@ public class MapController : MonoBehaviour
     // Destroys only visuals under MapRoot.
     private void ClearMapVisualOnly()
     {
-        // 1) לנקות תאים/פלוסים שה-HexMapManager יצר
+        // 1) Clear cells/pluses created by HexMapManager
         if (mapManager != null)
             mapManager.ResetGrid();
 
-        // 2) לנקות אריחים שהונחו (שהם ילדים של MapRoot)
+        // 2) Clear placed tiles (children of MapRoot)
         if (MapRoot == null) return;
 
         for (int i = MapRoot.childCount - 1; i >= 0; i--)

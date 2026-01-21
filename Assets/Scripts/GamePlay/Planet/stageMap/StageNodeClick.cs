@@ -1,5 +1,9 @@
 using UnityEngine;
 
+/// <summary>
+/// Handles click interactions on stage nodes.
+/// Only allows entering unlocked stages, sets session state, and loads gameplay scene.
+/// </summary>
 public class StageNodeClick : MonoBehaviour
 {
     [SerializeField] private GameConfig gameConfig;
