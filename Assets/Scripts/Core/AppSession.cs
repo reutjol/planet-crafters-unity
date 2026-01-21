@@ -1,5 +1,9 @@
 using UnityEngine;
 
+/// <summary>
+/// Manages global application session state including authentication tokens and game context.
+/// Persists across scenes and handles token storage via PlayerPrefs.
+/// </summary>
 public class AppSession : MonoBehaviour
 {
     public static AppSession Instance { get; private set; }

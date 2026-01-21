@@ -1,5 +1,9 @@
 using UnityEngine;
 
+/// <summary>
+/// Represents a single hex cell on the grid (typically a "plus" placeholder for tile placement).
+/// Tracks occupancy state and provides visual highlighting.
+/// </summary>
 public class HexCell : MonoBehaviour
 {
     [Header("Axial Coordinates")]

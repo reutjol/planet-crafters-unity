@@ -1,6 +1,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Lazy-loading material library with caching.
+/// Loads materials from Resources folder on-demand and caches them for reuse.
+/// </summary>
 public class MaterialLibrary : MonoBehaviour
 {
     public string resourcesFolder = "Materials";

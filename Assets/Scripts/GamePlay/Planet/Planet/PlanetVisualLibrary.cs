@@ -2,6 +2,10 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// ScriptableObject library mapping planet IDs to their visual materials.
+/// Provides cached lookup for planet appearance customization.
+/// </summary>
 [CreateAssetMenu(menuName = "SpaceGame/Planet Visual Library", fileName = "PlanetVisualLibrary")]
 public class PlanetVisualLibrary : ScriptableObject
 {

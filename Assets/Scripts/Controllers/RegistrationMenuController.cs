@@ -1,5 +1,9 @@
 using UnityEngine;
 
+/// <summary>
+/// Initial authentication menu controller.
+/// Provides navigation to Sign In and Sign Up screens.
+/// </summary>
 public class RegistrationMenuController : MonoBehaviour
 {
     public void OnClickSignIn()

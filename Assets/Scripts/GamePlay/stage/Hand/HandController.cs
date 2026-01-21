@@ -2,6 +2,11 @@
 using UnityEngine;
 using System;
 
+/// <summary>
+/// Manages the player's hand of tiles (3 slots).
+/// Handles drawing from deck, shifting tiles after placement, and syncing with server state.
+/// Only the first slot is draggable.
+/// </summary>
 public class HandController : MonoBehaviour
 {
     [Header("Prefab")]
@@ -72,11 +77,11 @@ public class HandController : MonoBehaviour
 
         if (drag != null)
         {
-            drag.templateId = templateId;        // חשוב שיהיה
+            drag.templateId = templateId;        // Important for tracking
             drag.handController = this;
             drag.mapController = mapController;
             drag.SetHome(slots[slotIndex]);
-            drag.SetDraggable(slotIndex == 0);   // רק סלוט 0
+            drag.SetDraggable(slotIndex == 0);   // Only slot 0 is draggable
         }
     }
 

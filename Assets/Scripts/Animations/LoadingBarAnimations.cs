@@ -2,6 +2,10 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Animates a loading bar UI element by cycling through sprite frames.
+/// Auto-starts on enable, auto-stops on disable.
+/// </summary>
 public class LoadingBarAnimations : MonoBehaviour
 {
     public Image image;

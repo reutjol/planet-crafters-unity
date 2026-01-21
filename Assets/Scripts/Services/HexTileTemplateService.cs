@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
+/// <summary>
+/// Service for loading hex tile templates from the server.
+/// Fetches template configurations and provides dictionary access by template ID.
+/// Must call LoadTemplates() before use - check IsReady property.
+/// </summary>
 public class HexTileTemplateService : MonoBehaviour
 {
     [Header("Server")]
