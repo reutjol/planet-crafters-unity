@@ -1,5 +1,8 @@
 using UnityEngine;
 
+/// <summary>
+/// Spawns planet prefabs at a specified anchor and wires up click interactions.
+/// </summary>
 public class PlanetSpawner : MonoBehaviour
 {
     [SerializeField] Transform anchor;

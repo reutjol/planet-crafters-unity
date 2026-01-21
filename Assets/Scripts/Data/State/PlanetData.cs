@@ -1,5 +1,9 @@
 using UnityEngine;
 
+/// <summary>
+/// ScriptableObject defining planet metadata and visual prefab.
+/// Used for planet selection screen configuration.
+/// </summary>
 [CreateAssetMenu(menuName = "SpaceGame/Planet Data", fileName = "NewPlanetData")]
 public class PlanetData : ScriptableObject
 {

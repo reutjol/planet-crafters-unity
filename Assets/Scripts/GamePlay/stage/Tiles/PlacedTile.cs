@@ -1,6 +1,10 @@
 using System;
 using UnityEngine;
 
+/// <summary>
+/// Represents a tile instance placed on the hex grid.
+/// Combines tile definition, position, and rotation state.
+/// </summary>
 [Serializable]
 public class PlacedTile
 {

@@ -2,6 +2,10 @@ using System;
 using System.Collections;
 using UnityEngine;
 
+/// <summary>
+/// API client for planet-related operations (fetching active planet data).
+/// Singleton that persists across scenes.
+/// </summary>
 public class PlanetApiClient : BaseApiClient
 {
     public static PlanetApiClient Instance { get; private set; }

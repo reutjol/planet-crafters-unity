@@ -1,5 +1,8 @@
 using UnityEngine;
 
+/// <summary>
+/// Generic button for navigating between scenes in authentication flow.
+/// </summary>
 public class AuthSceneButton : MonoBehaviour
 {
     public int targetSceneIndex;

@@ -1,5 +1,9 @@
 using System;
 
+/// <summary>
+/// Data Transfer Objects for authentication API responses.
+/// </summary>
+
 [Serializable]
 public class AuthResponseDto
 {

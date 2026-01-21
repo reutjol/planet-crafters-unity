@@ -1,5 +1,9 @@
 using UnityEngine;
 
+/// <summary>
+/// Factory for creating tile GameObjects from templates.
+/// Instantiates tile prefabs and applies visual configuration via HexTileView.
+/// </summary>
 public class TileFactory : MonoBehaviour
 {
     public GameObject tilePrefab;

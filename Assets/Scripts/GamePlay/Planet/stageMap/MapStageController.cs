@@ -1,6 +1,11 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Controller for the stage map scene.
+/// Loads planet data from GameManager and spawns stage nodes in a hex layout.
+/// Different prefabs are used for locked, unlocked, and completed stages.
+/// </summary>
 public class MapStageController : MonoBehaviour
 {
     [Header("Prefabs")]
