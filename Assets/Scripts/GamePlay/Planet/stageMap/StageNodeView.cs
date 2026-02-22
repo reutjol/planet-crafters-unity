@@ -1,5 +1,9 @@
 using UnityEngine;
 
+/// <summary>
+/// Visual representation of a stage node on the stage map.
+/// Stores stage metadata like ID, unlock status, and completion state.
+/// </summary>
 public class StageNodeView : MonoBehaviour
 {
     [Header("Stage Data")]

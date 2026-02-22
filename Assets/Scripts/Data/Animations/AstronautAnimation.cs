@@ -2,6 +2,10 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Animates an astronaut sprite by cycling through a sprite array at a fixed frame rate.
+/// Auto-starts on enable, auto-stops on disable.
+/// </summary>
 public class AstronautAnimation : MonoBehaviour
 {
     public Image image;

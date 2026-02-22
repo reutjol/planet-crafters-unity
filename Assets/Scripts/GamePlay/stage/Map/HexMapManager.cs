@@ -1,6 +1,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Manages the hexagonal grid structure and cell spawning.
+/// Handles axial-to-world coordinate conversion and neighbor queries.
+/// </summary>
 public class HexMapManager : MonoBehaviour
 {
     [Header("Prefabs")]

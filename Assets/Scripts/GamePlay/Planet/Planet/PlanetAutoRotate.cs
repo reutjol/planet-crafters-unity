@@ -1,5 +1,9 @@
 using UnityEngine;
 
+/// <summary>
+/// Automatically rotates a planet GameObject continuously at a configurable speed.
+/// Used for visual effect on planet selection screen.
+/// </summary>
 public class PlanetAutoRotate : MonoBehaviour
 {
     [Header("Rotation Speed (degrees per second)")]

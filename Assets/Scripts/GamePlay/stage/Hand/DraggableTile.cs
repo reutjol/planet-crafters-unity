@@ -1,5 +1,9 @@
 ﻿using UnityEngine;
 
+/// <summary>
+/// Handles tile drag-and-drop gameplay for placing tiles on the hex map.
+/// Supports rotation with 'R' key, snapping to hex cells, and validation of placement.
+/// </summary>
 public class DraggableTile : MonoBehaviour
 {
     [Header("Refs (Injected by HandController)")]
@@ -29,20 +33,20 @@ public class DraggableTile : MonoBehaviour
         myColliders = GetComponentsInChildren<Collider>(true);
     }
 
-    // נקרא מה-HandController
+    // Called by HandController
     public void SetHome(Transform parent)
     {
         homeParent = parent;
         homeLocalPos = Vector3.zero;
     }
 
-    // נקרא מה-HandController
+    // Called by HandController
     public void SetDraggable(bool canDrag)
     {
         enabled = canDrag;
     }
 
-    // נועל אחרי הנחה
+    // Locks after placement
     public void LockPlaced()
     {
         enabled = false;
@@ -57,7 +61,7 @@ public class DraggableTile : MonoBehaviour
 
         dragging = true;
 
-        // לכבות colliders כדי לא לחסום Raycast
+        // Disable colliders to not block raycast
         foreach (var c in myColliders)
             c.enabled = false;
 
@@ -68,7 +72,7 @@ public class DraggableTile : MonoBehaviour
     {
         if (!dragging) return;
 
-        // סיבוב
+        // Rotation with R key
         if (Input.GetKeyDown(KeyCode.R))
         {
             rotation = (rotation + 1) % 6;
@@ -77,7 +81,7 @@ public class DraggableTile : MonoBehaviour
 
         Ray ray = cam.ScreenPointToRay(Input.mousePosition);
 
-        // קודם מנסים תא
+        // First try to snap to a hex cell
         if (Physics.Raycast(ray, out RaycastHit hit, 200f, hexCellMask))
         {
             HexCell cell = hit.collider.GetComponentInParent<HexCell>();
@@ -99,7 +103,7 @@ public class DraggableTile : MonoBehaviour
             }
         }
 
-        // fallback – גרירה חופשית על מישור
+        // Fallback: free drag on plane
         Plane plane = new Plane(Vector3.up, new Vector3(0, mapController.tileHeightY, 0));
         if (plane.Raycast(ray, out float enter))
         {
@@ -111,7 +115,7 @@ public class DraggableTile : MonoBehaviour
     {
         dragging = false;
 
-        // להחזיר colliders
+        // Re-enable colliders
         foreach (var c in myColliders)
             c.enabled = true;
 

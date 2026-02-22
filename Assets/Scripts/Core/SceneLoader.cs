@@ -2,6 +2,10 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+/// <summary>
+/// Handles asynchronous scene loading with loading screen transitions.
+/// Singleton that persists across scenes.
+/// </summary>
 public class SceneLoader : MonoBehaviour
 {
     public static SceneLoader Instance;
