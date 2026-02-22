@@ -1,6 +1,10 @@
 using System;
 using UnityEngine;
 
+/// <summary>
+/// Axial coordinate system for hexagonal grids.
+/// Uses q (column) and r (row) coordinates.
+/// </summary>
 [Serializable]
 public struct AxialCoord
 {

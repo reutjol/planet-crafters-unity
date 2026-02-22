@@ -1,5 +1,9 @@
 using UnityEngine;
 
+/// <summary>
+/// Visual component for a hex tile GameObject.
+/// Manages center and edge renderers, applies materials from templates.
+/// </summary>
 public class HexTileView : MonoBehaviour
 {
     [Header("Renderers")]

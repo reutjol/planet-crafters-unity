@@ -2,6 +2,10 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Main controller for the hex tile map gameplay.
+/// Manages tile placement, loading from server state, and placeable cell generation.
+/// </summary>
 public class MapController : MonoBehaviour
 {
     [Header("Refs")]
@@ -40,7 +44,7 @@ public class MapController : MonoBehaviour
     // ===============================
     public void LoadPlacedTilesFromServer(IEnumerable<PlacedTileDto> tiles, TileFactory factory)
     {
-        // אם אין אריחים בכלל -> יצירת פלוס ראשון ולצאת
+        // If no tiles exist, create the first plus cell and exit
         if (tiles == null)
         {
             ClearMap();
@@ -48,7 +52,7 @@ public class MapController : MonoBehaviour
             return;
         }
 
-        // להפוך ל-List כדי לבדוק Count פעם אחת
+        // Convert to List to check Count once
         var list = (tiles as IList<PlacedTileDto>) ?? new List<PlacedTileDto>(tiles);
 
         if (list.Count == 0)
@@ -74,7 +78,7 @@ public class MapController : MonoBehaviour
             return;
         }
 
-        ClearMapVisualOnly();     // destroy visuals + plus cells (via RemoveCell usage)
+        ClearMapVisualOnly();   
         occupied.Clear();
         placedTiles.Clear();
 
@@ -104,6 +108,10 @@ public class MapController : MonoBehaviour
                 Vector3 pos = mapManager.AxialToWorld(q, r) + Vector3.up * tileHeightY;
                 go.transform.position = pos;
                 go.transform.rotation = Quaternion.Euler(0f, t.rotation * 60f, 0f);
+
+                // Remove DraggableTile component - tiles on map should not be draggable
+                var draggable = go.GetComponent<DraggableTile>();
+                if (draggable != null) Destroy(draggable);
 
                 placedTiles.Add(t);
             }
@@ -168,6 +176,10 @@ public class MapController : MonoBehaviour
         draggedTile.transform.position = pos;
         draggedTile.transform.rotation = Quaternion.Euler(0f, rotation * 60f, 0f);
 
+        // Remove DraggableTile component - tiles on map should not be draggable
+        var draggable = draggedTile.GetComponent<DraggableTile>();
+        if (draggable != null) Destroy(draggable);
+
         // update server state list
         placedTiles.Add(new PlacedTileDto
         {
@@ -198,11 +210,11 @@ public class MapController : MonoBehaviour
     // Destroys only visuals under MapRoot.
     private void ClearMapVisualOnly()
     {
-        // 1) לנקות תאים/פלוסים שה-HexMapManager יצר
+        // 1) Clear cells/pluses created by HexMapManager
         if (mapManager != null)
             mapManager.ResetGrid();
 
-        // 2) לנקות אריחים שהונחו (שהם ילדים של MapRoot)
+        // 2) Clear placed tiles (children of MapRoot)
         if (MapRoot == null) return;
 
         for (int i = MapRoot.childCount - 1; i >= 0; i--)

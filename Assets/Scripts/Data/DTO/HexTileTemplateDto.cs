@@ -1,5 +1,10 @@
 using System;
 
+/// <summary>
+/// Data Transfer Object for hexagonal tile templates from the server.
+/// Contains tile configuration including center, edges, type, and level.
+/// </summary>
+
 [Serializable]
 public class HexTileTemplateDto
 {

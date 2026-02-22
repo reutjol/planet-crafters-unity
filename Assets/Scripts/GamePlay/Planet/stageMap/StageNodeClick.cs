@@ -1,7 +1,12 @@
 using UnityEngine;
 
+/// <summary>
+/// Handles click interactions on stage nodes.
+/// Only allows entering unlocked stages, sets session state, and loads gameplay scene.
+/// </summary>
 public class StageNodeClick : MonoBehaviour
 {
+    [SerializeField] private GameConfig gameConfig;
     private StageNodeView view;
 
     private void Awake()
@@ -9,6 +14,11 @@ public class StageNodeClick : MonoBehaviour
         view = GetComponent<StageNodeView>();
         if (view == null)
             Debug.LogError("StageNodeView missing on this GameObject");
+
+        if (gameConfig == null)
+        {
+            gameConfig = Resources.Load<GameConfig>("GameConfig");
+        }
     }
 
     private void OnMouseDown()
@@ -37,6 +47,9 @@ public class StageNodeClick : MonoBehaviour
 
         Debug.Log($"[StagesMap] Clicked unlocked stage: {view.stageId}");
 
-        SceneLoader.Instance.LoadScene(7);
+        if (SceneLoader.Instance != null && gameConfig != null)
+        {
+            SceneLoader.Instance.LoadScene(gameConfig.gameplaySceneIndex);
+        }
     }
 }

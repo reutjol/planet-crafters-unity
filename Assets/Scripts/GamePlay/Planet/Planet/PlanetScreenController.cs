@@ -1,5 +1,9 @@
 using UnityEngine;
 
+/// <summary>
+/// Controls the planet selection screen.
+/// Spawns the planet visual and handles navigation to stage map on click.
+/// </summary>
 public class PlanetScreenController : MonoBehaviour
 {
     [Header("Model")]
