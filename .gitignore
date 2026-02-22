@@ -5,8 +5,10 @@
 [Bb]uilds/
 [Ll]ogs/
 UserSettings/
+[Uu]ser[Ss]ettings/
 
 .vscode/
+.vs/
 .idea/
 
 *.csproj
@@ -14,6 +16,7 @@ UserSettings/
 *.user
 *.pidb
 *.booproj
+*.suo
 
 sysinfo.txt
 .DS_Store
