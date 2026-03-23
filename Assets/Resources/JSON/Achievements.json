@@ -1,0 +1,545 @@
+{
+    "achievements": [
+        {
+            "id": "single_001",
+            "title": "First Colony",
+            "description": "Complete your first level",
+            "category": "Single",
+            "targetValue": 1,
+            "rewardType": "Coins",
+            "rewardAmount": 50
+        },
+        {
+            "id": "single_002",
+            "title": "Tile Builder",
+            "description": "Place 25 tiles in one level",
+            "category": "Single",
+            "targetValue": 25,
+            "rewardType": "Coins",
+            "rewardAmount": 50
+        },
+        {
+            "id": "single_003",
+            "title": "Speed Runner",
+            "description": "Complete a level in under 60 seconds",
+            "category": "Single",
+            "targetValue": 60,
+            "rewardType": "Spin",
+            "rewardAmount": 1
+        },
+        {
+            "id": "single_004",
+            "title": "Star Collector",
+            "description": "Win a level with 3 stars",
+            "category": "Single",
+            "targetValue": 3,
+            "rewardType": "Boost",
+            "rewardAmount": 1
+        },
+        {
+            "id": "single_005",
+            "title": "Level Climber I",
+            "description": "Complete 10 levels",
+            "category": "Single",
+            "targetValue": 10,
+            "rewardType": "Spin",
+            "rewardAmount": 1
+        },
+        {
+            "id": "single_006",
+            "title": "Hex Starter",
+            "description": "Match 100 hexes in total",
+            "category": "Single",
+            "targetValue": 100,
+            "rewardType": "Coins",
+            "rewardAmount": 50
+        },
+        {
+            "id": "single_007",
+            "title": "Boost Explorer",
+            "description": "Use all 3 boosts for the first time",
+            "category": "Single",
+            "targetValue": 3,
+            "rewardType": "Boost",
+            "rewardAmount": 1
+        },
+        {
+            "id": "single_008",
+            "title": "Tile Explorer",
+            "description": "Use all tile types",
+            "category": "Single",
+            "targetValue": 26,
+            "rewardType": "Coins",
+            "rewardAmount": 50
+        },
+        {
+            "id": "single_009",
+            "title": "Match Maker I",
+            "description": "Match 200 hexes in total",
+            "category": "Single",
+            "targetValue": 200,
+            "rewardType": "Coins",
+            "rewardAmount": 50
+        },
+        {
+            "id": "single_010",
+            "title": "Match Maker II",
+            "description": "Match 300 hexes in total",
+            "category": "Single",
+            "targetValue": 300,
+            "rewardType": "Coins",
+            "rewardAmount": 100
+        },
+        {
+            "id": "single_011",
+            "title": "Match Maker III",
+            "description": "Match 400 hexes in total",
+            "category": "Single",
+            "targetValue": 400,
+            "rewardType": "Coins",
+            "rewardAmount": 100
+        },
+        {
+            "id": "single_012",
+            "title": "Match Master I",
+            "description": "Match 500 hexes in total",
+            "category": "Single",
+            "targetValue": 500,
+            "rewardType": "Boost",
+            "rewardAmount": 2
+        },
+        {
+            "id": "single_013",
+            "title": "Match Master II",
+            "description": "Match 600 hexes in total",
+            "category": "Single",
+            "targetValue": 600,
+            "rewardType": "Coins",
+            "rewardAmount": 150
+        },
+        {
+            "id": "single_014",
+            "title": "Match Master III",
+            "description": "Match 700 hexes in total",
+            "category": "Single",
+            "targetValue": 700,
+            "rewardType": "Coins",
+            "rewardAmount": 150
+        },
+        {
+            "id": "single_015",
+            "title": "Match Legend I",
+            "description": "Match 800 hexes in total",
+            "category": "Single",
+            "targetValue": 800,
+            "rewardType": "Coins",
+            "rewardAmount": 200
+        },
+        {
+            "id": "single_016",
+            "title": "Match Legend II",
+            "description": "Match 900 hexes in total",
+            "category": "Single",
+            "targetValue": 900,
+            "rewardType": "Coins",
+            "rewardAmount": 200
+        },
+        {
+            "id": "single_017",
+            "title": "Match Legend III",
+            "description": "Match 1000 hexes in total",
+            "category": "Single",
+            "targetValue": 1000,
+            "rewardType": "Spin",
+            "rewardAmount": 1
+        },
+        {
+            "id": "single_018",
+            "title": "Level Climber II",
+            "description": "Complete 20 levels",
+            "category": "Single",
+            "targetValue": 20,
+            "rewardType": "Boost",
+            "rewardAmount": 1
+        },
+        {
+            "id": "single_019",
+            "title": "Level Climber III",
+            "description": "Complete 30 levels",
+            "category": "Single",
+            "targetValue": 30,
+            "rewardType": "Coins",
+            "rewardAmount": 100
+        },
+        {
+            "id": "single_020",
+            "title": "Level Climber IV",
+            "description": "Complete 40 levels",
+            "category": "Single",
+            "targetValue": 40,
+            "rewardType": "Coins",
+            "rewardAmount": 100
+        },
+        {
+            "id": "single_021",
+            "title": "Level Climber V",
+            "description": "Complete 50 levels",
+            "category": "Single",
+            "targetValue": 50,
+            "rewardType": "Spin",
+            "rewardAmount": 1
+        },
+        {
+            "id": "single_022",
+            "title": "Level Climber VI",
+            "description": "Complete 60 levels",
+            "category": "Single",
+            "targetValue": 60,
+            "rewardType": "Coins",
+            "rewardAmount": 150
+        },
+        {
+            "id": "single_023",
+            "title": "Level Climber VII",
+            "description": "Complete 70 levels",
+            "category": "Single",
+            "targetValue": 70,
+            "rewardType": "Coins",
+            "rewardAmount": 150
+        },
+        {
+            "id": "single_024",
+            "title": "Level Climber VIII",
+            "description": "Complete 80 levels",
+            "category": "Single",
+            "targetValue": 80,
+            "rewardType": "Coins",
+            "rewardAmount": 200
+        },
+        {
+            "id": "single_025",
+            "title": "Level Climber IX",
+            "description": "Complete 90 levels",
+            "category": "Single",
+            "targetValue": 90,
+            "rewardType": "Coins",
+            "rewardAmount": 200
+        },
+        {
+            "id": "single_026",
+            "title": "Level Climber X",
+            "description": "Complete 100 levels",
+            "category": "Single",
+            "targetValue": 100,
+            "rewardType": "Spin",
+            "rewardAmount": 2
+        },
+        {
+            "id": "single_027",
+            "title": "Planet Pioneer",
+            "description": "Complete first planet",
+            "category": "Single",
+            "targetValue": 1,
+            "rewardType": "Spin",
+            "rewardAmount": 2
+        },
+        {
+            "id": "single_028",
+            "title": "Score Hunter",
+            "description": "Score 100 points in one level",
+            "category": "Single",
+            "targetValue": 100,
+            "rewardType": "Boost",
+            "rewardAmount": 1
+        },
+        {
+            "id": "single_029",
+            "title": "Pure Victory",
+            "description": "Complete a level without using boosts",
+            "category": "Single",
+            "targetValue": 1,
+            "rewardType": "Boost",
+            "rewardAmount": 1
+        },
+        {
+            "id": "single_030",
+            "title": "Star Master",
+            "description": "Score 3 stars on 10 levels",
+            "category": "Single",
+            "targetValue": 10,
+            "rewardType": "Coins",
+            "rewardAmount": 100
+        },
+
+        {
+            "id": "multi_001",
+            "title": "Multiplayer Unlocked",
+            "description": "Unlock Multiplayer mode",
+            "category": "Multi",
+            "targetValue": 1,
+            "rewardType": "Coins",
+            "rewardAmount": 50
+        },
+        {
+            "id": "multi_002",
+            "title": "First Match",
+            "description": "Play your first match",
+            "category": "Multi",
+            "targetValue": 1,
+            "rewardType": "Coins",
+            "rewardAmount": 50
+        },
+        {
+            "id": "multi_003",
+            "title": "First Victory",
+            "description": "Win your first match",
+            "category": "Multi",
+            "targetValue": 1,
+            "rewardType": "Boost",
+            "rewardAmount": 1
+        },
+        {
+            "id": "multi_004",
+            "title": "Getting Competitive",
+            "description": "Play 5 matches",
+            "category": "Multi",
+            "targetValue": 5,
+            "rewardType": "Coins",
+            "rewardAmount": 50
+        },
+        {
+            "id": "multi_035",
+            "title": "Arena Regular",
+            "description": "Play 10 matches",
+            "category": "Multi",
+            "targetValue": 10,
+            "rewardType": "Coins",
+            "rewardAmount": 100
+        },
+        {
+            "id": "multi_006",
+            "title": "Arena Veteran",
+            "description": "Play 25 matches",
+            "category": "Multi",
+            "targetValue": 25,
+            "rewardType": "Coins",
+            "rewardAmount": 100
+        },
+        {
+            "id": "multi_007",
+            "title": "Arena Master",
+            "description": "Play 50 matches",
+            "category": "Multi",
+            "targetValue": 50,
+            "rewardType": "Spin",
+            "rewardAmount": 1
+        },
+        {
+            "id": "multi_008",
+            "title": "First Streak",
+            "description": "Win 2 matches in a row",
+            "category": "Multi",
+            "targetValue": 2,
+            "rewardType": "Boost",
+            "rewardAmount": 1
+        },
+        {
+            "id": "multi_009",
+            "title": "Winning Streak",
+            "description": "Win 5 matches in a row",
+            "category": "Multi",
+            "targetValue": 5,
+            "rewardType": "Coins",
+            "rewardAmount": 100
+        },
+        {
+            "id": "multi_010",
+            "title": "Unstoppable",
+            "description": "Win 10 matches in a row",
+            "category": "Multi",
+            "targetValue": 10,
+            "rewardType": "Boost",
+            "rewardAmount": 1
+        },
+        {
+            "id": "multi_011",
+            "title": "Challenger",
+            "description": "Win 5 matches",
+            "category": "Multi",
+            "targetValue": 5,
+            "rewardType": "Coins",
+            "rewardAmount": 50
+        },
+        {
+            "id": "multi_012",
+            "title": "Competitor",
+            "description": "Win 10 matches",
+            "category": "Multi",
+            "targetValue": 10,
+            "rewardType": "Coins",
+            "rewardAmount": 100
+        },
+        {
+            "id": "multi_013",
+            "title": "Rising Champion",
+            "description": "Win 25 matches",
+            "category": "Multi",
+            "targetValue": 25,
+            "rewardType": "Boost",
+            "rewardAmount": 1
+        },
+        {
+            "id": "multi_014",
+            "title": "Arena Champion",
+            "description": "Win 50 matches",
+            "category": "Multi",
+            "targetValue": 50,
+            "rewardType": "Spin",
+            "rewardAmount": 1
+        },
+        {
+            "id": "multi_015",
+            "title": "Tile Master",
+            "description": "Place 100 hexes",
+            "category": "Multi",
+            "targetValue": 100,
+            "rewardType": "Coins",
+            "rewardAmount": 50
+        },
+        {
+            "id": "multi_016",
+            "title": "Tile Expert",
+            "description": "Place 300 hexes",
+            "category": "Multi",
+            "targetValue": 300,
+            "rewardType": "Coins",
+            "rewardAmount": 100
+        },
+        {
+            "id": "multi_017",
+            "title": "Tile Architect",
+            "description": "Place 500 hexes",
+            "category": "Multi",
+            "targetValue": 500,
+            "rewardType": "Boost",
+            "rewardAmount": 1
+        },
+        {
+            "id": "multi_018",
+            "title": "Tile Engineer",
+            "description": "Place 800 hexes",
+            "category": "Multi",
+            "targetValue": 800,
+            "rewardType": "Coins",
+            "rewardAmount": 150
+        },
+        {
+            "id": "multi_019",
+            "title": "Tile Legend",
+            "description": "Place 1000 hexes",
+            "category": "Multi",
+            "targetValue": 1000,
+            "rewardType": "Spin",
+            "rewardAmount": 1
+        },
+        {
+            "id": "multi_020",
+            "title": "Rematch Ready",
+            "description": "Play 3 matches in a row",
+            "category": "Multi",
+            "targetValue": 3,
+            "rewardType": "Boost",
+            "rewardAmount": 1
+        },
+        {
+            "id": "multi_021",
+            "title": "Battle Marathon",
+            "description": "Play 5 matches in one session",
+            "category": "Multi",
+            "targetValue": 5,
+            "rewardType": "Coins",
+            "rewardAmount": 150
+        },
+        {
+            "id": "multi_022",
+            "title": "Comeback Player",
+            "description": "Win a match after losing",
+            "category": "Multi",
+            "targetValue": 1,
+            "rewardType": "Boost",
+            "rewardAmount": 1
+        },
+        {
+            "id": "multi_023",
+            "title": "Arena Grinder",
+            "description": "Play 100 matches",
+            "category": "Multi",
+            "targetValue": 100,
+            "rewardType": "Coins",
+            "rewardAmount": 100
+        },
+        {
+            "id": "multi_024",
+            "title": "Battle Veteran",
+            "description": "Play 500 matches",
+            "category": "Multi",
+            "targetValue": 500,
+            "rewardType": "Coins",
+            "rewardAmount": 200
+        },
+        {
+            "id": "multi_025",
+            "title": "Arena Addict",
+            "description": "Play 1000 matches",
+            "category": "Multi",
+            "targetValue": 1000,
+            "rewardType": "Spin",
+            "rewardAmount": 1
+        },
+        {
+            "id": "multi_026",
+            "title": "Multiplayer Veteran",
+            "description": "Win 100 matches",
+            "category": "Multi",
+            "targetValue": 100,
+            "rewardType": "Coins",
+            "rewardAmount": 150
+        },
+        {
+            "id": "multi_027",
+            "title": "Arena Legend",
+            "description": "Win 200 matches",
+            "category": "Multi",
+            "targetValue": 200,
+            "rewardType": "Boost",
+            "rewardAmount": 1
+        },
+        {
+            "id": "multi_028",
+            "title": "Dedicated Player",
+            "description": "Play 20 matches in one day",
+            "category": "Multi",
+            "targetValue": 20,
+            "rewardType": "Coins",
+            "rewardAmount": 150
+        },
+        {
+            "id": "multi_029",
+            "title": "Daily Warrior",
+            "description": "Play 5 matches in one day",
+            "category": "Multi",
+            "targetValue": 5,
+            "rewardType": "Coins",
+            "rewardAmount": 75
+        },
+        {
+            "id": "multi_030",
+            "title": "Hex Empire",
+            "description": "Place 1500 hexes",
+            "category": "Multi",
+            "targetValue": 1500,
+            "rewardType": "Spin",
+            "rewardAmount": 1
+        }
+    ]
+}

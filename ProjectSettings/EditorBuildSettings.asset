@@ -29,4 +29,13 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/GamePlayScene.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
+  - enabled: 1
+    path: Assets/Scenes/WheelScene.unity
+    guid: 9d850f503821384489c85c1e3f978ead
+  - enabled: 1
+    path: Assets/Scenes/ShopScene.unity
+    guid: 15335674d018c63499a65603822383ae
+  - enabled: 1
+    path: Assets/Scenes/AchievementsScene.unity
+    guid: 3160144b20ea15e42aae4b7f81e1db09
   m_configObjects: {}
