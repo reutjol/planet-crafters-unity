@@ -13,6 +13,9 @@ public class MapStageController : MonoBehaviour
     [SerializeField] private GameObject stageLockedPrefab;
     [SerializeField] private GameObject stageCompletedPrefab;
 
+    [Header("Config")]
+    [SerializeField] private GameConfig gameConfig;
+
     [Header("Scene")]
     [SerializeField] private Transform stagesParent;
 
@@ -50,6 +53,9 @@ public class MapStageController : MonoBehaviour
 
     private void Start()
     {
+        if (gameConfig == null)
+            gameConfig = Resources.Load<GameConfig>("GameConfig");
+
         Debug.Log("[MapStageController] Start");
 
         // --- Inspector wiring checks ---
@@ -82,9 +88,9 @@ public class MapStageController : MonoBehaviour
         Debug.Log($"[MapStageController] HasAccess? {AppSession.Instance.HasAccess()}");
         Debug.Log($"[MapStageController] AccessToken length: {(AppSession.Instance.AccessToken != null ? AppSession.Instance.AccessToken.Length : -1)}");
 
-        // request planet (cache or fetch)
-        Debug.Log("[MapStageController] RequestActivePlanet()...");
-        GameManager.Instance.RequestActivePlanet();
+        // Always fetch fresh planet so stage map shows current isUnlocked/isCompleted/score
+        Debug.Log("[MapStageController] RequestActivePlanet(forceRefresh: true)...");
+        GameManager.Instance.RequestActivePlanet(forceRefresh: true);
     }
 
     private void HandleUnauthorized()
@@ -189,7 +195,9 @@ public class MapStageController : MonoBehaviour
             if (view != null)
             {
                 Debug.Log($"[MapStageController] StageNodeView found on {go.name} -> Init()");
-                view.Init(stage.stageId, unlocked, completed);
+                int stageScore = stage.state?.progress?.score ?? 0;
+                int targetScore = gameConfig != null ? gameConfig.stageTargetScore : 5;
+                view.Init(stage.stageId, unlocked, completed, stageScore, targetScore);
             }
             else
             {

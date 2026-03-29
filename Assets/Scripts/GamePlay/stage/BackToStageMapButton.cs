@@ -20,15 +20,15 @@ public class BackToStageMapButton : MonoBehaviour
     /// </summary>
     public void OnBackClicked()
     {
-        // Clear cache so when we return, GameBootstrap will load fresh state
+        // Clear stage state cache
         if (GameManager.Instance != null)
-        {
             GameManager.Instance.ClearCache();
-        }
+
+        // Clear planet cache so stage map always fetches fresh data (updated isUnlocked, progress)
+        if (AppSession.Instance != null)
+            AppSession.Instance.ActivePlanet = null;
 
         if (SceneLoader.Instance != null && gameConfig != null)
-        {
             SceneLoader.Instance.LoadScene(gameConfig.stagesMapSceneIndex);
-        }
     }
 }

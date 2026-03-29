@@ -11,6 +11,7 @@ public class GameBootstrap : MonoBehaviour
     [SerializeField] private TileFactory tileFactory;
     [SerializeField] private HandController handController;
     [SerializeField] private MapController mapController;
+    [SerializeField] private GameConfig gameConfig;
 
     private bool isInitialized = false;
     private System.Action<PlanetStageStateDto> currentStateLoadHandler;
@@ -140,24 +141,40 @@ public class GameBootstrap : MonoBehaviour
         if (state.deck == null)
             Debug.LogWarning("[GameBootstrap] state.deck is null");
 
+        // Ensure gameConfig is available
+        if (gameConfig == null)
+            gameConfig = Resources.Load<GameConfig>("GameConfig");
+
         // Connect controllers
         handController.factory = tileFactory;
         handController.mapController = mapController;
+        mapController.tileFactory = tileFactory;
 
-        // Load state into gameplay systems
-        mapController.LoadPlacedTilesFromServer(state.map?.placedTiles, tileFactory);
+        // Load initial state — subscribe to OnStageCompleted AFTER this call so we
+        // don't navigate away if the stage was already completed before this session.
+        mapController.ApplyServerState(state);
         handController.LoadFromServer(state.hand, state.deck);
 
-        // Enable auto-save
-        var autoSave = FindObjectOfType<StageStateAutoSave>();
-        if (autoSave != null)
-        {
-            autoSave.SetReady(true);
-            Debug.Log("[GameBootstrap] Auto-save enabled");
-        }
+        // Subscribe to future completions (not the initial load)
+        mapController.OnStageCompleted += HandleStageCompleted;
 
         isInitialized = true;
         Debug.Log("[GameBootstrap] Gameplay initialized successfully");
+    }
+
+    private void HandleStageCompleted()
+    {
+        Debug.Log("[GameBootstrap] Stage completed! Returning to stage map.");
+
+        // Clear cached planet so stage map refreshes from server (new isUnlocked/isCompleted)
+        if (AppSession.Instance != null)
+            AppSession.Instance.ActivePlanet = null;
+
+        if (GameManager.Instance != null)
+            GameManager.Instance.ClearCache();
+
+        if (SceneLoader.Instance != null && gameConfig != null)
+            SceneLoader.Instance.LoadScene(gameConfig.stagesMapSceneIndex);
     }
 
     private void OnDestroy()
@@ -168,5 +185,8 @@ public class GameBootstrap : MonoBehaviour
             GameManager.Instance.OnPlanetStageStateLoaded -= currentStateLoadHandler;
             currentStateLoadHandler = null;
         }
+
+        if (mapController != null)
+            mapController.OnStageCompleted -= HandleStageCompleted;
     }
 }

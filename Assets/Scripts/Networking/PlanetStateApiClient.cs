@@ -46,6 +46,18 @@ public class PlanetStateApiClient : BaseApiClient
         yield return PutRequest(endpoint, dto, accessToken, onSuccess, onError);
     }
 
+    public IEnumerator PlaceTile(
+        string planetId,
+        string stageId,
+        string accessToken,
+        PlaceTileRequestDto dto,
+        Action<PlanetStageStateDto> onSuccess,
+        Action<string> onError)
+    {
+        var endpoint = $"/api/planet-state/{planetId}/{stageId}/place-tile";
+        yield return PostRequest<PlaceTileRequestDto, PlanetStageStateDto>(endpoint, dto, accessToken, onSuccess, onError);
+    }
+
     public IEnumerator ResetStage(
         string planetId,
         string stageId,

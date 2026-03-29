@@ -104,6 +104,7 @@ public class PlanetStageStateDto
     public HandDto hand;
     public DeckDto deck;
     public ProgressDto progress;
+    public List<CoordDto> scoredConnections;
 }
 
 [System.Serializable]
@@ -121,4 +122,12 @@ public class StageStateInnerDto
     public HandDto hand;
     public DeckDto deck;
     public ProgressDto progress;
+}
+
+[System.Serializable]
+public class PlaceTileRequestDto
+{
+    public string tileId;
+    public CoordDto coord;
+    public int rotation;
 }

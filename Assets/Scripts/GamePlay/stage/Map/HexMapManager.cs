@@ -29,11 +29,6 @@ public class HexMapManager : MonoBehaviour
         new Vector2Int(0, 1),
     };
 
-    private void Start()
-    {
-    
-    }
-
     public HexCell GetCell(int q, int r)
     {
         cells.TryGetValue(new Vector2Int(q, r), out HexCell cell);

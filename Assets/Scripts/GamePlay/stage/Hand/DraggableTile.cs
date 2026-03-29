@@ -1,8 +1,10 @@
-﻿using UnityEngine;
+using System.Collections;
+using UnityEngine;
 
 /// <summary>
 /// Handles tile drag-and-drop gameplay for placing tiles on the hex map.
-/// Supports rotation with 'R' key, snapping to hex cells, and validation of placement.
+/// Supports rotation with 'R' key and snapping to hex cells.
+/// On drop, sends the action to the server; server validates and returns updated state.
 /// </summary>
 public class DraggableTile : MonoBehaviour
 {
@@ -46,12 +48,6 @@ public class DraggableTile : MonoBehaviour
         enabled = canDrag;
     }
 
-    // Locks after placement
-    public void LockPlaced()
-    {
-        enabled = false;
-    }
-
     // ===============================
     // Mouse
     // ===============================
@@ -60,6 +56,10 @@ public class DraggableTile : MonoBehaviour
         if (!enabled) return;
 
         dragging = true;
+
+        // Switch to Default layer so Main Camera renders it during drag
+        // (HandCamera is fixed; dragging must follow Main Camera's raycast)
+        SetLayerRecursively(gameObject, LayerMask.NameToLayer("Default"));
 
         // Disable colliders to not block raycast
         foreach (var c in myColliders)
@@ -129,16 +129,62 @@ public class DraggableTile : MonoBehaviour
             hoveredCell.SetHighlight(false);
             hoveredCell = null;
 
-            bool placed = mapController.TryPlaceTile(q, r, rotation, gameObject, templateId);
-            if (placed)
-            {
-                LockPlaced(); 
-                handController.OnTilePlacedFromSlot1(this);
-                return;
-            }
+            // Disable while waiting for server response
+            enabled = false;
 
+            StartCoroutine(SendPlaceTileToServer(q, r, rotation));
+            return;
         }
+
         ReturnHome();
+    }
+
+    // ===============================
+    // Server call
+    // ===============================
+    private IEnumerator SendPlaceTileToServer(int q, int r, int rot)
+    {
+        var planetId = AppSession.Instance?.ActivePlanet?.planetId;
+        var stageId = AppSession.Instance?.SelectedStageId;
+        var token = AppSession.Instance?.AccessToken;
+
+        if (string.IsNullOrEmpty(planetId) || string.IsNullOrEmpty(stageId) || string.IsNullOrEmpty(token))
+        {
+            Debug.LogError("[DraggableTile] Missing session data for place-tile request");
+            ReturnHome();
+            enabled = true;
+            yield break;
+        }
+
+        var dto = new PlaceTileRequestDto
+        {
+            tileId = templateId,
+            coord = new CoordDto { q = q, r = r },
+            rotation = rot
+        };
+
+        PlanetStageStateDto newState = null;
+        string error = null;
+
+        yield return PlanetStateApiClient.Instance.PlaceTile(
+            planetId, stageId, token, dto,
+            onSuccess: state => newState = state,
+            onError: err => error = err
+        );
+
+        if (newState != null)
+        {
+            // Re-render map and hand from server state
+            // LoadFromServer will destroy this GameObject via ClearHandVisuals (tiles[0])
+            mapController.ApplyServerState(newState);
+            handController.LoadFromServer(newState.hand, newState.deck);
+        }
+        else
+        {
+            Debug.LogError($"[DraggableTile] Place tile failed: {error}");
+            ReturnHome();
+            enabled = true;
+        }
     }
 
     // ===============================
@@ -150,5 +196,15 @@ public class DraggableTile : MonoBehaviour
         transform.localPosition = homeLocalPos;
         transform.localRotation = Quaternion.identity;
         rotation = 0;
+
+        // Back in slot — restore Hand layer so HandCamera renders it on top
+        SetLayerRecursively(gameObject, LayerMask.NameToLayer("Hand"));
+    }
+
+    private static void SetLayerRecursively(GameObject obj, int layer)
+    {
+        obj.layer = layer;
+        foreach (Transform child in obj.transform)
+            SetLayerRecursively(child.gameObject, layer);
     }
 }
