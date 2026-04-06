@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: a1f1167807d8cee4eae3c34bc7a38d43
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - wheelConfig: {fileID: 11400000, guid: 40ef125c9aea3224d82ce052b966cc37, type: 2}
+  - spinButtonView: {instanceID: 0}
+  - cooldownTextView: {instanceID: 0}
+  - wheelRotationAnimation: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

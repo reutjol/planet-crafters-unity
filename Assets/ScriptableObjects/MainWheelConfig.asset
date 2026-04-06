@@ -1,0 +1,75 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 432ea0894a8fac141b8562fd614fa9ab, type: 3}
+  m_Name: MainWheelConfig
+  m_EditorClassIdentifier: 
+  rewards:
+  - id: Coins_50
+    title: 50 Coins
+    rewardType: 1
+    amount: 50
+    weight: 28
+    sliceIndex: 0
+    iconKey: Coins
+  - id: Booster_Swap
+    title: Swap
+    rewardType: 3
+    amount: 2
+    weight: 12
+    sliceIndex: 1
+    iconKey: Swap
+  - id: Spin
+    title: Spin
+    rewardType: 2
+    amount: 1
+    weight: 8
+    sliceIndex: 2
+    iconKey: Spin
+  - id: Coins_100
+    title: 100 Coins
+    rewardType: 1
+    amount: 100
+    weight: 18
+    sliceIndex: 3
+    iconKey: Coins
+  - id: Booster_Joker
+    title: Joker
+    rewardType: 4
+    amount: 2
+    weight: 10
+    sliceIndex: 4
+    iconKey: Joker
+  - id: Booster_Refresh
+    title: Refresh
+    rewardType: 5
+    amount: 2
+    weight: 10
+    sliceIndex: 5
+    iconKey: Refresh
+  - id: Coins_150
+    title: 150 Coins
+    rewardType: 1
+    amount: 150
+    weight: 8
+    sliceIndex: 6
+    iconKey: Coins
+  - id: Booster_Random
+    title: Random
+    rewardType: 6
+    amount: 2
+    weight: 6
+    sliceIndex: 7
+    iconKey: Random
+  sliceCount: 8
+  spinDuration: 2.2
+  extraFullRotations: 2
+  cooldownHours: 0
