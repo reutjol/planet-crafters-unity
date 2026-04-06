@@ -70,6 +70,6 @@ MonoBehaviour:
     sliceIndex: 7
     iconKey: Random
   sliceCount: 8
-  spinDuration: 2.2
-  extraFullRotations: 2
+  spinDuration: 3.2
+  extraFullRotations: 4
   cooldownHours: 0
