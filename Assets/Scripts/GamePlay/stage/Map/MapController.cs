@@ -1,5 +1,8 @@
 using System;
+<<<<<<< HEAD
 using System.Collections;
+=======
+>>>>>>> origin/main
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -16,6 +19,7 @@ public class MapController : MonoBehaviour
     [Header("Settings")]
     public float tileHeightY = 0.5f;
 
+<<<<<<< HEAD
     [Header("Star Effect")]
     public GameObject starPrefab;
     public float starRiseHeight = 1.5f;
@@ -44,6 +48,17 @@ public class MapController : MonoBehaviour
     public event Action<ProgressDto> OnProgressChanged;
     public event Action OnStageCompleted;
     public event Action<int> OnStageCompletedWithCoins;
+=======
+    // Occupied axial coords (q,r)
+    private readonly HashSet<Vector2Int> occupied = new();
+
+    // ✅ single source of truth for server state
+    private readonly List<PlacedTileDto> placedTiles = new();
+
+    public event Action OnMapStateChanged;
+
+    public IReadOnlyList<PlacedTileDto> GetPlacedTiles() => placedTiles;
+>>>>>>> origin/main
 
     // ===============================
     // New stage: start with first plus
@@ -60,6 +75,7 @@ public class MapController : MonoBehaviour
     }
 
     // ===============================
+<<<<<<< HEAD
     // Load tiles from server into the map (Diff — only spawns new tiles)
     // ===============================
     public void LoadPlacedTilesFromServer(IEnumerable<PlacedTileDto> tiles, TileFactory factory)
@@ -67,6 +83,22 @@ public class MapController : MonoBehaviour
         var list = tiles != null
             ? ((tiles as IList<PlacedTileDto>) ?? new List<PlacedTileDto>(tiles))
             : new List<PlacedTileDto>();
+=======
+    // Load tiles from server into the map
+    // ===============================
+    public void LoadPlacedTilesFromServer(IEnumerable<PlacedTileDto> tiles, TileFactory factory)
+    {
+        // If no tiles exist, create the first plus cell and exit
+        if (tiles == null)
+        {
+            ClearMap();
+            InitEmptyMap();
+            return;
+        }
+
+        // Convert to List to check Count once
+        var list = (tiles as IList<PlacedTileDto>) ?? new List<PlacedTileDto>(tiles);
+>>>>>>> origin/main
 
         if (list.Count == 0)
         {
@@ -75,6 +107,7 @@ public class MapController : MonoBehaviour
             return;
         }
 
+<<<<<<< HEAD
         if (mapManager == null) { Debug.LogError("[MapController] mapManager is null"); return; }
         if (MapRoot == null)    { Debug.LogError("[MapController] MapRoot is null"); return; }
         if (factory == null)    { Debug.LogError("[MapController] TileFactory is null"); return; }
@@ -144,11 +177,79 @@ public class MapController : MonoBehaviour
         // Rebuild plus cells
         mapManager.ResetGrid();
         RefreshPlaceableCells();
+=======
+        if (mapManager == null)
+        {
+            Debug.LogError("[MapController] mapManager is null");
+            return;
+        }
+        if (MapRoot == null)
+        {
+            Debug.LogError("[MapController] MapRoot is null");
+            return;
+        }
+        if (factory == null)
+        {
+            Debug.LogError("[MapController] TileFactory is null");
+            return;
+        }
+
+        ClearMapVisualOnly();   
+        occupied.Clear();
+        placedTiles.Clear();
+
+        bool hasAnyTiles = false;
+
+        if (tiles != null)
+        {
+            foreach (var t in tiles)
+            {
+                if (t == null || t.coord == null || string.IsNullOrEmpty(t.tileId))
+                    continue;
+
+                hasAnyTiles = true;
+
+                int q = t.coord.q;
+                int r = t.coord.r;
+
+                var key = new Vector2Int(q, r);
+                occupied.Add(key);
+
+                // remove a plus cell if exists in that coord
+                mapManager.RemoveCell(q, r);
+
+                var go = factory.CreateTileByTemplateId(t.tileId, MapRoot);
+                if (go == null) continue;
+
+                Vector3 pos = mapManager.AxialToWorld(q, r) + Vector3.up * tileHeightY;
+                go.transform.position = pos;
+                go.transform.rotation = Quaternion.Euler(0f, t.rotation * 60f, 0f);
+
+                // Remove DraggableTile component - tiles on map should not be draggable
+                var draggable = go.GetComponent<DraggableTile>();
+                if (draggable != null) Destroy(draggable);
+
+                placedTiles.Add(t);
+            }
+        }
+
+        if (!hasAnyTiles)
+        {
+            // stage is empty -> first plus
+            InitEmptyMap();
+        }
+        else
+        {
+            // tiles exist -> create surrounding plus cells
+            RefreshPlaceableCells();
+        }
+>>>>>>> origin/main
 
         OnMapStateChanged?.Invoke();
     }
 
     // ===============================
+<<<<<<< HEAD
     // Raise animation — tile rises from below ground
     // ===============================
     private IEnumerator RaiseTile(GameObject tile, Vector3 finalPos)
@@ -172,6 +273,8 @@ public class MapController : MonoBehaviour
     }
 
     // ===============================
+=======
+>>>>>>> origin/main
     // Create plus cells around occupied tiles
     // ===============================
     public void RefreshPlaceableCells()
@@ -193,6 +296,7 @@ public class MapController : MonoBehaviour
     }
 
     // ===============================
+<<<<<<< HEAD
     // Debug: trigger bonus visual + progress update without touching the map
     // ===============================
     public void DebugTriggerBonus(int bonusPoints)
@@ -305,6 +409,49 @@ public class MapController : MonoBehaviour
         }
 
         bonusText.gameObject.SetActive(false);
+=======
+    // Try place a dragged tile onto a plus cell
+    // ===============================
+    public bool TryPlaceTile(int q, int r, int rotation, GameObject draggedTile, string templateId)
+    {
+        if (mapManager == null || MapRoot == null) return false;
+
+        var key = new Vector2Int(q, r);
+        if (occupied.Contains(key)) return false;
+
+        HexCell cell = mapManager.GetCell(q, r);
+        if (cell == null || cell.occupied || !cell.isPlusCell) return false;
+
+        // mark occupied + remove plus cell
+        occupied.Add(key);
+        mapManager.RemoveCell(q, r);
+
+        // move dragged tile to map
+        Vector3 pos = mapManager.AxialToWorld(q, r) + Vector3.up * tileHeightY;
+
+        draggedTile.transform.SetParent(MapRoot);
+        draggedTile.transform.position = pos;
+        draggedTile.transform.rotation = Quaternion.Euler(0f, rotation * 60f, 0f);
+
+        // Remove DraggableTile component - tiles on map should not be draggable
+        var draggable = draggedTile.GetComponent<DraggableTile>();
+        if (draggable != null) Destroy(draggable);
+
+        // update server state list
+        placedTiles.Add(new PlacedTileDto
+        {
+            tileId = templateId,
+            rotation = rotation,
+            coord = new CoordDto { q = q, r = r }
+        });
+
+        // spawn new placeable cells around
+        RefreshPlaceableCells();
+
+        // notify once
+        OnMapStateChanged?.Invoke();
+        return true;
+>>>>>>> origin/main
     }
 
     // ===============================
@@ -314,7 +461,10 @@ public class MapController : MonoBehaviour
     {
         occupied.Clear();
         placedTiles.Clear();
+<<<<<<< HEAD
         liveTiles.Clear();
+=======
+>>>>>>> origin/main
         ClearMapVisualOnly();
         OnMapStateChanged?.Invoke();
     }
@@ -331,8 +481,11 @@ public class MapController : MonoBehaviour
 
         for (int i = MapRoot.childCount - 1; i >= 0; i--)
             Destroy(MapRoot.GetChild(i).gameObject);
+<<<<<<< HEAD
 
         liveTiles.Clear();
+=======
+>>>>>>> origin/main
     }
 
 

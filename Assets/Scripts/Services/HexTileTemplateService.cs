@@ -11,6 +11,7 @@ using UnityEngine.Networking;
 public class HexTileTemplateService : MonoBehaviour
 {
     [Header("Server")]
+<<<<<<< HEAD
     public string url = "http://localhost:3000/api/hex-tiles";
 
     private void Awake()
@@ -19,6 +20,9 @@ public class HexTileTemplateService : MonoBehaviour
         if (config != null)
             url = config.serverBaseUrl + "/api/hex-tiles";
     }
+=======
+    public string url = "https://planet-crafters-server.onrender.com/api/hex-tiles";
+>>>>>>> origin/main
 
     public bool IsReady { get; private set; }
 

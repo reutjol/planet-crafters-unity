@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 using System.Collections;
 using UnityEngine;
 
@@ -5,6 +6,13 @@ using UnityEngine;
 /// Handles tile drag-and-drop gameplay for placing tiles on the hex map.
 /// Supports rotation with 'R' key and snapping to hex cells.
 /// On drop, sends the action to the server; server validates and returns updated state.
+=======
+﻿using UnityEngine;
+
+/// <summary>
+/// Handles tile drag-and-drop gameplay for placing tiles on the hex map.
+/// Supports rotation with 'R' key, snapping to hex cells, and validation of placement.
+>>>>>>> origin/main
 /// </summary>
 public class DraggableTile : MonoBehaviour
 {
@@ -48,6 +56,15 @@ public class DraggableTile : MonoBehaviour
         enabled = canDrag;
     }
 
+<<<<<<< HEAD
+=======
+    // Locks after placement
+    public void LockPlaced()
+    {
+        enabled = false;
+    }
+
+>>>>>>> origin/main
     // ===============================
     // Mouse
     // ===============================
@@ -57,12 +74,16 @@ public class DraggableTile : MonoBehaviour
 
         dragging = true;
 
+<<<<<<< HEAD
         // Switch to Default layer so Main Camera renders it during drag
         // (HandCamera is fixed; dragging must follow Main Camera's raycast)
         SetLayerRecursively(gameObject, LayerMask.NameToLayer("Default"));
 
         // Refresh and disable all colliders (includes resource prefabs spawned after Awake)
         myColliders = GetComponentsInChildren<Collider>(true);
+=======
+        // Disable colliders to not block raycast
+>>>>>>> origin/main
         foreach (var c in myColliders)
             c.enabled = false;
 
@@ -130,6 +151,7 @@ public class DraggableTile : MonoBehaviour
             hoveredCell.SetHighlight(false);
             hoveredCell = null;
 
+<<<<<<< HEAD
             // Disable while waiting for server response
             enabled = false;
 
@@ -137,10 +159,22 @@ public class DraggableTile : MonoBehaviour
             return;
         }
 
+=======
+            bool placed = mapController.TryPlaceTile(q, r, rotation, gameObject, templateId);
+            if (placed)
+            {
+                LockPlaced(); 
+                handController.OnTilePlacedFromSlot1(this);
+                return;
+            }
+
+        }
+>>>>>>> origin/main
         ReturnHome();
     }
 
     // ===============================
+<<<<<<< HEAD
     // Server call
     // ===============================
     private IEnumerator SendPlaceTileToServer(int q, int r, int rot)
@@ -189,6 +223,8 @@ public class DraggableTile : MonoBehaviour
     }
 
     // ===============================
+=======
+>>>>>>> origin/main
     // Helpers
     // ===============================
     private void ReturnHome()
@@ -197,6 +233,7 @@ public class DraggableTile : MonoBehaviour
         transform.localPosition = homeLocalPos;
         transform.localRotation = Quaternion.identity;
         rotation = 0;
+<<<<<<< HEAD
 
         // Back in slot — restore Hand layer so HandCamera renders it on top
         SetLayerRecursively(gameObject, LayerMask.NameToLayer("Hand"));
@@ -207,5 +244,7 @@ public class DraggableTile : MonoBehaviour
         obj.layer = layer;
         foreach (Transform child in obj.transform)
             SetLayerRecursively(child.gameObject, layer);
+=======
+>>>>>>> origin/main
     }
 }

@@ -177,7 +177,10 @@ GameObject:
   m_Component:
   - component: {fileID: 82529158}
   - component: {fileID: 82529157}
+<<<<<<< HEAD
   - component: {fileID: 82529159}
+=======
+>>>>>>> origin/main
   m_Layer: 0
   m_Name: Directional Light
   m_TagString: Untagged
@@ -262,6 +265,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 20, y: 0, z: 0}
+<<<<<<< HEAD
 --- !u!114 &82529159
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -285,6 +289,8 @@ MonoBehaviour:
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
   m_SoftShadowQuality: 0
+=======
+>>>>>>> origin/main
 --- !u!1 &477257759
 GameObject:
   m_ObjectHideFlags: 0
@@ -455,6 +461,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+<<<<<<< HEAD
 --- !u!1 &1021145510 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1517405216873907217, guid: fcf30ca0fd1a3d6469c154866167f8ef, type: 3}
@@ -475,6 +482,8 @@ MonoBehaviour:
   m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
   m_EffectDistance: {x: 10, y: -10}
   m_UseGraphicAlpha: 1
+=======
+>>>>>>> origin/main
 --- !u!1 &1088343127
 GameObject:
   m_ObjectHideFlags: 0
@@ -504,7 +513,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc153357676d7a7499a6eb41777f133c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+<<<<<<< HEAD
   gameConfig: {fileID: 0}
+=======
+  baseUrl: https://planet-crafters-server.onrender.com
+>>>>>>> origin/main
 --- !u!4 &1088343129
 Transform:
   m_ObjectHideFlags: 0
@@ -588,6 +601,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+<<<<<<< HEAD
 --- !u!1 &1861364367
 GameObject:
   m_ObjectHideFlags: 0
@@ -869,6 +883,8 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2107357540}
   m_CullTransparentMesh: 1
+=======
+>>>>>>> origin/main
 --- !u!1001 &8288997450336662647
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -877,6 +893,7 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+<<<<<<< HEAD
     - target: {fileID: 666850545686476346, guid: fcf30ca0fd1a3d6469c154866167f8ef, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -988,6 +1005,31 @@ PrefabInstance:
     - target: {fileID: 2861372361252907123, guid: fcf30ca0fd1a3d6469c154866167f8ef, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: -96.783
+=======
+    - target: {fileID: 2861372361252907123, guid: fcf30ca0fd1a3d6469c154866167f8ef, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2861372361252907123, guid: fcf30ca0fd1a3d6469c154866167f8ef, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2861372361252907123, guid: fcf30ca0fd1a3d6469c154866167f8ef, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2861372361252907123, guid: fcf30ca0fd1a3d6469c154866167f8ef, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2861372361252907123, guid: fcf30ca0fd1a3d6469c154866167f8ef, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2861372361252907123, guid: fcf30ca0fd1a3d6469c154866167f8ef, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+>>>>>>> origin/main
       objectReference: {fileID: 0}
     - target: {fileID: 2955527811917947257, guid: fcf30ca0fd1a3d6469c154866167f8ef, type: 3}
       propertyPath: m_Pivot.x
@@ -1069,6 +1111,7 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+<<<<<<< HEAD
     - target: {fileID: 2956549000763075596, guid: fcf30ca0fd1a3d6469c154866167f8ef, type: 3}
       propertyPath: m_AnchorMax.y
       value: 1
@@ -1224,11 +1267,37 @@ PrefabInstance:
     - target: {fileID: 5345890681071592368, guid: fcf30ca0fd1a3d6469c154866167f8ef, type: 3}
       propertyPath: m_EffectDistance.y
       value: -5
+=======
+    - target: {fileID: 4281402276471810983, guid: fcf30ca0fd1a3d6469c154866167f8ef, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4281402276471810983, guid: fcf30ca0fd1a3d6469c154866167f8ef, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4281402276471810983, guid: fcf30ca0fd1a3d6469c154866167f8ef, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4281402276471810983, guid: fcf30ca0fd1a3d6469c154866167f8ef, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4281402276471810983, guid: fcf30ca0fd1a3d6469c154866167f8ef, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4281402276471810983, guid: fcf30ca0fd1a3d6469c154866167f8ef, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+>>>>>>> origin/main
       objectReference: {fileID: 0}
     - target: {fileID: 6056739999813350126, guid: fcf30ca0fd1a3d6469c154866167f8ef, type: 3}
       propertyPath: m_Name
       value: MainUICanvas
       objectReference: {fileID: 0}
+<<<<<<< HEAD
     - target: {fileID: 6734945515004162362, guid: fcf30ca0fd1a3d6469c154866167f8ef, type: 3}
       propertyPath: m_SizeDelta.x
       value: 184.8091
@@ -1402,6 +1471,61 @@ MonoBehaviour:
   m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
   m_EffectDistance: {x: 10, y: -10}
   m_UseGraphicAlpha: 1
+=======
+    - target: {fileID: 7230836989785144223, guid: fcf30ca0fd1a3d6469c154866167f8ef, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7230836989785144223, guid: fcf30ca0fd1a3d6469c154866167f8ef, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7230836989785144223, guid: fcf30ca0fd1a3d6469c154866167f8ef, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7230836989785144223, guid: fcf30ca0fd1a3d6469c154866167f8ef, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7230836989785144223, guid: fcf30ca0fd1a3d6469c154866167f8ef, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7230836989785144223, guid: fcf30ca0fd1a3d6469c154866167f8ef, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8806384773077503771, guid: fcf30ca0fd1a3d6469c154866167f8ef, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8806384773077503771, guid: fcf30ca0fd1a3d6469c154866167f8ef, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8806384773077503771, guid: fcf30ca0fd1a3d6469c154866167f8ef, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8806384773077503771, guid: fcf30ca0fd1a3d6469c154866167f8ef, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8806384773077503771, guid: fcf30ca0fd1a3d6469c154866167f8ef, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8806384773077503771, guid: fcf30ca0fd1a3d6469c154866167f8ef, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: fcf30ca0fd1a3d6469c154866167f8ef, type: 3}
+>>>>>>> origin/main
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

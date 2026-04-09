@@ -1,9 +1,13 @@
+<<<<<<< HEAD
 using System.Collections;
+=======
+>>>>>>> origin/main
 using UnityEngine;
 
 /// <summary>
 /// Initial authentication menu controller.
 /// Provides navigation to Sign In and Sign Up screens.
+<<<<<<< HEAD
 /// On start, attempts auto-login via stored refresh token.
 /// </summary>
 public class RegistrationMenuController : MonoBehaviour
@@ -47,6 +51,11 @@ public class RegistrationMenuController : MonoBehaviour
         );
     }
 
+=======
+/// </summary>
+public class RegistrationMenuController : MonoBehaviour
+{
+>>>>>>> origin/main
     public void OnClickSignIn()
     {
         SceneLoader.Instance.LoadScene(3);

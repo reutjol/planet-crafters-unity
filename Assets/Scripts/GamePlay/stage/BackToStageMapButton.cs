@@ -20,6 +20,7 @@ public class BackToStageMapButton : MonoBehaviour
     /// </summary>
     public void OnBackClicked()
     {
+<<<<<<< HEAD
         // Clear stage state cache
         if (GameManager.Instance != null)
             GameManager.Instance.ClearCache();
@@ -34,6 +35,17 @@ public class BackToStageMapButton : MonoBehaviour
                 SceneLoader.Instance.GoBack();
             else
                 SceneLoader.Instance.LoadScene(gameConfig.stagesMapSceneIndex);
+=======
+        // Clear cache so when we return, GameBootstrap will load fresh state
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.ClearCache();
+        }
+
+        if (SceneLoader.Instance != null && gameConfig != null)
+        {
+            SceneLoader.Instance.LoadScene(gameConfig.stagesMapSceneIndex);
+>>>>>>> origin/main
         }
     }
 }

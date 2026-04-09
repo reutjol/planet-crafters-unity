@@ -9,7 +9,11 @@ public class GameConfig : ScriptableObject
 {
     [Header("Server Settings")]
     [Tooltip("Base URL for the backend server API")]
+<<<<<<< HEAD
     public string serverBaseUrl = "http://localhost:3000";
+=======
+    public string serverBaseUrl = "https://planet-crafters-server.onrender.com";
+>>>>>>> origin/main
 
     [Header("Scene Indices")]
     [Tooltip("Scene index for the Boot scene")]
@@ -43,8 +47,13 @@ public class GameConfig : ScriptableObject
     [Tooltip("Maximum hand size (number of tiles in hand)")]
     public int maxHandSize = 3;
 
+<<<<<<< HEAD
     [Tooltip("Number of matching connections needed to complete a stage")]
     public int stageTargetScore = 5;
+=======
+    [Tooltip("Auto-save debounce delay in seconds")]
+    public float autoSaveDebounceDelay = 0.25f;
+>>>>>>> origin/main
 
     [Header("UI Settings")]
     [Tooltip("Loading scene minimum display time in seconds")]

@@ -12,7 +12,11 @@ public abstract class BaseApiClient : MonoBehaviour
 {
     [SerializeField] protected GameConfig gameConfig;
 
+<<<<<<< HEAD
     protected string BaseUrl => gameConfig != null ? gameConfig.serverBaseUrl : "http://localhost:3000";
+=======
+    protected string BaseUrl => gameConfig != null ? gameConfig.serverBaseUrl : "https://planet-crafters-server.onrender.com";
+>>>>>>> origin/main
 
     protected virtual void Awake()
     {

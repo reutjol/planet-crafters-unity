@@ -11,9 +11,12 @@ public class GameBootstrap : MonoBehaviour
     [SerializeField] private TileFactory tileFactory;
     [SerializeField] private HandController handController;
     [SerializeField] private MapController mapController;
+<<<<<<< HEAD
     [SerializeField] private GameConfig gameConfig;
     [SerializeField] private GameObject gameOverPanel;
     [SerializeField] private ScoreDisplay scoreDisplay;
+=======
+>>>>>>> origin/main
 
     private bool isInitialized = false;
     private System.Action<PlanetStageStateDto> currentStateLoadHandler;
@@ -44,7 +47,11 @@ public class GameBootstrap : MonoBehaviour
         // 3) Try to get cached state first
         var cachedState = GameManager.Instance.GetCachedPlanetStageState();
 
+<<<<<<< HEAD
         if (cachedState != null && cachedState.targetScore > 0)
+=======
+        if (cachedState != null)
+>>>>>>> origin/main
         {
             Debug.Log("[GameBootstrap] Using cached state from GameManager");
             InitializeGameplay(cachedState);
@@ -66,9 +73,14 @@ public class GameBootstrap : MonoBehaviour
 
         GameManager.Instance.OnPlanetStageStateLoaded += currentStateLoadHandler;
 
+<<<<<<< HEAD
         // Request the state — force refresh if cache had no targetScore
         bool needsFresh = cachedState != null && cachedState.targetScore == 0;
         GameManager.Instance.RequestPlanetStageState(forceRefresh: needsFresh);
+=======
+        // Request the state
+        GameManager.Instance.RequestPlanetStageState(forceRefresh: false);
+>>>>>>> origin/main
 
         // Wait for state to load (with timeout)
         float timeout = 10f;
@@ -117,9 +129,12 @@ public class GameBootstrap : MonoBehaviour
             return false;
         }
 
+<<<<<<< HEAD
         if (scoreDisplay == null)
             scoreDisplay = FindObjectOfType<ScoreDisplay>(true);
 
+=======
+>>>>>>> origin/main
         return true;
     }
 
@@ -147,6 +162,7 @@ public class GameBootstrap : MonoBehaviour
         if (state.deck == null)
             Debug.LogWarning("[GameBootstrap] state.deck is null");
 
+<<<<<<< HEAD
         // Ensure gameConfig is available
         if (gameConfig == null)
             gameConfig = Resources.Load<GameConfig>("GameConfig");
@@ -167,11 +183,29 @@ public class GameBootstrap : MonoBehaviour
         // Subscribe to future completions (not the initial load)
         mapController.OnStageCompleted += HandleStageCompleted;
         handController.OnHandAndDeckEmpty += HandleGameOver;
+=======
+        // Connect controllers
+        handController.factory = tileFactory;
+        handController.mapController = mapController;
+
+        // Load state into gameplay systems
+        mapController.LoadPlacedTilesFromServer(state.map?.placedTiles, tileFactory);
+        handController.LoadFromServer(state.hand, state.deck);
+
+        // Enable auto-save
+        var autoSave = FindObjectOfType<StageStateAutoSave>();
+        if (autoSave != null)
+        {
+            autoSave.SetReady(true);
+            Debug.Log("[GameBootstrap] Auto-save enabled");
+        }
+>>>>>>> origin/main
 
         isInitialized = true;
         Debug.Log("[GameBootstrap] Gameplay initialized successfully");
     }
 
+<<<<<<< HEAD
     private void HandleGameOver()
     {
         Debug.Log("[GameBootstrap] Game Over — hand and deck empty.");
@@ -199,6 +233,8 @@ public class GameBootstrap : MonoBehaviour
         }
     }
 
+=======
+>>>>>>> origin/main
     private void OnDestroy()
     {
         // Cleanup: Unsubscribe from events to prevent memory leaks
@@ -207,11 +243,14 @@ public class GameBootstrap : MonoBehaviour
             GameManager.Instance.OnPlanetStageStateLoaded -= currentStateLoadHandler;
             currentStateLoadHandler = null;
         }
+<<<<<<< HEAD
 
         if (mapController != null)
             mapController.OnStageCompleted -= HandleStageCompleted;
 
         if (handController != null)
             handController.OnHandAndDeckEmpty -= HandleGameOver;
+=======
+>>>>>>> origin/main
     }
 }

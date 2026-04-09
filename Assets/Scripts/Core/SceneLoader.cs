@@ -1,11 +1,18 @@
 using System.Collections;
+<<<<<<< HEAD
 using System.Collections.Generic;
+=======
+>>>>>>> origin/main
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Handles asynchronous scene loading with loading screen transitions.
+<<<<<<< HEAD
 /// Singleton that persists across scenes. Maintains navigation history stack.
+=======
+/// Singleton that persists across scenes.
+>>>>>>> origin/main
 /// </summary>
 public class SceneLoader : MonoBehaviour
 {
@@ -19,8 +26,11 @@ public class SceneLoader : MonoBehaviour
     [SerializeField] int startSceneIndex = 2;
 
     int targetSceneIndex;
+<<<<<<< HEAD
     private readonly Stack<int> history = new();
     public int PreviousSceneIndex => history.Count > 0 ? history.Peek() : -1;
+=======
+>>>>>>> origin/main
 
     void Awake()
     {
@@ -39,11 +49,15 @@ public class SceneLoader : MonoBehaviour
 
     public void LoadScene(int sceneIndex)
     {
+<<<<<<< HEAD
         history.Push(SceneManager.GetActiveScene().buildIndex);
+=======
+>>>>>>> origin/main
         targetSceneIndex = sceneIndex;
         SceneManager.LoadScene(loadingSceneIndex);
     }
 
+<<<<<<< HEAD
     public void GoBack()
     {
         if (history.Count == 0) return;
@@ -51,6 +65,8 @@ public class SceneLoader : MonoBehaviour
         SceneManager.LoadScene(loadingSceneIndex);
     }
 
+=======
+>>>>>>> origin/main
     public void StartAsyncLoad()
     {
         StartCoroutine(AsyncLoadRoutine());
