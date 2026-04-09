@@ -21,6 +21,10 @@ public class MapController : MonoBehaviour
     public float starRiseHeight = 1.5f;
     public float starDuration = 0.8f;
 
+    [Header("Bonus Text")]
+    public TMPro.TextMeshProUGUI bonusText;
+    public float bonusTextDuration = 5f;
+
     // Set by GameBootstrap - needed for ApplyServerState
     [HideInInspector] public TileFactory tileFactory;
 
@@ -39,6 +43,7 @@ public class MapController : MonoBehaviour
     public event Action OnMapStateChanged;
     public event Action<ProgressDto> OnProgressChanged;
     public event Action OnStageCompleted;
+    public event Action<int> OnStageCompletedWithCoins;
 
     // ===============================
     // New stage: start with first plus
@@ -100,6 +105,13 @@ public class MapController : MonoBehaviour
 
             var go = factory.CreateTileByTemplateId(t.tileId, MapRoot);
             if (go == null) continue;
+
+            // Apply server-supplied face levels if available
+            if (t.faces != null && t.faces.Count > 0)
+            {
+                var view = go.GetComponent<HexTileView>();
+                view?.ApplyFaceLevels(t.faces, t.center);
+            }
 
             Vector3 pos = mapManager.AxialToWorld(q, r) + Vector3.up * tileHeightY;
             go.transform.position = pos;
@@ -181,6 +193,17 @@ public class MapController : MonoBehaviour
     }
 
     // ===============================
+    // Debug: trigger bonus visual + progress update without touching the map
+    // ===============================
+    public void DebugTriggerBonus(int bonusPoints)
+    {
+        ShowBonusText(bonusPoints);
+        previousScore += bonusPoints;
+        var fakeProgress = new ProgressDto { score = previousScore, isCompleted = false };
+        OnProgressChanged?.Invoke(fakeProgress);
+    }
+
+    // ===============================
     // Apply full state received from server
     // ===============================
     public void ApplyServerState(PlanetStageStateDto state)
@@ -197,9 +220,15 @@ public class MapController : MonoBehaviour
             if (lastPlacedCoord.HasValue && starPrefab != null && state.scoredConnections != null && state.scoredConnections.Count > 0)
                 SpawnConnectionStars(lastPlacedCoord.Value, state.scoredConnections);
 
+            if (state.bonusPoints > 0)
+                ShowBonusText(state.bonusPoints);
+
             OnProgressChanged?.Invoke(state.progress);
             if (state.progress.isCompleted)
+            {
                 OnStageCompleted?.Invoke();
+                OnStageCompletedWithCoins?.Invoke(state.coinsAwarded);
+            }
         }
     }
 
@@ -247,6 +276,35 @@ public class MapController : MonoBehaviour
         }
 
         Destroy(star);
+    }
+
+    // ===============================
+    // Show +N bonus text on Canvas
+    // ===============================
+    private void ShowBonusText(int bonus)
+    {
+        if (bonusText == null) return;
+        bonusText.text = $"+{bonus}";
+        StopCoroutine("BonusTextAnimation");
+        StartCoroutine(BonusTextAnimation());
+    }
+
+    private IEnumerator BonusTextAnimation()
+    {
+        Color startColor = bonusText.color;
+        bonusText.color = new Color(startColor.r, startColor.g, startColor.b, 1f);
+        bonusText.gameObject.SetActive(true);
+
+        float elapsed = 0f;
+        while (elapsed < bonusTextDuration)
+        {
+            elapsed += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsed / bonusTextDuration);
+            bonusText.color = new Color(startColor.r, startColor.g, startColor.b, 1f - t);
+            yield return null;
+        }
+
+        bonusText.gameObject.SetActive(false);
     }
 
     // ===============================

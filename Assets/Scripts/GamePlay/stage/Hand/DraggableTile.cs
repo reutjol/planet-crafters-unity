@@ -61,7 +61,8 @@ public class DraggableTile : MonoBehaviour
         // (HandCamera is fixed; dragging must follow Main Camera's raycast)
         SetLayerRecursively(gameObject, LayerMask.NameToLayer("Default"));
 
-        // Disable colliders to not block raycast
+        // Refresh and disable all colliders (includes resource prefabs spawned after Awake)
+        myColliders = GetComponentsInChildren<Collider>(true);
         foreach (var c in myColliders)
             c.enabled = false;
 

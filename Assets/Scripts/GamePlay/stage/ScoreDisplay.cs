@@ -1,14 +1,17 @@
 using TMPro;
 using UnityEngine;
 
-/// <summary>
-/// Displays the current score on screen.
-/// Subscribes to MapController.OnProgressChanged and updates a TMP_Text element.
-/// </summary>
 public class ScoreDisplay : MonoBehaviour
 {
-    [SerializeField] private TMP_Text scoreText;
+    [SerializeField] private TMP_Text currentScoreText;
+    [SerializeField] private TMP_Text targetScoreText;
     [SerializeField] private MapController mapController;
+
+    private void Awake()
+    {
+        if (mapController == null)
+            mapController = FindObjectOfType<MapController>();
+    }
 
     private void OnEnable()
     {
@@ -22,9 +25,15 @@ public class ScoreDisplay : MonoBehaviour
             mapController.OnProgressChanged -= UpdateDisplay;
     }
 
+    public void SetTargetScore(int target)
+    {
+        if (targetScoreText != null)
+            targetScoreText.text = target.ToString();
+    }
+
     private void UpdateDisplay(ProgressDto progress)
     {
-        if (scoreText != null)
-            scoreText.text = $"Score: {progress.score}";
+        if (currentScoreText != null)
+            currentScoreText.text = progress.score.ToString();
     }
 }

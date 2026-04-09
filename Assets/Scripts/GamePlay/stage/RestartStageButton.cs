@@ -8,6 +8,7 @@ using UnityEngine;
 public class RestartStageButton : MonoBehaviour
 {
     [SerializeField] private GameConfig gameConfig;
+    [SerializeField] private GameObject panelToHide;
 
     private void Awake()
     {
@@ -22,6 +23,9 @@ public class RestartStageButton : MonoBehaviour
     /// </summary>
     public void OnRestartClicked()
     {
+        if (panelToHide != null)
+            panelToHide.SetActive(false);
+
         StartCoroutine(ResetAndReload());
     }
 

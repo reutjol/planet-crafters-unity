@@ -16,6 +16,7 @@ public class PlanetDto
 {
     public string planetId;
     public List<StageDto> stages;
+    public int totalCoins;
 }
 
 [System.Serializable]
@@ -30,9 +31,11 @@ public class StageDto
 public class StageMetaDto
 {
     public CoordDto coord;
+    public string resourceType;
     public bool isUnlocked;
     public bool isStarted;
     public bool isCompleted;
+    public int coinsAwarded;
     public string lastPlayedAt; // ISO string format
 }
 
@@ -63,11 +66,28 @@ public class MapDto
 }
 
 [System.Serializable]
+public class FaceDataDto
+{
+    public string resource;
+    public int variant;
+    public int level;
+}
+
+[System.Serializable]
+public class CenterDataDto
+{
+    public string resource;
+    public int level;
+}
+
+[System.Serializable]
 public class PlacedTileDto
 {
     public CoordDto coord;
     public int rotation;
     public string tileId;
+    public System.Collections.Generic.List<FaceDataDto> faces;
+    public CenterDataDto center;
 }
 
 [System.Serializable]
@@ -89,6 +109,7 @@ public class ProgressDto
     public float developedPercent;
     public int score;
     public bool isCompleted;
+    public int baseResourceConnections;
 }
 
 // ==========================================
@@ -104,7 +125,10 @@ public class PlanetStageStateDto
     public HandDto hand;
     public DeckDto deck;
     public ProgressDto progress;
+    public int targetScore;
+    public int coinsAwarded;
     public List<CoordDto> scoredConnections;
+    public int bonusPoints;
 }
 
 [System.Serializable]

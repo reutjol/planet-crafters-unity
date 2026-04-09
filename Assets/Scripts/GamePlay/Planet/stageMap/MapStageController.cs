@@ -1,17 +1,21 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
 /// Controller for the stage map scene.
 /// Loads planet data from GameManager and spawns stage nodes in a hex layout.
-/// Different prefabs are used for locked, unlocked, and completed stages.
+/// Each resource type has its own prefab; locked stages are darkened, completed stages are brightened.
 /// </summary>
 public class MapStageController : MonoBehaviour
 {
-    [Header("Prefabs")]
-    [SerializeField] private GameObject stageUnlockedPrefab;
-    [SerializeField] private GameObject stageLockedPrefab;
-    [SerializeField] private GameObject stageCompletedPrefab;
+    [Header("Prefabs by Resource Type")]
+    [SerializeField] private GameObject rockPrefab;
+    [SerializeField] private GameObject goldPrefab;
+    [SerializeField] private GameObject bioPrefab;
+    [SerializeField] private GameObject crystalPrefab;
+
+    [Header("Tint")]
+    [Range(0f, 1f)] [SerializeField] private float lockedDarkness = 0.35f;
 
     [Header("Config")]
     [SerializeField] private GameConfig gameConfig;
@@ -25,26 +29,16 @@ public class MapStageController : MonoBehaviour
 
     private readonly List<GameObject> spawned = new List<GameObject>();
 
-    private void Awake()
-    {
-        Debug.Log("[MapStageController] Awake");
-    }
-
     private void OnEnable()
     {
-        // Check if GameManager exists before subscribing to events
-        if (GameManager.Instance == null)
-        {
-            Debug.LogWarning("[MapStageController] GameManager.Instance is null in OnEnable, skipping event subscription");
-            return;
-        }
-
+        if (GameManager.Instance == null) return;
         GameManager.Instance.OnPlanetLoaded += HandlePlanetLoaded;
         GameManager.Instance.OnUnauthorized += HandleUnauthorized;
         GameManager.Instance.OnError += HandleError;
     }
 
-    private void OnDisable() {
+    private void OnDisable()
+    {
         if (GameManager.Instance == null) return;
         GameManager.Instance.OnPlanetLoaded -= HandlePlanetLoaded;
         GameManager.Instance.OnUnauthorized -= HandleUnauthorized;
@@ -56,75 +50,51 @@ public class MapStageController : MonoBehaviour
         if (gameConfig == null)
             gameConfig = Resources.Load<GameConfig>("GameConfig");
 
-        Debug.Log("[MapStageController] Start");
-
-        // --- Inspector wiring checks ---
-        Debug.Log($"[MapStageController] stagesParent assigned? {(stagesParent != null)}");
-        Debug.Log($"[MapStageController] prefabs assigned? unlocked={(stageUnlockedPrefab != null)}, locked={(stageLockedPrefab != null)}, completed={(stageCompletedPrefab != null)}");
-        Debug.Log($"[MapStageController] layout: hexSize={hexSize}, pointyTop={pointyTop}");
-
         if (stagesParent == null)
         {
-            Debug.LogError("[MapStageController] ERROR: stagesParent is NULL (assign in Inspector).");
+            Debug.LogError("[MapStageController] stagesParent is NULL (assign in Inspector).");
             return;
         }
 
-        // --- GameManager existence ---
         if (GameManager.Instance == null)
         {
-            Debug.LogError("[MapStageController] ERROR: GameManager.Instance is NULL. (Is GameManager in Boot scene with DontDestroyOnLoad?)");
+            Debug.LogError("[MapStageController] GameManager.Instance is NULL.");
             return;
         }
 
-        Debug.Log("[MapStageController] GameManager found. Subscribing to events...");
-
-        // --- Session / token checks ---
         if (AppSession.Instance == null)
         {
-            Debug.LogError("[MapStageController] ERROR: AppSession.Instance is NULL.");
+            Debug.LogError("[MapStageController] AppSession.Instance is NULL.");
             return;
         }
 
-        Debug.Log($"[MapStageController] HasAccess? {AppSession.Instance.HasAccess()}");
-        Debug.Log($"[MapStageController] AccessToken length: {(AppSession.Instance.AccessToken != null ? AppSession.Instance.AccessToken.Length : -1)}");
-
-        // Always fetch fresh planet so stage map shows current isUnlocked/isCompleted/score
-        Debug.Log("[MapStageController] RequestActivePlanet(forceRefresh: true)...");
         GameManager.Instance.RequestActivePlanet(forceRefresh: true);
     }
 
     private void HandleUnauthorized()
     {
-        Debug.LogWarning("[MapStageController] OnUnauthorized (likely 401). Session may be missing/expired.");
+        Debug.LogWarning("[MapStageController] Unauthorized (401). Session may be missing/expired.");
     }
 
     private void HandleError(string err)
     {
-        Debug.LogError("[MapStageController] OnError: " + err);
+        Debug.LogError("[MapStageController] Error: " + err);
     }
 
     private void HandlePlanetLoaded(PlanetDto planet)
     {
-        Debug.Log("[MapStageController] ✅ OnPlanetLoaded fired!");
-
         if (planet == null)
         {
             Debug.LogError("[MapStageController] planet is NULL");
             return;
         }
 
-        Debug.Log($"[MapStageController] planetId={planet.planetId}");
-        Debug.Log($"[MapStageController] stages array null? {(planet.stages == null)}");
-
         Clear();
         DrawStages(planet);
-
-        Debug.Log($"[MapStageController] Draw complete. Spawned count={spawned.Count}");
     }
 
     private void Clear()
     {
-        Debug.Log($"[MapStageController] Clear() destroying {spawned.Count} spawned objects...");
         foreach (var go in spawned)
         {
             if (go != null) Destroy(go);
@@ -136,90 +106,91 @@ public class MapStageController : MonoBehaviour
     {
         if (planet?.stages == null)
         {
-            Debug.LogWarning("[MapStageController] DrawStages: planet.stages is NULL -> nothing to draw.");
+            Debug.LogWarning("[MapStageController] planet.stages is NULL.");
             return;
         }
 
-        Debug.Log("[MapStageController] DrawStages: begin loop...");
-
-        int skippedNull = 0;
-        int skippedNoCoord = 0;
-        int skippedNoPrefab = 0;
-        int drawn = 0;
-
         foreach (var stage in planet.stages)
         {
-            if (stage == null)
-            {
-                skippedNull++;
-                continue;
-            }
+            if (stage == null) continue;
 
             if (stage.meta == null)
             {
                 Debug.LogWarning($"[MapStageController] stage {stage.stageId}: meta is NULL -> skip");
-                skippedNoCoord++;
                 continue;
             }
 
             if (stage.meta.coord == null)
             {
                 Debug.LogWarning($"[MapStageController] stage {stage.stageId}: meta.coord is NULL -> skip");
-                skippedNoCoord++;
                 continue;
             }
 
             int q = stage.meta.coord.q;
             int r = stage.meta.coord.r;
-
             bool unlocked = stage.meta.isUnlocked;
             bool completed = stage.meta.isCompleted;
 
-            var pos = AxialToWorld(q, r);
             var prefab = ChoosePrefab(stage);
+            if (!prefab) continue;
 
-            Debug.Log($"[MapStageController] stage={stage.stageId} q={q} r={r} unlocked={unlocked} completed={completed} -> worldPos={pos} prefab={(prefab ? prefab.name : "NULL")}");
-
-            if (!prefab)
-            {
-                skippedNoPrefab++;
-                continue;
-            }
-
-            var go = Instantiate(prefab, pos, Quaternion.identity, stagesParent);
+            var pos = AxialToWorld(q, r);
+            var go = Instantiate(prefab, pos, prefab.transform.rotation, stagesParent);
             go.name = $"{stage.stageId} ({q},{r})";
             spawned.Add(go);
-            drawn++;
+
+            ApplyStateTint(go, unlocked, completed);
 
             var view = go.GetComponent<StageNodeView>();
             if (view != null)
             {
-                Debug.Log($"[MapStageController] StageNodeView found on {go.name} -> Init()");
                 int stageScore = stage.state?.progress?.score ?? 0;
-                int targetScore = gameConfig != null ? gameConfig.stageTargetScore : 5;
-                view.Init(stage.stageId, unlocked, completed, stageScore, targetScore);
-            }
-            else
-            {
-                Debug.Log($"[MapStageController] StageNodeView NOT found on {go.name} (optional)");
+                float developedPercent = stage.state?.progress?.developedPercent ?? 0f;
+                int coinsAwarded = stage.meta?.coinsAwarded ?? 0;
+                view.Init(stage.stageId, unlocked, completed, stage.meta.resourceType, stageScore, developedPercent, coinsAwarded);
             }
         }
-
-        Debug.Log($"[MapStageController] DrawStages summary: drawn={drawn}, skippedNull={skippedNull}, skippedNoCoord={skippedNoCoord}, skippedNoPrefab={skippedNoPrefab}");
     }
 
     private GameObject ChoosePrefab(StageDto stage)
     {
-        if (stage.meta.isCompleted && stageCompletedPrefab) return stageCompletedPrefab;
-        if (stage.meta.isUnlocked && stageUnlockedPrefab) return stageUnlockedPrefab;
-
-        if (!stageLockedPrefab)
+        GameObject prefab = stage.meta.resourceType switch
         {
-            Debug.LogError("[MapStageController] stageLockedPrefab is NULL - cannot draw locked stages.");
-            return null;
-        }
+            "gold"    => goldPrefab,
+            "bio"     => bioPrefab,
+            "crystal" => crystalPrefab,
+            _         => rockPrefab,
+        };
 
-        return stageLockedPrefab;
+        if (!prefab)
+            Debug.LogError($"[MapStageController] Prefab for resourceType '{stage.meta.resourceType}' is NULL.");
+
+        return prefab;
+    }
+
+    private void ApplyStateTint(GameObject go, bool unlocked, bool completed)
+    {
+        if (unlocked && !completed) return;
+
+        var renderers = go.GetComponentsInChildren<Renderer>();
+        foreach (var r in renderers)
+        {
+            foreach (var mat in r.materials)
+            {
+                if (mat.shader.name.Contains("TextMeshPro")) continue;
+
+                if (!unlocked)
+                {
+                    mat.color *= new Color(lockedDarkness, lockedDarkness, lockedDarkness, 1f);
+                }
+                else if (completed)
+                {
+                    mat.EnableKeyword("_EMISSION");
+                    if (mat.HasProperty("_EmissionColor"))
+                        mat.SetColor("_EmissionColor", new Color(0.4f, 0.4f, 0.15f));
+                }
+            }
+        }
     }
 
     private Vector3 AxialToWorld(int q, int r)

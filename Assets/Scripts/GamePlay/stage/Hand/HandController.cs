@@ -19,6 +19,7 @@ public class HandController : MonoBehaviour
     private DraggableTile[] tiles = new DraggableTile[3];
 
     public event Action OnHandStateChanged;
+    public event Action OnHandAndDeckEmpty;
 
     // ===============================
     // Load hand from server state
@@ -39,6 +40,11 @@ public class HandController : MonoBehaviour
 
         UpdateInteractivity();
         OnHandStateChanged?.Invoke();
+
+        bool handEmpty = tilesInHand.Count == 0;
+        bool deckEmpty = (deckDto?.remainingTiles == null || deckDto.remainingTiles.Count == 0);
+        if (handEmpty && deckEmpty)
+            OnHandAndDeckEmpty?.Invoke();
     }
 
     private void SpawnSpecificTemplateToSlot(int slotIndex, string templateId)
@@ -91,6 +97,8 @@ public class HandController : MonoBehaviour
             tiles[i] = null;
         }
     }
+
+    public void SimulateGameOver() => OnHandAndDeckEmpty?.Invoke();
 
     private void UpdateInteractivity()
     {

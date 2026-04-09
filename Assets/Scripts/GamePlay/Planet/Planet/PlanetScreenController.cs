@@ -16,6 +16,9 @@ public class PlanetScreenController : MonoBehaviour
     void Start()
     {
         Open();
+
+        if (GameManager.Instance != null)
+            GameManager.Instance.RequestActivePlanet(forceRefresh: true);
     }
 
     public void Open()

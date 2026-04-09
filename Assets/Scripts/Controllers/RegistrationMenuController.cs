@@ -1,11 +1,52 @@
+using System.Collections;
 using UnityEngine;
 
 /// <summary>
 /// Initial authentication menu controller.
 /// Provides navigation to Sign In and Sign Up screens.
+/// On start, attempts auto-login via stored refresh token.
 /// </summary>
 public class RegistrationMenuController : MonoBehaviour
 {
+    [SerializeField] private AuthApiClient authApi;
+    [SerializeField] private GameConfig gameConfig;
+
+    private void Start()
+    {
+        if (gameConfig == null)
+            gameConfig = Resources.Load<GameConfig>("GameConfig");
+
+        if (AppSession.Instance != null && AppSession.Instance.HasRefresh())
+            StartCoroutine(TryAutoLogin());
+    }
+
+    private IEnumerator TryAutoLogin()
+    {
+        if (authApi == null)
+            authApi = FindObjectOfType<AuthApiClient>(true);
+
+        if (authApi == null)
+        {
+            Debug.LogWarning("[RegistrationMenu] AuthApiClient not found, skipping auto-login");
+            yield break;
+        }
+
+        yield return authApi.Refresh(
+            AppSession.Instance.RefreshToken,
+            onSuccess: (newAccessToken) =>
+            {
+                Debug.Log("[RegistrationMenu] Auto-login successful");
+                AppSession.Instance.SetAccess(newAccessToken);
+                SceneLoader.Instance.LoadScene(gameConfig.planetSceneIndex);
+            },
+            onError: (err) =>
+            {
+                Debug.Log($"[RegistrationMenu] Refresh token expired ({err}), showing login screen");
+                AppSession.Instance.Logout();
+            }
+        );
+    }
+
     public void OnClickSignIn()
     {
         SceneLoader.Instance.LoadScene(3);

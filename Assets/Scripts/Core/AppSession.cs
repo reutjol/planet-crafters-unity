@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Manages global application session state including authentication tokens and game context.
@@ -16,6 +17,21 @@ public class AppSession : MonoBehaviour
 
     public string SelectedStageId { get; private set; }
     public PlanetDto ActivePlanet { get; set; }
+
+    private int previousSceneIndex = -1;
+    public int PreviousSceneIndex => previousSceneIndex;
+
+    public void NavigateTo(int sceneIndex)
+    {
+        previousSceneIndex = SceneManager.GetActiveScene().buildIndex;
+        SceneManager.LoadScene(sceneIndex);
+    }
+
+    public void GoBack()
+    {
+        if (previousSceneIndex >= 0)
+            SceneManager.LoadScene(previousSceneIndex);
+    }
 
     public void SetSelectedStage(string stageId)
     {

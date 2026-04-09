@@ -28,7 +28,12 @@ public class BackToStageMapButton : MonoBehaviour
         if (AppSession.Instance != null)
             AppSession.Instance.ActivePlanet = null;
 
-        if (SceneLoader.Instance != null && gameConfig != null)
-            SceneLoader.Instance.LoadScene(gameConfig.stagesMapSceneIndex);
+        if (SceneLoader.Instance != null)
+        {
+            if (SceneLoader.Instance.PreviousSceneIndex >= 0)
+                SceneLoader.Instance.GoBack();
+            else
+                SceneLoader.Instance.LoadScene(gameConfig.stagesMapSceneIndex);
+        }
     }
 }

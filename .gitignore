@@ -22,3 +22,7 @@ sysinfo.txt
 .DS_Store
 
 *.md
+
+# Large asset store packages
+Assets/Low Poly Environment Starter Kit/
+Assets/Low Poly Environment Starter Kit.meta
