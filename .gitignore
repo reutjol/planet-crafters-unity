@@ -1,0 +1,31 @@
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+UserSettings/
+[Uu]ser[Ss]ettings/
+
+.vscode/
+.vs/
+.idea/
+
+*.csproj
+*.sln
+*.user
+*.pidb
+*.booproj
+*.suo
+
+sysinfo.txt
+.DS_Store
+
+*.md
+
+# Large asset store packages
+Assets/Low Poly Environment Starter Kit/
+Assets/Low Poly Environment Starter Kit.meta
+
+# Large binary files
+Assets/Resources/Blender/

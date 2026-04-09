@@ -1,0 +1,209 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\reutu\\planetcrafters\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{8108052B-9B70-D3F5-07C5-3043BCC8D999}|Assembly-CSharp.Player.csproj|c:\\users\\reutu\\planetcrafters\\assets\\scripts\\core\\gamemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8108052B-9B70-D3F5-07C5-3043BCC8D999}|Assembly-CSharp.Player.csproj|solutionrelative:assets\\scripts\\core\\gamemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8108052B-9B70-D3F5-07C5-3043BCC8D999}|Assembly-CSharp.Player.csproj|C:\\Users\\reutu\\planetcrafters\\assets\\scripts\\networking\\planetapiclient.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8108052B-9B70-D3F5-07C5-3043BCC8D999}|Assembly-CSharp.Player.csproj|solutionrelative:assets\\scripts\\networking\\planetapiclient.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8108052B-9B70-D3F5-07C5-3043BCC8D999}|Assembly-CSharp.Player.csproj|c:\\users\\reutu\\planetcrafters\\assets\\scripts\\gameplay\\planet\\stagemap\\mapstagecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8108052B-9B70-D3F5-07C5-3043BCC8D999}|Assembly-CSharp.Player.csproj|solutionrelative:assets\\scripts\\gameplay\\planet\\stagemap\\mapstagecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8108052B-9B70-D3F5-07C5-3043BCC8D999}|Assembly-CSharp.Player.csproj|c:\\users\\reutu\\planetcrafters\\assets\\scripts\\controllers\\signincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8108052B-9B70-D3F5-07C5-3043BCC8D999}|Assembly-CSharp.Player.csproj|solutionrelative:assets\\scripts\\controllers\\signincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8108052B-9B70-D3F5-07C5-3043BCC8D999}|Assembly-CSharp.Player.csproj|c:\\users\\reutu\\planetcrafters\\assets\\scripts\\networking\\authapiclient.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8108052B-9B70-D3F5-07C5-3043BCC8D999}|Assembly-CSharp.Player.csproj|solutionrelative:assets\\scripts\\networking\\authapiclient.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8108052B-9B70-D3F5-07C5-3043BCC8D999}|Assembly-CSharp.Player.csproj|c:\\users\\reutu\\planetcrafters\\assets\\scripts\\gameplay\\planet\\stagemap\\stagenodeview.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8108052B-9B70-D3F5-07C5-3043BCC8D999}|Assembly-CSharp.Player.csproj|solutionrelative:assets\\scripts\\gameplay\\planet\\stagemap\\stagenodeview.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8108052B-9B70-D3F5-07C5-3043BCC8D999}|Assembly-CSharp.Player.csproj|C:\\Users\\reutu\\planetcrafters\\assets\\scripts\\networking\\stagestateapiclient.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8108052B-9B70-D3F5-07C5-3043BCC8D999}|Assembly-CSharp.Player.csproj|solutionrelative:assets\\scripts\\networking\\stagestateapiclient.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8108052B-9B70-D3F5-07C5-3043BCC8D999}|Assembly-CSharp.Player.csproj|C:\\Users\\reutu\\planetcrafters\\assets\\scripts\\core\\appsession.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8108052B-9B70-D3F5-07C5-3043BCC8D999}|Assembly-CSharp.Player.csproj|solutionrelative:assets\\scripts\\core\\appsession.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8108052B-9B70-D3F5-07C5-3043BCC8D999}|Assembly-CSharp.Player.csproj|c:\\users\\reutu\\planetcrafters\\assets\\scripts\\core\\sceneloader.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8108052B-9B70-D3F5-07C5-3043BCC8D999}|Assembly-CSharp.Player.csproj|solutionrelative:assets\\scripts\\core\\sceneloader.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8108052B-9B70-D3F5-07C5-3043BCC8D999}|Assembly-CSharp.Player.csproj|C:\\Users\\reutu\\planetcrafters\\assets\\scripts\\gameplay\\planet\\planet\\bootstrapcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8108052B-9B70-D3F5-07C5-3043BCC8D999}|Assembly-CSharp.Player.csproj|solutionrelative:assets\\scripts\\gameplay\\planet\\planet\\bootstrapcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\reutu\\planetcrafters\\assets\\scripts\\gameplay\\planet\\stagemap\\stagemapcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:assets\\scripts\\gameplay\\planet\\stagemap\\stagemapcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 4,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{004be353-6879-467c-9d1e-9ac23cdf6d49}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "AuthApiClient.cs",
+              "DocumentMoniker": "C:\\Users\\reutu\\planetcrafters\\Assets\\Scripts\\Networking\\AuthApiClient.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\Networking\\AuthApiClient.cs",
+              "ToolTip": "C:\\Users\\reutu\\planetcrafters\\Assets\\Scripts\\Networking\\AuthApiClient.cs",
+              "RelativeToolTip": "Assets\\Scripts\\Networking\\AuthApiClient.cs",
+              "ViewState": "AgIAAAgAAAAAAAAAAAAQwBQAAAAXAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-15T22:27:41.118Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "SignInController.cs",
+              "DocumentMoniker": "C:\\Users\\reutu\\planetcrafters\\Assets\\Scripts\\Controllers\\SignInController.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\Controllers\\SignInController.cs",
+              "ToolTip": "C:\\Users\\reutu\\planetcrafters\\Assets\\Scripts\\Controllers\\SignInController.cs",
+              "RelativeToolTip": "Assets\\Scripts\\Controllers\\SignInController.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAABAAAAAtAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-15T22:27:22.295Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "StageNodeView.cs",
+              "DocumentMoniker": "C:\\Users\\reutu\\planetcrafters\\Assets\\Scripts\\GamePlay\\Planet\\stageMap\\StageNodeView.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\GamePlay\\Planet\\stageMap\\StageNodeView.cs",
+              "ToolTip": "C:\\Users\\reutu\\planetcrafters\\Assets\\Scripts\\GamePlay\\Planet\\stageMap\\StageNodeView.cs",
+              "RelativeToolTip": "Assets\\Scripts\\GamePlay\\Planet\\stageMap\\StageNodeView.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-15T22:14:45.012Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "GameManager.cs",
+              "DocumentMoniker": "C:\\Users\\reutu\\planetcrafters\\Assets\\Scripts\\Core\\GameManager.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\Core\\GameManager.cs",
+              "ToolTip": "C:\\Users\\reutu\\planetcrafters\\Assets\\Scripts\\Core\\GameManager.cs",
+              "RelativeToolTip": "Assets\\Scripts\\Core\\GameManager.cs",
+              "ViewState": "AgIAAC4AAAAAAAAAAAAcwCMAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-15T22:10:43.589Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "SceneLoader.cs",
+              "DocumentMoniker": "C:\\Users\\reutu\\planetcrafters\\Assets\\Scripts\\Core\\SceneLoader.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\Core\\SceneLoader.cs",
+              "ToolTip": "C:\\Users\\reutu\\planetcrafters\\Assets\\Scripts\\Core\\SceneLoader.cs",
+              "RelativeToolTip": "Assets\\Scripts\\Core\\SceneLoader.cs",
+              "ViewState": "AgIAAB8AAAAAAAAAAAAuwDgAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-15T21:59:22.652Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "AppSession.cs",
+              "DocumentMoniker": "C:\\Users\\reutu\\planetcrafters\\Assets\\Scripts\\Core\\AppSession.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\Core\\AppSession.cs",
+              "ToolTip": "C:\\Users\\reutu\\planetcrafters\\Assets\\Scripts\\Core\\AppSession.cs",
+              "RelativeToolTip": "Assets\\Scripts\\Core\\AppSession.cs",
+              "ViewState": "AgIAAAIAAAAAAAAAAAAxwA8AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-15T16:04:37.633Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "MapStageController.cs",
+              "DocumentMoniker": "C:\\Users\\reutu\\planetcrafters\\Assets\\Scripts\\GamePlay\\Planet\\stageMap\\MapStageController.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\GamePlay\\Planet\\stageMap\\MapStageController.cs",
+              "ToolTip": "C:\\Users\\reutu\\planetcrafters\\Assets\\Scripts\\GamePlay\\Planet\\stageMap\\MapStageController.cs",
+              "RelativeToolTip": "Assets\\Scripts\\GamePlay\\Planet\\stageMap\\MapStageController.cs",
+              "ViewState": "AgIAAGoAAAAAAAAAAAArwG8AAABYAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-15T15:44:04.141Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "PlanetApiClient.cs",
+              "DocumentMoniker": "C:\\Users\\reutu\\planetcrafters\\Assets\\Scripts\\Networking\\PlanetApiClient.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\Networking\\PlanetApiClient.cs",
+              "ToolTip": "C:\\Users\\reutu\\planetcrafters\\Assets\\Scripts\\Networking\\PlanetApiClient.cs",
+              "RelativeToolTip": "Assets\\Scripts\\Networking\\PlanetApiClient.cs",
+              "ViewState": "AgIAAEwAAAAAAAAAAAAgwFoAAAAHAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-15T16:10:31.603Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "BootstrapController.cs",
+              "DocumentMoniker": "C:\\Users\\reutu\\planetcrafters\\Assets\\Scripts\\GamePlay\\Planet\\Planet\\BootstrapController.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\GamePlay\\Planet\\Planet\\BootstrapController.cs",
+              "ToolTip": "C:\\Users\\reutu\\planetcrafters\\Assets\\Scripts\\GamePlay\\Planet\\Planet\\BootstrapController.cs",
+              "RelativeToolTip": "Assets\\Scripts\\GamePlay\\Planet\\Planet\\BootstrapController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-15T15:51:52.07Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "StageStateApiClient.cs",
+              "DocumentMoniker": "C:\\Users\\reutu\\planetcrafters\\Assets\\Scripts\\Networking\\StageStateApiClient.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\Networking\\StageStateApiClient.cs",
+              "ToolTip": "C:\\Users\\reutu\\planetcrafters\\Assets\\Scripts\\Networking\\StageStateApiClient.cs",
+              "RelativeToolTip": "Assets\\Scripts\\Networking\\StageStateApiClient.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAABGAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-15T21:54:51.597Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "stageMapController.cs",
+              "DocumentMoniker": "C:\\Users\\reutu\\planetcrafters\\Assets\\Scripts\\GamePlay\\Planet\\stageMap\\stageMapController.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\GamePlay\\Planet\\stageMap\\stageMapController.cs",
+              "ToolTip": "C:\\Users\\reutu\\planetcrafters\\Assets\\Scripts\\GamePlay\\Planet\\stageMap\\stageMapController.cs",
+              "RelativeToolTip": "Assets\\Scripts\\GamePlay\\Planet\\stageMap\\stageMapController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-15T15:41:55.411Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
