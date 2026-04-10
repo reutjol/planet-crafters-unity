@@ -41,7 +41,7 @@ public class StageNodeView : MonoBehaviour
             starsText.gameObject.SetActive(completed);
             if (completed)
             {
-                int stars = coinsAwarded > 0 ? coinsAwarded : 1;
+                int stars = Mathf.Clamp(coinsAwarded > 0 ? coinsAwarded : 1, 1, 3);
                 starsText.text = $"{stars}/3";
             }
         }

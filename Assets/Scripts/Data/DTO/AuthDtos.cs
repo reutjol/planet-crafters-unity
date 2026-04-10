@@ -17,5 +17,6 @@ public class UserDto
 {
     public string id;
     public string name;
+    public string userName;
     public string email;
 }

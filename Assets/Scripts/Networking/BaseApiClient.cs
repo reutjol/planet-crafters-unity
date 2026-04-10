@@ -167,6 +167,56 @@ public abstract class BaseApiClient : MonoBehaviour
     }
 
     /// <summary>
+    /// Sends a PUT request with JSON body and returns a response
+    /// </summary>
+    protected IEnumerator PutRequest<TRequest, TResponse>(
+        string endpoint,
+        TRequest body,
+        string accessToken,
+        Action<TResponse> onSuccess,
+        Action<string> onError)
+    {
+        var url = $"{BaseUrl}{endpoint}";
+
+        using var req = new UnityWebRequest(url, "PUT");
+        var json = JsonConvert.SerializeObject(body);
+        req.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(json));
+        req.downloadHandler = new DownloadHandlerBuffer();
+        req.SetRequestHeader("Content-Type", "application/json");
+
+        if (!string.IsNullOrEmpty(accessToken))
+            req.SetRequestHeader("Authorization", $"Bearer {accessToken}");
+
+        yield return req.SendWebRequest();
+
+        var raw = req.downloadHandler?.text ?? "";
+
+        if (req.result != UnityWebRequest.Result.Success)
+        {
+            var errorMsg = $"PUT {endpoint} failed: {req.error} ({req.responseCode}) {raw}";
+            Debug.LogError($"[{GetType().Name}] {errorMsg}");
+            onError?.Invoke(errorMsg);
+            yield break;
+        }
+
+        TResponse response;
+        try
+        {
+            response = JsonConvert.DeserializeObject<TResponse>(raw);
+        }
+        catch (Exception ex)
+        {
+            var errorMsg = $"JSON parse error: {ex.Message}\nRaw response: {raw}";
+            Debug.LogError($"[{GetType().Name}] {errorMsg}");
+            onError?.Invoke(errorMsg);
+            yield break;
+        }
+
+        Debug.Log($"[{GetType().Name}] PUT {endpoint} succeeded ({req.responseCode})");
+        onSuccess?.Invoke(response);
+    }
+
+    /// <summary>
     /// Sends a PUT request with JSON body
     /// </summary>
     protected IEnumerator PutRequest<TRequest>(

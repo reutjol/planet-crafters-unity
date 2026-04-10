@@ -4,6 +4,7 @@ using UnityEngine;
 /// Handles click interactions on stage nodes.
 /// Only allows entering unlocked stages, sets session state, and loads gameplay scene.
 /// </summary>
+[RequireComponent(typeof(StageNodeView))]
 public class StageNodeClick : MonoBehaviour
 {
     [SerializeField] private GameConfig gameConfig;
@@ -27,7 +28,7 @@ public class StageNodeClick : MonoBehaviour
 
         if (!view.isUnlocked)
         {
-            Debug.Log($"[StagesMap] Stage {view.stageId} is locked");
+            Debug.Log($"[StageNodeClick] Stage {view.stageId} is locked");
             return;
         }
 

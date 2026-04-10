@@ -245,6 +245,7 @@ public class MapController : MonoBehaviour
             Vector3 midpoint = (newWorldPos + neighborWorldPos) * 0.5f;
 
             var star = Instantiate(starPrefab, midpoint, Quaternion.identity);
+            star.transform.localScale = Vector3.one * 0.1f;
             StartCoroutine(StarRiseAnimation(star));
         }
     }
@@ -257,6 +258,7 @@ public class MapController : MonoBehaviour
         Vector3 startPos = star.transform.position;
         Vector3 endPos = startPos + Vector3.up * starRiseHeight;
 
+        Vector3 baseScale = star.transform.localScale;
         float elapsed = 0f;
         while (elapsed < starDuration)
         {
@@ -270,7 +272,7 @@ public class MapController : MonoBehaviour
             float scaleCurve = t < 0.3f
                 ? t / 0.3f
                 : 1f - ((t - 0.3f) / 0.7f);
-            star.transform.localScale = Vector3.one * scaleCurve;
+            star.transform.localScale = baseScale * scaleCurve;
 
             yield return null;
         }

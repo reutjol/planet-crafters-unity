@@ -3,33 +3,27 @@ using UnityEngine;
 public class ProfilePopupController : MonoBehaviour, IClosablePopup
 {
     [SerializeField] private ProfilePopupView view;
-    [SerializeField] private LocalPlayerProfileService profileService;
+    [SerializeField] private ServerPlayerProfileService profileService;
     [SerializeField] private Sprite[] avatarSprites;
     [SerializeField] private TopBarProfileController topBarProfileController;
 
-    private IPlayerProfileService profileServiceAbstraction;
+    private IPlayerProfileService service;
     private PlayerProfileDto currentProfile;
 
     public bool IsOpen => view != null && view.IsVisible;
 
     private void Awake()
     {
-        profileServiceAbstraction = profileService;
+        service = profileService;
 
-        if (view == null)
-        {
-            Debug.LogError("ProfilePopupController: view reference is missing.");
-            return;
-        }
+        if (view == null) { Debug.LogError("[ProfilePopupController] view is missing"); return; }
+        if (service == null) { Debug.LogError("[ProfilePopupController] profileService is missing"); return; }
 
-        if (profileServiceAbstraction == null)
-        {
-            Debug.LogError("ProfilePopupController: profile service reference is missing.");
-            return;
-        }
+        view.CloseButton?.onClick.AddListener(ClosePopup);
 
-        if (view.CloseButton != null)
-            view.CloseButton.onClick.AddListener(ClosePopup);
+        view.OnFullNameSave += name => SaveField(new UpdateProfileRequestDto { name = name });
+        view.OnUserNameSave += userName => SaveField(new UpdateProfileRequestDto { userName = userName });
+        view.OnEmailSave    += email => SaveField(new UpdateProfileRequestDto { email = email });
 
         view.Hide();
         RefreshTopBarAvatar();
@@ -37,45 +31,54 @@ public class ProfilePopupController : MonoBehaviour, IClosablePopup
 
     public void OpenPopup()
     {
-        currentProfile = profileServiceAbstraction.GetProfile();
-
-        if (currentProfile == null)
-        {
-            Debug.LogWarning("ProfilePopupController: profile data is null.");
-            return;
-        }
-
-        view.BindProfile(currentProfile, avatarSprites, OnAvatarSelected);
-        view.Show();
+        service.LoadProfileFromServer(
+            onSuccess: () =>
+            {
+                currentProfile = service.GetProfile();
+                if (currentProfile == null) { Debug.LogWarning("[ProfilePopupController] profile is null"); return; }
+                view.BindProfile(currentProfile, avatarSprites, OnAvatarSelected);
+                view.Show();
+            },
+            onError: err => Debug.LogError($"[ProfilePopupController] Failed to load profile: {err}")
+        );
     }
 
     public void ClosePopup()
     {
-        if (view != null)
-            view.Hide();
+        view?.Hide();
+    }
+
+    private void SaveField(UpdateProfileRequestDto request)
+    {
+        service.UpdateProfile(
+            request,
+            onSuccess: user =>
+            {
+                view.UpdateFieldValue("name", user.name);
+                view.UpdateFieldValue("userName", user.userName);
+                view.UpdateFieldValue("email", user.email);
+            },
+            onError: err => Debug.LogError($"[ProfilePopupController] Update failed: {err}")
+        );
     }
 
     private void OnAvatarSelected(int avatarIndex)
     {
-        profileServiceAbstraction.SetSelectedAvatar(avatarIndex);
+        service.SetSelectedAvatar(avatarIndex);
 
         if (currentProfile != null)
             currentProfile.selectedAvatarIndex = avatarIndex;
 
-        if (view != null)
-            view.UpdateSelectedAvatar(avatarIndex, avatarSprites);
-
+        view?.UpdateSelectedAvatar(avatarIndex, avatarSprites);
         RefreshTopBarAvatar();
     }
 
     private void RefreshTopBarAvatar()
     {
-        if (topBarProfileController == null || avatarSprites == null || avatarSprites.Length == 0)
-            return;
+        if (topBarProfileController == null || avatarSprites == null || avatarSprites.Length == 0) return;
 
-        PlayerProfileDto profile = profileServiceAbstraction.GetProfile();
-        if (profile == null)
-            return;
+        PlayerProfileDto profile = service?.GetProfile();
+        if (profile == null) return;
 
         int safeIndex = Mathf.Clamp(profile.selectedAvatarIndex, 0, avatarSprites.Length - 1);
         topBarProfileController.SetAvatar(avatarSprites[safeIndex]);

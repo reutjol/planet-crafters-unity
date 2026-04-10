@@ -356,7 +356,7 @@ PrefabInstance:
     - target: {fileID: -7511558181221131132, guid: 1469a1fa4454cad46b8b1e73578bea0d, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 3e69a93b6bb7e4140a1b8d6763e44ce5, type: 2}
+      objectReference: {fileID: 2100000, guid: abff9a0e7b711f545838fe6043bc2006, type: 2}
     - target: {fileID: 919132149155446097, guid: 1469a1fa4454cad46b8b1e73578bea0d, type: 3}
       propertyPath: m_Name
       value: Bush_1
@@ -640,7 +640,7 @@ PrefabInstance:
     - target: {fileID: -7511558181221131132, guid: 45aa7baacf3cc6442be13c43f5a6349e, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 3e69a93b6bb7e4140a1b8d6763e44ce5, type: 2}
+      objectReference: {fileID: 2100000, guid: abff9a0e7b711f545838fe6043bc2006, type: 2}
     - target: {fileID: 919132149155446097, guid: 45aa7baacf3cc6442be13c43f5a6349e, type: 3}
       propertyPath: m_Name
       value: Bush_2

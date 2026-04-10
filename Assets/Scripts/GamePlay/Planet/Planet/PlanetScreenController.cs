@@ -12,9 +12,13 @@ public class PlanetScreenController : MonoBehaviour
     [Header("View")]
     [SerializeField] GameObject screenRoot;
     [SerializeField] PlanetSpawner spawner;
+    [SerializeField] private GameConfig gameConfig;
 
     void Start()
     {
+        if (gameConfig == null)
+            gameConfig = Resources.Load<GameConfig>("GameConfig");
+
         Open();
 
         if (GameManager.Instance != null)
@@ -54,15 +58,13 @@ public class PlanetScreenController : MonoBehaviour
     {
         Debug.Log("[PlanetScreenController] OnPlanetClicked");
 
-        if (SceneLoader.Instance != null)
+        if (SceneLoader.Instance != null && gameConfig != null)
         {
-            Debug.Log("[PlanetScreenController] Using SceneLoader -> Load 6");
-            SceneLoader.Instance.LoadScene(6);
+            SceneLoader.Instance.LoadScene(gameConfig.stagesMapSceneIndex);
         }
         else
         {
-            Debug.LogWarning("[PlanetScreenController] SceneLoader.Instance is NULL -> using SceneManager.LoadScene(6)");
-            UnityEngine.SceneManagement.SceneManager.LoadScene(6);
+            Debug.LogWarning("[PlanetScreenController] SceneLoader or GameConfig is null");
         }
     }
 
