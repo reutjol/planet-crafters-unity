@@ -26,3 +26,4 @@ sysinfo.txt
 # Large asset store packages
 Assets/Low Poly Environment Starter Kit/
 Assets/Low Poly Environment Starter Kit.meta
+*.glb
