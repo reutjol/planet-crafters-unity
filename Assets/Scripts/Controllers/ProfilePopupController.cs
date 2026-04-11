@@ -4,16 +4,18 @@ public class ProfilePopupController : MonoBehaviour, IClosablePopup
 {
     [SerializeField] private ProfilePopupView view;
     [SerializeField] private ServerPlayerProfileService profileService;
-    [SerializeField] private Sprite[] avatarSprites;
     [SerializeField] private TopBarProfileController topBarProfileController;
 
     private IPlayerProfileService service;
     private PlayerProfileDto currentProfile;
+    private Sprite[] avatarSprites;
 
     public bool IsOpen => view != null && view.IsVisible;
 
     private void Awake()
     {
+        avatarSprites = Resources.LoadAll<Sprite>("Sprites/avatar Sprites");
+
         service = profileService;
 
         if (view == null) { Debug.LogError("[ProfilePopupController] view is missing"); return; }
