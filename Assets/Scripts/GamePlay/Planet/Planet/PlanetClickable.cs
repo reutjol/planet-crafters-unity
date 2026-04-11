@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 /// <summary>
 /// Simple clickable component for planet GameObjects.
@@ -10,6 +11,9 @@ public class PlanetClickable : MonoBehaviour
 
     private void OnMouseDown()
     {
+        if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
+            return;
+
         Clicked?.Invoke();
     }
 }
