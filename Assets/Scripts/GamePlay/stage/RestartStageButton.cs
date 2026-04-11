@@ -26,7 +26,7 @@ public class RestartStageButton : MonoBehaviour
         if (panelToHide != null)
             panelToHide.SetActive(false);
 
-        StartCoroutine(ResetAndReload());
+        GameManager.Instance.StartCoroutine(ResetAndReload());
     }
 
     private IEnumerator ResetAndReload()
