@@ -13,6 +13,7 @@ public class GameBootstrap : MonoBehaviour
     [SerializeField] private MapController mapController;
     [SerializeField] private GameConfig gameConfig;
     [SerializeField] private GameObject gameOverPanel;
+    [SerializeField] private StageCompletePanel stageCompletePanel;
     [SerializeField] private ScoreDisplay scoreDisplay;
 
     private bool isInitialized = false;
@@ -66,8 +67,13 @@ public class GameBootstrap : MonoBehaviour
 
         GameManager.Instance.OnPlanetStageStateLoaded += currentStateLoadHandler;
 
+        string loadError = null;
+        System.Action<string> errorHandler = (err) => { loadError = err; stateLoaded = true; };
+        GameManager.Instance.OnError += errorHandler;
+
         // Request the state — force refresh if cache had no targetScore
         bool needsFresh = cachedState != null && cachedState.targetScore == 0;
+        Debug.Log($"[GameBootstrap] Requesting state. planetId={AppSession.Instance?.ActivePlanet?.planetId}, stageId={AppSession.Instance?.SelectedStageId}");
         GameManager.Instance.RequestPlanetStageState(forceRefresh: needsFresh);
 
         // Wait for state to load (with timeout)
@@ -82,7 +88,14 @@ public class GameBootstrap : MonoBehaviour
 
         // Unsubscribe
         GameManager.Instance.OnPlanetStageStateLoaded -= currentStateLoadHandler;
+        GameManager.Instance.OnError -= errorHandler;
         currentStateLoadHandler = null;
+
+        if (!string.IsNullOrEmpty(loadError))
+        {
+            Debug.LogError($"[GameBootstrap] GameManager error: {loadError}");
+            yield break;
+        }
 
         if (!stateLoaded || loadedState == null)
         {
@@ -166,37 +179,35 @@ public class GameBootstrap : MonoBehaviour
 
         // Subscribe to future completions (not the initial load)
         mapController.OnStageCompleted += HandleStageCompleted;
+        mapController.OnStageCompletedWithCoins += HandleStageCompletedWithCoins;
         handController.OnHandAndDeckEmpty += HandleGameOver;
 
         isInitialized = true;
         Debug.Log("[GameBootstrap] Gameplay initialized successfully");
     }
 
+    private void HandleStageCompletedWithCoins(int coins)
+    {
+        if (stageCompletePanel != null)
+            stageCompletePanel.Show(coins);
+    }
+
     private void HandleGameOver()
     {
         Debug.Log("[GameBootstrap] Game Over — hand and deck empty.");
         if (gameOverPanel != null)
+        {
             gameOverPanel.SetActive(true);
+            PopupManager.OnPopupOpened();
+        }
     }
 
     private void HandleStageCompleted()
     {
-        Debug.Log("[GameBootstrap] Stage completed! Returning to stage map.");
-
-        // Clear cached planet so stage map refreshes from server (new isUnlocked/isCompleted)
-        if (AppSession.Instance != null)
-            AppSession.Instance.ActivePlanet = null;
+        Debug.Log("[GameBootstrap] Stage completed! Showing complete panel.");
 
         if (GameManager.Instance != null)
             GameManager.Instance.ClearCache();
-
-        if (SceneLoader.Instance != null)
-        {
-            if (SceneLoader.Instance.PreviousSceneIndex >= 0)
-                SceneLoader.Instance.GoBack();
-            else
-                SceneLoader.Instance.LoadScene(gameConfig.stagesMapSceneIndex);
-        }
     }
 
     private void OnDestroy()
@@ -209,7 +220,10 @@ public class GameBootstrap : MonoBehaviour
         }
 
         if (mapController != null)
+        {
             mapController.OnStageCompleted -= HandleStageCompleted;
+            mapController.OnStageCompletedWithCoins -= HandleStageCompletedWithCoins;
+        }
 
         if (handController != null)
             handController.OnHandAndDeckEmpty -= HandleGameOver;

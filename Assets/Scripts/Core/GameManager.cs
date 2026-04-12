@@ -136,6 +136,7 @@ public class GameManager : MonoBehaviour
     {
         if (!HasAccess())
         {
+            Debug.LogError("[GameManager] RequestPlanetStageState: No access token!");
             OnUnauthorized?.Invoke();
             return;
         }
@@ -145,12 +146,14 @@ public class GameManager : MonoBehaviour
 
         if (string.IsNullOrEmpty(planetId))
         {
+            Debug.LogError("[GameManager] RequestPlanetStageState: No active planet!");
             OnError?.Invoke("No active planet. Call RequestActivePlanet() first.");
             return;
         }
 
         if (string.IsNullOrEmpty(stageId))
         {
+            Debug.LogError("[GameManager] RequestPlanetStageState: No selected stage!");
             OnError?.Invoke("No selected stage. Call SelectStage(stageId) first.");
             return;
         }
@@ -165,9 +168,11 @@ public class GameManager : MonoBehaviour
 
         if (isLoadingPlanetStageState)
         {
-            Debug.LogWarning("[GameManager] Already loading PlanetStageState");
+            Debug.LogWarning("[GameManager] Already loading PlanetStageState - SKIPPING");
             return;
         }
+
+        Debug.Log($"[GameManager] Starting network request for stage state. planet={planetId}, stage={stageId}, token={!string.IsNullOrEmpty(AppSession.Instance?.AccessToken)}");
 
         EnsureApiRefs();
         StartCoroutine(LoadPlanetStageStateRoutine(planetId, stageId));
@@ -180,7 +185,15 @@ public class GameManager : MonoBehaviour
 
         Debug.Log($"[GameManager] Loading PlanetStageState for planet={planetId}, stage={stageId}");
 
-        yield return StartCoroutine(planetStateApi.GetPlanetStageState(
+        var api = planetStateApi ?? PlanetStateApiClient.Instance;
+        if (api == null)
+        {
+            Debug.LogError("[GameManager] planetStateApi is null, cannot load stage state");
+            isLoadingPlanetStageState = false;
+            yield break;
+        }
+
+        yield return StartCoroutine(api.GetPlanetStageState(
             planetId,
             stageId,
             defaultDeckSize,
@@ -334,6 +347,7 @@ public class GameManager : MonoBehaviour
     {
         currentStageId = null;
         currentPlanetStageState = null;
+        isLoadingPlanetStageState = false;
     }
 
     private void HandleError(string err)

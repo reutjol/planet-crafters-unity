@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 /// <summary>
 /// Handles click interactions on stage nodes.
@@ -25,6 +26,7 @@ public class StageNodeClick : MonoBehaviour
     private void OnMouseDown()
     {
         if (view == null) return;
+        if (PopupManager.IsAnyPopupOpen) return;
 
         if (!view.isUnlocked)
         {

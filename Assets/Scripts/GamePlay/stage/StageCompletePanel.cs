@@ -25,13 +25,13 @@ public class StageCompletePanel : MonoBehaviour
             panel.SetActive(false);
     }
 
-    private void OnEnable()
+    private void Start()
     {
         if (mapController != null)
             mapController.OnStageCompletedWithCoins += Show;
     }
 
-    private void OnDisable()
+    private void OnDestroy()
     {
         if (mapController != null)
             mapController.OnStageCompletedWithCoins -= Show;
@@ -40,7 +40,10 @@ public class StageCompletePanel : MonoBehaviour
     public void Show(int coins)
     {
         if (panel != null)
+        {
             panel.SetActive(true);
+            PopupManager.OnPopupOpened();
+        }
 
         // Light up the earned coin icons
         for (int i = 0; i < coinObjects.Length; i++)

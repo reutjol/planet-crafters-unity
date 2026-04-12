@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 /// <summary>
 /// Handles tile drag-and-drop gameplay for placing tiles on the hex map.
@@ -54,6 +55,7 @@ public class DraggableTile : MonoBehaviour
     private void OnMouseDown()
     {
         if (!enabled) return;
+        if (PopupManager.IsAnyPopupOpen) return;
 
         dragging = true;
 

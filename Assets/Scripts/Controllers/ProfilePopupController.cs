@@ -39,6 +39,7 @@ public class ProfilePopupController : MonoBehaviour, IClosablePopup
                 currentProfile = service.GetProfile();
                 if (currentProfile == null) { Debug.LogWarning("[ProfilePopupController] profile is null"); return; }
                 view.BindProfile(currentProfile, avatarSprites, OnAvatarSelected);
+                PopupManager.OnPopupOpened();
                 view.Show();
             },
             onError: err => Debug.LogError($"[ProfilePopupController] Failed to load profile: {err}")
@@ -47,6 +48,7 @@ public class ProfilePopupController : MonoBehaviour, IClosablePopup
 
     public void ClosePopup()
     {
+        PopupManager.OnPopupClosed();
         view?.Hide();
     }
 

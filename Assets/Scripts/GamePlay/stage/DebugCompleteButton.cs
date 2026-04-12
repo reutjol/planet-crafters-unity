@@ -1,4 +1,3 @@
-#if UNITY_EDITOR
 using UnityEngine;
 
 /// <summary>
@@ -16,4 +15,3 @@ public class DebugCompleteButton : MonoBehaviour
         stageCompletePanel?.Show(coinsToTest);
     }
 }
-#endif

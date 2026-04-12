@@ -19,6 +19,7 @@ public class SceneLoader : MonoBehaviour
     [SerializeField] int startSceneIndex = 2;
 
     int targetSceneIndex;
+    private bool isLoading = false;
     private readonly Stack<int> history = new();
     public int PreviousSceneIndex => history.Count > 0 ? history.Peek() : -1;
 
@@ -39,15 +40,22 @@ public class SceneLoader : MonoBehaviour
 
     public void LoadScene(int sceneIndex)
     {
-        history.Push(SceneManager.GetActiveScene().buildIndex);
+        if (isLoading) return;
+
+        int currentScene = SceneManager.GetActiveScene().buildIndex;
+        if (currentScene != loadingSceneIndex)
+            history.Push(currentScene);
+
         targetSceneIndex = sceneIndex;
+        isLoading = true;
         SceneManager.LoadScene(loadingSceneIndex);
     }
 
     public void GoBack()
     {
-        if (history.Count == 0) return;
+        if (isLoading || history.Count == 0) return;
         targetSceneIndex = history.Pop();
+        isLoading = true;
         SceneManager.LoadScene(loadingSceneIndex);
     }
 
@@ -64,8 +72,11 @@ public class SceneLoader : MonoBehaviour
         while (async.progress < 0.9f) yield return null;
 
         if (LoadingSceneController.Instance != null)
-            LoadingSceneController.Instance.OnSceneReady(() => async.allowSceneActivation = true);
+            LoadingSceneController.Instance.OnSceneReady(() => { async.allowSceneActivation = true; isLoading = false; });
         else
+        {
             async.allowSceneActivation = true;
+            isLoading = false;
+        }
     }
 }

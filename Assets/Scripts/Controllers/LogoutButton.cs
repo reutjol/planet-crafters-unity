@@ -15,6 +15,10 @@ public class LogoutButton : MonoBehaviour
 
     public void OnClick()
     {
+        // Close any open popups before logout
+        var profilePopup = FindObjectOfType<ProfilePopupController>();
+        profilePopup?.ClosePopup();
+
         AppSession.Instance?.Logout();
         SceneLoader.Instance?.LoadScene(gameConfig.registrationMenuSceneIndex);
     }
