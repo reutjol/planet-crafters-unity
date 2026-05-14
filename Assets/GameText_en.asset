@@ -1,0 +1,773 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: GameText_en
+  m_EditorClassIdentifier: 
+  m_LocaleId:
+    m_Code: en
+  m_SharedData: {fileID: 11400000, guid: 42d9af3cceaea904cabfb38e21461ecd, type: 2}
+  m_Metadata:
+    m_Items: []
+  m_TableData:
+  - m_Id: 64591179841536
+    m_Localized: achievements
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813056
+    m_Localized: Arena Addict
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813057
+    m_Localized: Arena Champion
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813058
+    m_Localized: Arena Grinder
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813059
+    m_Localized: Arena Legend
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813060
+    m_Localized: Arena Master
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813061
+    m_Localized: Arena Regular
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813062
+    m_Localized: Arena Veteran
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813063
+    m_Localized: Avatar
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813064
+    m_Localized: BACK TO MAP
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813065
+    m_Localized: Battle Marathon
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813066
+    m_Localized: Battle Veteran
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813067
+    m_Localized: Boost
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813068
+    m_Localized: Boost Explorer
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813069
+    m_Localized: Challenger
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813070
+    m_Localized: Coins
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813071
+    m_Localized: Comeback Player
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813072
+    m_Localized: Competitor
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813073
+    m_Localized: complete
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813074
+    m_Localized: Complete 10 levels
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813075
+    m_Localized: Complete 100 levels
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813076
+    m_Localized: Complete 20 levels
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813077
+    m_Localized: Complete 30 levels
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813078
+    m_Localized: Complete 40 levels
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813079
+    m_Localized: Complete 50 levels
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813080
+    m_Localized: Complete 60 levels
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813081
+    m_Localized: Complete 70 levels
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813082
+    m_Localized: Complete 80 levels
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813083
+    m_Localized: Complete 90 levels
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813084
+    m_Localized: Complete a level in under 60 seconds
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813085
+    m_Localized: Complete a level without using boosts
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813086
+    m_Localized: Complete first planet
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813087
+    m_Localized: Complete your first level
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813088
+    m_Localized: Confirm password...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813089
+    m_Localized: Connect
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813090
+    m_Localized: Connection error, please try again
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813091
+    m_Localized: CONTINUE
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813092
+    m_Localized: Create
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813093
+    m_Localized: Daily Warrior
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813094
+    m_Localized: Dedicated Player
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813095
+    m_Localized: Email or username already exists
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813096
+    m_Localized: Enter email...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813097
+    m_Localized: Enter full name...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813098
+    m_Localized: Enter mail..
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813099
+    m_Localized: Enter password..
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813100
+    m_Localized: Enter password...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813101
+    m_Localized: Enter user name...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813102
+    m_Localized: First Colony
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813103
+    m_Localized: First Match
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813104
+    m_Localized: First Streak
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813105
+    m_Localized: First Victory
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813106
+    m_Localized: Free spin available
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813107
+    m_Localized: 'Game
+
+      Over'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813108
+    m_Localized: gameover
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813109
+    m_Localized: Getting Competitive
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813110
+    m_Localized: Hex Empire
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813111
+    m_Localized: Hex Starter
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813112
+    m_Localized: Invalid details, please check and try again
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813113
+    m_Localized: Invalid email format
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813114
+    m_Localized: Invalid email or password
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813115
+    m_Localized: language
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813116
+    m_Localized: Level Climber I
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813117
+    m_Localized: Level Climber II
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813118
+    m_Localized: Level Climber III
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813119
+    m_Localized: Level Climber IV
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813120
+    m_Localized: Level Climber IX
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813121
+    m_Localized: Level Climber V
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813122
+    m_Localized: Level Climber VI
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813123
+    m_Localized: Level Climber VII
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813124
+    m_Localized: Level Climber VIII
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813125
+    m_Localized: Level Climber X
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813126
+    m_Localized: Login failed, please try again
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813127
+    m_Localized: logout
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813128
+    m_Localized: Lucky Wheel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813129
+    m_Localized: MAP
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813130
+    m_Localized: Match 100 hexes in total
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813131
+    m_Localized: Match 1000 hexes in total
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813132
+    m_Localized: Match 200 hexes in total
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813133
+    m_Localized: Match 300 hexes in total
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813134
+    m_Localized: Match 400 hexes in total
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813135
+    m_Localized: Match 500 hexes in total
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813136
+    m_Localized: Match 600 hexes in total
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813137
+    m_Localized: Match 700 hexes in total
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813138
+    m_Localized: Match 800 hexes in total
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813139
+    m_Localized: Match 900 hexes in total
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813140
+    m_Localized: Match Legend I
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813141
+    m_Localized: Match Legend II
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813142
+    m_Localized: Match Legend III
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813143
+    m_Localized: Match Maker I
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813144
+    m_Localized: Match Maker II
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813145
+    m_Localized: Match Maker III
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813146
+    m_Localized: Match Master I
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813147
+    m_Localized: Match Master II
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813148
+    m_Localized: Match Master III
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813149
+    m_Localized: MENU
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813150
+    m_Localized: mission complete
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813151
+    m_Localized: multi
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813152
+    m_Localized: Multi
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813153
+    m_Localized: Multiplayer Unlocked
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813154
+    m_Localized: Multiplayer Veteran
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813155
+    m_Localized: Next spin in 04:00:00
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813156
+    m_Localized: Next spin in {time}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813157
+    m_Localized: No reward could be resolved.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813158
+    m_Localized: Password must be at least 6 characters
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813159
+    m_Localized: Passwords do not match
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813160
+    m_Localized: Place 100 hexes
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813161
+    m_Localized: Place 1000 hexes
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813162
+    m_Localized: Place 1500 hexes
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813163
+    m_Localized: Place 25 tiles in one level
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813164
+    m_Localized: Place 300 hexes
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813165
+    m_Localized: Place 500 hexes
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813166
+    m_Localized: Place 800 hexes
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813167
+    m_Localized: Planet Pioneer
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813168
+    m_Localized: Play 10 matches
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813169
+    m_Localized: Play 100 matches
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813170
+    m_Localized: Play 1000 matches
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813171
+    m_Localized: Play 20 matches in one day
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813172
+    m_Localized: Play 25 matches
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813173
+    m_Localized: Play 3 matches in a row
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813174
+    m_Localized: Play 5 matches
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813175
+    m_Localized: Play 5 matches in one day
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813176
+    m_Localized: Play 5 matches in one session
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813177
+    m_Localized: Play 50 matches
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813178
+    m_Localized: Play 500 matches
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813179
+    m_Localized: Play your first match
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813180
+    m_Localized: Player Profile
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813181
+    m_Localized: Please confirm your password
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813182
+    m_Localized: Please enter email address
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813183
+    m_Localized: Please enter full name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813184
+    m_Localized: Please enter password
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813185
+    m_Localized: Please enter username
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813186
+    m_Localized: plusone
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813187
+    m_Localized: Privacy Policy
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813188
+    m_Localized: Pure Victory
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813189
+    m_Localized: Registration failed, please try again
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813190
+    m_Localized: Registration successful! Redirecting to login...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813191
+    m_Localized: Rematch Ready
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813192
+    m_Localized: Restart
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813193
+    m_Localized: Rising Champion
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813194
+    m_Localized: Score 100 points in one level
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813195
+    m_Localized: Score 3 stars on 10 levels
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813196
+    m_Localized: Score Hunter
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813197
+    m_Localized: Settings
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813198
+    m_Localized: sign in
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813199
+    m_Localized: sign In
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813200
+    m_Localized: sign up
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813201
+    m_Localized: Single
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813202
+    m_Localized: Speed Runner
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813203
+    m_Localized: Spin
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813204
+    m_Localized: SPIN
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813205
+    m_Localized: Spin completed.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813206
+    m_Localized: Spin is on cooldown.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813207
+    m_Localized: Spin not available
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813208
+    m_Localized: Star Collector
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813209
+    m_Localized: Star Master
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813210
+    m_Localized: Start Over
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813211
+    m_Localized: Technical error, please try again
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813212
+    m_Localized: Terms of use
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813213
+    m_Localized: Tile Architect
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813214
+    m_Localized: Tile Builder
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813215
+    m_Localized: Tile Engineer
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813216
+    m_Localized: Tile Expert
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813217
+    m_Localized: Tile Explorer
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813218
+    m_Localized: Tile Legend
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813219
+    m_Localized: Tile Master
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813220
+    m_Localized: try again
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813221
+    m_Localized: TRY AGAIN
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813222
+    m_Localized: Unlock Multiplayer mode
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813223
+    m_Localized: Unstoppable
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813224
+    m_Localized: Use all 3 boosts for the first time
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813225
+    m_Localized: Use all tile types
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813226
+    m_Localized: Wheel animator is missing.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813227
+    m_Localized: Wheel config is missing.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813228
+    m_Localized: Wheel is already spinning.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813229
+    m_Localized: Win 10 matches
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813230
+    m_Localized: Win 10 matches in a row
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813231
+    m_Localized: Win 100 matches
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813232
+    m_Localized: Win 2 matches in a row
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813233
+    m_Localized: Win 200 matches
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813234
+    m_Localized: Win 25 matches
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813235
+    m_Localized: Win 5 matches
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813236
+    m_Localized: Win 5 matches in a row
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813237
+    m_Localized: Win 50 matches
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813238
+    m_Localized: Win a level with 3 stars
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813239
+    m_Localized: Win a match after losing
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813240
+    m_Localized: Win your first match
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813241
+    m_Localized: Winning Streak
+    m_Metadata:
+      m_Items: []
+  references:
+    version: 2
+    RefIds: []

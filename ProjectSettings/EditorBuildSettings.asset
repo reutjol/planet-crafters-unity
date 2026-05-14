@@ -38,4 +38,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/AchievementsScene.unity
     guid: 3160144b20ea15e42aae4b7f81e1db09
-  m_configObjects: {}
+  m_configObjects:
+    com.unity.addressableassets: {fileID: 11400000, guid: 919e437373b0b284987af1cf0ba01ced, type: 2}
+    com.unity.localization.settings: {fileID: 11400000, guid: e1cfb28157e8f65448a6cb97aae499e5, type: 2}

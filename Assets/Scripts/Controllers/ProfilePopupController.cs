@@ -5,10 +5,12 @@ public class ProfilePopupController : MonoBehaviour, IClosablePopup
     [SerializeField] private ProfilePopupView view;
     [SerializeField] private ServerPlayerProfileService profileService;
     [SerializeField] private TopBarProfileController topBarProfileController;
+    [SerializeField] private SettingsPopupController settingsPopupController;
 
     private IPlayerProfileService service;
     private PlayerProfileDto currentProfile;
     private Sprite[] avatarSprites;
+    private int openRequestId;
 
     public bool IsOpen => view != null && view.IsVisible;
 
@@ -17,6 +19,9 @@ public class ProfilePopupController : MonoBehaviour, IClosablePopup
         avatarSprites = Resources.LoadAll<Sprite>("Sprites/avatar Sprites");
 
         service = profileService;
+
+        if (settingsPopupController == null)
+            settingsPopupController = FindObjectOfType<SettingsPopupController>(true);
 
         if (view == null) { Debug.LogError("[ProfilePopupController] view is missing"); return; }
         if (service == null) { Debug.LogError("[ProfilePopupController] profileService is missing"); return; }
@@ -33,13 +38,26 @@ public class ProfilePopupController : MonoBehaviour, IClosablePopup
 
     public void OpenPopup()
     {
+        if (view == null || service == null)
+            return;
+
+        int requestId = ++openRequestId;
+        settingsPopupController?.ClosePopup();
+        bool wasOpen = IsOpen;
+
         service.LoadProfileFromServer(
             onSuccess: () =>
             {
+                if (requestId != openRequestId)
+                    return;
+
                 currentProfile = service.GetProfile();
                 if (currentProfile == null) { Debug.LogWarning("[ProfilePopupController] profile is null"); return; }
                 view.BindProfile(currentProfile, avatarSprites, OnAvatarSelected);
-                PopupManager.OnPopupOpened();
+
+                if (!wasOpen)
+                    PopupManager.OnPopupOpened();
+
                 view.Show();
             },
             onError: err => Debug.LogError($"[ProfilePopupController] Failed to load profile: {err}")
@@ -48,6 +66,11 @@ public class ProfilePopupController : MonoBehaviour, IClosablePopup
 
     public void ClosePopup()
     {
+        openRequestId++;
+
+        if (!IsOpen)
+            return;
+
         PopupManager.OnPopupClosed();
         view?.Hide();
     }
