@@ -1,0 +1,776 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b11a58205ec3474ca216360e9fa74a8, type: 3}
+  m_Name: GameText Shared Data
+  m_EditorClassIdentifier: 
+  m_TableCollectionName: GameText
+  m_TableCollectionNameGuidString: 42d9af3cceaea904cabfb38e21461ecd
+  m_Entries:
+  - m_Id: 64591179841536
+    m_Key: text.achievements
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813056
+    m_Key: text.arena_addict
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813057
+    m_Key: text.arena_champion
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813058
+    m_Key: text.arena_grinder
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813059
+    m_Key: text.arena_legend
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813060
+    m_Key: text.arena_master
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813061
+    m_Key: text.arena_regular
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813062
+    m_Key: text.arena_veteran
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813063
+    m_Key: text.avatar
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813064
+    m_Key: text.back_to_map
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813065
+    m_Key: text.battle_marathon
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813066
+    m_Key: text.battle_veteran
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813067
+    m_Key: text.boost
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813068
+    m_Key: text.boost_explorer
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813069
+    m_Key: text.challenger
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813070
+    m_Key: text.coins
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813071
+    m_Key: text.comeback_player
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813072
+    m_Key: text.competitor
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813073
+    m_Key: text.complete
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813074
+    m_Key: text.complete_10_levels
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813075
+    m_Key: text.complete_100_levels
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813076
+    m_Key: text.complete_20_levels
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813077
+    m_Key: text.complete_30_levels
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813078
+    m_Key: text.complete_40_levels
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813079
+    m_Key: text.complete_50_levels
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813080
+    m_Key: text.complete_60_levels
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813081
+    m_Key: text.complete_70_levels
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813082
+    m_Key: text.complete_80_levels
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813083
+    m_Key: text.complete_90_levels
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813084
+    m_Key: text.complete_a_level_in_under_60_seconds
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813085
+    m_Key: text.complete_a_level_without_using_boosts
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813086
+    m_Key: text.complete_first_planet
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813087
+    m_Key: text.complete_your_first_level
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813088
+    m_Key: text.confirm_password
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813089
+    m_Key: text.connect
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813090
+    m_Key: text.connection_error_please_try_again
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813091
+    m_Key: text.continue
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813092
+    m_Key: text.create
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813093
+    m_Key: text.daily_warrior
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813094
+    m_Key: text.dedicated_player
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813095
+    m_Key: text.email_or_username_already_exists
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813096
+    m_Key: text.enter_email
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813097
+    m_Key: text.enter_full_name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813098
+    m_Key: text.enter_mail
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813099
+    m_Key: text.enter_password
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813100
+    m_Key: text.enter_password_2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813101
+    m_Key: text.enter_user_name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813102
+    m_Key: text.first_colony
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813103
+    m_Key: text.first_match
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813104
+    m_Key: text.first_streak
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813105
+    m_Key: text.first_victory
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813106
+    m_Key: text.free_spin_available
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813107
+    m_Key: text.game_over
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813108
+    m_Key: text.gameover
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813109
+    m_Key: text.getting_competitive
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813110
+    m_Key: text.hex_empire
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813111
+    m_Key: text.hex_starter
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813112
+    m_Key: text.invalid_details_please_check_and_try_again
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813113
+    m_Key: text.invalid_email_format
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813114
+    m_Key: text.invalid_email_or_password
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813115
+    m_Key: text.language
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813116
+    m_Key: text.level_climber_i
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813117
+    m_Key: text.level_climber_ii
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813118
+    m_Key: text.level_climber_iii
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813119
+    m_Key: text.level_climber_iv
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813120
+    m_Key: text.level_climber_ix
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813121
+    m_Key: text.level_climber_v
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813122
+    m_Key: text.level_climber_vi
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813123
+    m_Key: text.level_climber_vii
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813124
+    m_Key: text.level_climber_viii
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813125
+    m_Key: text.level_climber_x
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813126
+    m_Key: text.login_failed_please_try_again
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813127
+    m_Key: text.logout
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813128
+    m_Key: text.lucky_wheel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813129
+    m_Key: text.map
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813130
+    m_Key: text.match_100_hexes_in_total
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813131
+    m_Key: text.match_1000_hexes_in_total
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813132
+    m_Key: text.match_200_hexes_in_total
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813133
+    m_Key: text.match_300_hexes_in_total
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813134
+    m_Key: text.match_400_hexes_in_total
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813135
+    m_Key: text.match_500_hexes_in_total
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813136
+    m_Key: text.match_600_hexes_in_total
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813137
+    m_Key: text.match_700_hexes_in_total
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813138
+    m_Key: text.match_800_hexes_in_total
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813139
+    m_Key: text.match_900_hexes_in_total
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813140
+    m_Key: text.match_legend_i
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813141
+    m_Key: text.match_legend_ii
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813142
+    m_Key: text.match_legend_iii
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813143
+    m_Key: text.match_maker_i
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813144
+    m_Key: text.match_maker_ii
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813145
+    m_Key: text.match_maker_iii
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813146
+    m_Key: text.match_master_i
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813147
+    m_Key: text.match_master_ii
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813148
+    m_Key: text.match_master_iii
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813149
+    m_Key: text.menu
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813150
+    m_Key: text.mission_complete
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813151
+    m_Key: text.multi
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813152
+    m_Key: text.multi_2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813153
+    m_Key: text.multiplayer_unlocked
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813154
+    m_Key: text.multiplayer_veteran
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813155
+    m_Key: text.next_spin_in_04_00_00
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813156
+    m_Key: text.next_spin_in_time
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813157
+    m_Key: text.no_reward_could_be_resolved
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813158
+    m_Key: text.password_must_be_at_least_6_characters
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813159
+    m_Key: text.passwords_do_not_match
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813160
+    m_Key: text.place_100_hexes
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813161
+    m_Key: text.place_1000_hexes
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813162
+    m_Key: text.place_1500_hexes
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813163
+    m_Key: text.place_25_tiles_in_one_level
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813164
+    m_Key: text.place_300_hexes
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813165
+    m_Key: text.place_500_hexes
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813166
+    m_Key: text.place_800_hexes
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813167
+    m_Key: text.planet_pioneer
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813168
+    m_Key: text.play_10_matches
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813169
+    m_Key: text.play_100_matches
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813170
+    m_Key: text.play_1000_matches
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813171
+    m_Key: text.play_20_matches_in_one_day
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813172
+    m_Key: text.play_25_matches
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813173
+    m_Key: text.play_3_matches_in_a_row
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813174
+    m_Key: text.play_5_matches
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813175
+    m_Key: text.play_5_matches_in_one_day
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813176
+    m_Key: text.play_5_matches_in_one_session
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813177
+    m_Key: text.play_50_matches
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813178
+    m_Key: text.play_500_matches
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813179
+    m_Key: text.play_your_first_match
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813180
+    m_Key: text.player_profile
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813181
+    m_Key: text.please_confirm_your_password
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813182
+    m_Key: text.please_enter_email_address
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813183
+    m_Key: text.please_enter_full_name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813184
+    m_Key: text.please_enter_password
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813185
+    m_Key: text.please_enter_username
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813186
+    m_Key: text.plusone
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813187
+    m_Key: text.privacy_policy
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813188
+    m_Key: text.pure_victory
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813189
+    m_Key: text.registration_failed_please_try_again
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813190
+    m_Key: text.registration_successful_redirecting_to_login
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813191
+    m_Key: text.rematch_ready
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813192
+    m_Key: text.restart
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813193
+    m_Key: text.rising_champion
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813194
+    m_Key: text.score_100_points_in_one_level
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813195
+    m_Key: text.score_3_stars_on_10_levels
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813196
+    m_Key: text.score_hunter
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813197
+    m_Key: text.settings
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813198
+    m_Key: text.sign_in
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813199
+    m_Key: text.sign_in_2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813200
+    m_Key: text.sign_up
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813201
+    m_Key: text.single
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813202
+    m_Key: text.speed_runner
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813203
+    m_Key: text.spin
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813204
+    m_Key: text.spin_2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813205
+    m_Key: text.spin_completed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813206
+    m_Key: text.spin_is_on_cooldown
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813207
+    m_Key: text.spin_not_available
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813208
+    m_Key: text.star_collector
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813209
+    m_Key: text.star_master
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813210
+    m_Key: text.start_over
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813211
+    m_Key: text.technical_error_please_try_again
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813212
+    m_Key: text.terms_of_use
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813213
+    m_Key: text.tile_architect
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813214
+    m_Key: text.tile_builder
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813215
+    m_Key: text.tile_engineer
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813216
+    m_Key: text.tile_expert
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813217
+    m_Key: text.tile_explorer
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813218
+    m_Key: text.tile_legend
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813219
+    m_Key: text.tile_master
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813220
+    m_Key: text.try_again
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813221
+    m_Key: text.try_again_2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813222
+    m_Key: text.unlock_multiplayer_mode
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813223
+    m_Key: text.unstoppable
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813224
+    m_Key: text.use_all_3_boosts_for_the_first_time
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813225
+    m_Key: text.use_all_tile_types
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813226
+    m_Key: text.wheel_animator_is_missing
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813227
+    m_Key: text.wheel_config_is_missing
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813228
+    m_Key: text.wheel_is_already_spinning
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813229
+    m_Key: text.win_10_matches
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813230
+    m_Key: text.win_10_matches_in_a_row
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813231
+    m_Key: text.win_100_matches
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813232
+    m_Key: text.win_2_matches_in_a_row
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813233
+    m_Key: text.win_200_matches
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813234
+    m_Key: text.win_25_matches
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813235
+    m_Key: text.win_5_matches
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813236
+    m_Key: text.win_5_matches_in_a_row
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813237
+    m_Key: text.win_50_matches
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813238
+    m_Key: text.win_a_level_with_3_stars
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813239
+    m_Key: text.win_a_match_after_losing
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813240
+    m_Key: text.win_your_first_match
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813241
+    m_Key: text.winning_streak
+    m_Metadata:
+      m_Items: []
+  m_Metadata:
+    m_Items: []
+  m_KeyGenerator:
+    rid: 2767745816233246746
+  references:
+    version: 2
+    RefIds:
+    - rid: 2767745816233246746
+      type: {class: DistributedUIDGenerator, ns: UnityEngine.Localization.Tables, asm: Unity.Localization}
+      data:
+        m_CustomEpoch: 1778731477251

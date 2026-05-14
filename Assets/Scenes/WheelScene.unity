@@ -581,6 +581,7 @@ GameObject:
   - component: {fileID: 823666756}
   - component: {fileID: 823666758}
   - component: {fileID: 823666757}
+  - component: {fileID: 823666759}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -704,6 +705,23 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 823666755}
   m_CullTransparentMesh: 1
+--- !u!114 &823666759
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 823666755}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ae7e89c7f52c5145aae68c21ea84ba3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  localizationKey: text.spin_2
+  fallbackText: SPIN
+  updateRightToLeft: 1
+  tmpText: {fileID: 823666757}
+  uiText: {fileID: 0}
 --- !u!1 &875745769
 GameObject:
   m_ObjectHideFlags: 0
@@ -985,6 +1003,7 @@ GameObject:
   - component: {fileID: 1088797451}
   - component: {fileID: 1088797450}
   - component: {fileID: 1088797452}
+  - component: {fileID: 1088797453}
   m_Layer: 5
   m_Name: CooldownText
   m_TagString: Untagged
@@ -1121,6 +1140,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   textLabel: {fileID: 1088797450}
+--- !u!114 &1088797453
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1088797448}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ae7e89c7f52c5145aae68c21ea84ba3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  localizationKey: text.next_spin_in_04_00_00
+  fallbackText: Next spin in 04:00:00
+  updateRightToLeft: 1
+  tmpText: {fileID: 1088797450}
+  uiText: {fileID: 0}
 --- !u!1 &1357536141
 GameObject:
   m_ObjectHideFlags: 0
@@ -1248,6 +1284,7 @@ GameObject:
   - component: {fileID: 1579230164}
   - component: {fileID: 1579230166}
   - component: {fileID: 1579230165}
+  - component: {fileID: 1579230167}
   m_Layer: 5
   m_Name: TitleText
   m_TagString: Untagged
@@ -1371,6 +1408,23 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1579230163}
   m_CullTransparentMesh: 1
+--- !u!114 &1579230167
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1579230163}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ae7e89c7f52c5145aae68c21ea84ba3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  localizationKey: text.lucky_wheel
+  fallbackText: Lucky Wheel
+  updateRightToLeft: 1
+  tmpText: {fileID: 1579230165}
+  uiText: {fileID: 0}
 --- !u!1 &1712634475
 GameObject:
   m_ObjectHideFlags: 0

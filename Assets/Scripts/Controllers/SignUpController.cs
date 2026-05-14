@@ -21,8 +21,15 @@ public class SignUpController : MonoBehaviour
     [Header("UI Elements")]
     [SerializeField] private TMP_Text errorMessageText;
     [SerializeField] private TMP_Text successMessageText;
+
+    private ILocalizationService localizationService;
+    private string currentErrorMessage;
+    private string currentSuccessMessage;
+
     private void Awake()
     {
+        localizationService = UnityLocalizationService.Instance;
+
         if (gameConfig == null)
         {
             gameConfig = Resources.Load<GameConfig>("GameConfig");
@@ -47,6 +54,20 @@ public class SignUpController : MonoBehaviour
         {
             successMessageText.gameObject.SetActive(false);
         }
+    }
+
+    private void OnEnable()
+    {
+        if (localizationService == null)
+            localizationService = UnityLocalizationService.Instance;
+
+        localizationService.LanguageChanged += HandleLanguageChanged;
+    }
+
+    private void OnDisable()
+    {
+        if (localizationService != null)
+            localizationService.LanguageChanged -= HandleLanguageChanged;
     }
 
     /// <summary>
@@ -181,15 +202,19 @@ public class SignUpController : MonoBehaviour
 
     private void ShowError(string message)
     {
+        currentErrorMessage = message;
+
         if (errorMessageText != null)
         {
-            errorMessageText.text = message;
+            errorMessageText.text = LocalizeMessage(message);
             errorMessageText.gameObject.SetActive(true);
         }
     }
 
     private void HideError()
     {
+        currentErrorMessage = string.Empty;
+
         if (errorMessageText != null)
         {
             errorMessageText.gameObject.SetActive(false);
@@ -198,18 +223,38 @@ public class SignUpController : MonoBehaviour
 
     private void ShowSuccess(string message)
     {
+        currentSuccessMessage = message;
+
         if (successMessageText != null)
         {
-            successMessageText.text = message;
+            successMessageText.text = LocalizeMessage(message);
             successMessageText.gameObject.SetActive(true);
         }
     }
 
     private void HideSuccess()
     {
+        currentSuccessMessage = string.Empty;
+
         if (successMessageText != null)
         {
             successMessageText.gameObject.SetActive(false);
         }
+    }
+
+    private void HandleLanguageChanged(string languageCode)
+    {
+        if (errorMessageText != null && errorMessageText.gameObject.activeSelf && !string.IsNullOrEmpty(currentErrorMessage))
+            errorMessageText.text = LocalizeMessage(currentErrorMessage);
+
+        if (successMessageText != null && successMessageText.gameObject.activeSelf && !string.IsNullOrEmpty(currentSuccessMessage))
+            successMessageText.text = LocalizeMessage(currentSuccessMessage);
+    }
+
+    private string LocalizeMessage(string message)
+    {
+        return localizationService != null
+            ? localizationService.GetTextBySource(message)
+            : message;
     }
 }

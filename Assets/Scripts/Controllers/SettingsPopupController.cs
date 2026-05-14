@@ -14,9 +14,12 @@ public class SettingsPopupController : MonoBehaviour, IClosablePopup
     [Header("Existing Logout")]
     [SerializeField] private LogoutButton logoutButton;
 
+    [Header("Localization")]
+    [SerializeField] private UnityLocalizationService localizationService;
+
     [Header("External Links")]
-    [SerializeField] private string privacyPolicyUrl = "https://your-site.com/privacy-policy";
-    [SerializeField] private string termsOfUseUrl = "https://your-site.com/terms-of-use";
+    [SerializeField] private string privacyPolicyUrl = "";
+    [SerializeField] private string termsOfUseUrl = "";
 
     private IPlayerProfileService playerProfileService;
     private Sprite[] avatarSprites;
@@ -30,6 +33,9 @@ public class SettingsPopupController : MonoBehaviour, IClosablePopup
 
         if (profilePopupController == null)
             profilePopupController = FindObjectOfType<ProfilePopupController>(true);
+
+        if (localizationService == null)
+            localizationService = UnityLocalizationService.Instance;
 
         if (view == null)
             Debug.LogError("[SettingsPopupController] View is missing.");
@@ -127,7 +133,10 @@ public class SettingsPopupController : MonoBehaviour, IClosablePopup
 
     private void OpenLanguage()
     {
-        Debug.Log("[SettingsPopupController] Language popup will be connected later.");
+        if (localizationService == null)
+            localizationService = UnityLocalizationService.Instance;
+
+        localizationService.ToggleLanguage();
     }
 
     private void OpenPrivacyPolicy()

@@ -20,6 +20,7 @@ public class WheelScreenController : MonoBehaviour
     private IWheelRewardGrantService wheelRewardGrantService;
     private IWheelAngleCalculator wheelAngleCalculator;
     private IWheelRewardIconProvider wheelRewardIconProvider;
+    private ILocalizationService localizationService;
 
     private SpinWheelUseCase spinWheelUseCase;
     private WheelScreenPresenter wheelScreenPresenter;
@@ -58,6 +59,8 @@ public class WheelScreenController : MonoBehaviour
 
     private void BuildDependencies()
     {
+        localizationService = UnityLocalizationService.Instance;
+
         wheelStateRepository = WheelServicesFactory.CreateStateRepository();
 
         spinAvailabilityService = WheelServicesFactory.CreateSpinAvailabilityService(
@@ -72,7 +75,8 @@ public class WheelScreenController : MonoBehaviour
         wheelScreenPresenter = new WheelScreenPresenter(
             spinButtonView,
             cooldownTextView,
-            spinAvailabilityService
+            spinAvailabilityService,
+            localizationService
         );
 
         spinWheelUseCase = new SpinWheelUseCase(

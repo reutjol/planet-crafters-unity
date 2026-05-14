@@ -26,9 +26,13 @@ public class SignInController : MonoBehaviour
     [SerializeField] private Sprite hideIcon;  // Eye icon (closed)
 
     private bool isPasswordVisible = false;
+    private ILocalizationService localizationService;
+    private string currentErrorMessage;
 
     private void Awake()
     {
+        localizationService = UnityLocalizationService.Instance;
+
         if (gameConfig == null)
         {
             gameConfig = Resources.Load<GameConfig>("GameConfig");
@@ -52,6 +56,20 @@ public class SignInController : MonoBehaviour
             showPasswordButton.onClick.AddListener(TogglePasswordVisibility);
             UpdatePasswordButtonText();
         }
+    }
+
+    private void OnEnable()
+    {
+        if (localizationService == null)
+            localizationService = UnityLocalizationService.Instance;
+
+        localizationService.LanguageChanged += HandleLanguageChanged;
+    }
+
+    private void OnDisable()
+    {
+        if (localizationService != null)
+            localizationService.LanguageChanged -= HandleLanguageChanged;
     }
 
     private void OnDestroy()
@@ -162,18 +180,37 @@ public class SignInController : MonoBehaviour
 
     private void ShowError(string message)
     {
+        currentErrorMessage = message;
+
         if (errorMessageText != null)
         {
-            errorMessageText.text = message;
+            errorMessageText.text = LocalizeMessage(message);
             errorMessageText.gameObject.SetActive(true);
         }
     }
 
     private void HideError()
     {
+        currentErrorMessage = string.Empty;
+
         if (errorMessageText != null)
         {
             errorMessageText.gameObject.SetActive(false);
         }
+    }
+
+    private void HandleLanguageChanged(string languageCode)
+    {
+        if (errorMessageText == null || !errorMessageText.gameObject.activeSelf || string.IsNullOrEmpty(currentErrorMessage))
+            return;
+
+        errorMessageText.text = LocalizeMessage(currentErrorMessage);
+    }
+
+    private string LocalizeMessage(string message)
+    {
+        return localizationService != null
+            ? localizationService.GetTextBySource(message)
+            : message;
     }
 }

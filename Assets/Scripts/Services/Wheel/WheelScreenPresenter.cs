@@ -5,15 +5,18 @@ public class WheelScreenPresenter
     private readonly SpinButtonView spinButtonView;
     private readonly CooldownTextView cooldownTextView;
     private readonly ISpinAvailabilityService spinAvailabilityService;
+    private readonly ILocalizationService localizationService;
 
     public WheelScreenPresenter(
         SpinButtonView spinButtonView,
         CooldownTextView cooldownTextView,
-        ISpinAvailabilityService spinAvailabilityService)
+        ISpinAvailabilityService spinAvailabilityService,
+        ILocalizationService localizationService)
     {
         this.spinButtonView = spinButtonView;
         this.cooldownTextView = cooldownTextView;
         this.spinAvailabilityService = spinAvailabilityService;
+        this.localizationService = localizationService;
     }
 
     public void PresentInitial()
@@ -31,9 +34,9 @@ public class WheelScreenPresenter
         spinButtonView?.SetInteractable(false);
 
         if (remainingCooldown > TimeSpan.Zero)
-            cooldownTextView?.SetText($"Next spin in {remainingCooldown:hh\\:mm\\:ss}");
+            cooldownTextView?.SetText(GetCooldownText(remainingCooldown));
         else
-            cooldownTextView?.SetText("Spin not available");
+            cooldownTextView?.SetText(GetText("text.spin_not_available", "Spin not available"));
     }
 
     public void PresentCompleted(WheelSpinExecutionResult result)
@@ -52,8 +55,21 @@ public class WheelScreenPresenter
         spinButtonView?.SetInteractable(canSpin);
 
         if (canSpin)
-            cooldownTextView?.SetText("Free spin available");
+            cooldownTextView?.SetText(GetText("text.free_spin_available", "Free spin available"));
         else
-            cooldownTextView?.SetText($"Next spin in {remaining:hh\\:mm\\:ss}");
+            cooldownTextView?.SetText(GetCooldownText(remaining));
+    }
+
+    private string GetCooldownText(TimeSpan remaining)
+    {
+        return GetText("text.next_spin_in_time", "Next spin in {time}")
+            .Replace("{time}", remaining.ToString(@"hh\:mm\:ss"));
+    }
+
+    private string GetText(string key, string fallbackText)
+    {
+        return localizationService != null
+            ? localizationService.GetText(key, fallbackText)
+            : fallbackText;
     }
 }

@@ -134,6 +134,7 @@ GameObject:
   - component: {fileID: 111406452}
   - component: {fileID: 111406451}
   - component: {fileID: 111406450}
+  - component: {fileID: 111406453}
   m_Layer: 5
   m_Name: Placeholder
   m_TagString: Untagged
@@ -277,6 +278,23 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 111406448}
   m_CullTransparentMesh: 1
+--- !u!114 &111406453
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 111406448}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ae7e89c7f52c5145aae68c21ea84ba3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  localizationKey: text.enter_mail
+  fallbackText: Enter mail..
+  updateRightToLeft: 1
+  tmpText: {fileID: 111406451}
+  uiText: {fileID: 0}
 --- !u!1 &192963474
 GameObject:
   m_ObjectHideFlags: 0
@@ -1152,7 +1170,43 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 646626743652004224, guid: 9a9c6ec60a23593479ac31b033f98e55, type: 3}
       insertIndex: -1
       addedObject: {fileID: 300587030}
+    - targetCorrespondingSourceObject: {fileID: 1261885926464194529, guid: 9a9c6ec60a23593479ac31b033f98e55, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 719615766}
   m_SourcePrefab: {fileID: 100100000, guid: 9a9c6ec60a23593479ac31b033f98e55, type: 3}
+--- !u!1 &719615764 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1261885926464194529, guid: 9a9c6ec60a23593479ac31b033f98e55, type: 3}
+  m_PrefabInstance: {fileID: 719615763}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &719615765 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7277013070088413911, guid: 9a9c6ec60a23593479ac31b033f98e55, type: 3}
+  m_PrefabInstance: {fileID: 719615763}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 719615764}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &719615766
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 719615764}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ae7e89c7f52c5145aae68c21ea84ba3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  localizationKey: text.connect
+  fallbackText: Connect
+  updateRightToLeft: 1
+  tmpText: {fileID: 719615765}
+  uiText: {fileID: 0}
 --- !u!1 &732198097
 GameObject:
   m_ObjectHideFlags: 0
@@ -1520,6 +1574,7 @@ GameObject:
   - component: {fileID: 1520663135}
   - component: {fileID: 1520663137}
   - component: {fileID: 1520663136}
+  - component: {fileID: 1520663138}
   m_Layer: 5
   m_Name: 'SignIn text '
   m_TagString: Untagged
@@ -1643,6 +1698,23 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1520663134}
   m_CullTransparentMesh: 1
+--- !u!114 &1520663138
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1520663134}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ae7e89c7f52c5145aae68c21ea84ba3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  localizationKey: text.sign_in
+  fallbackText: sign in
+  updateRightToLeft: 1
+  tmpText: {fileID: 1520663136}
+  uiText: {fileID: 0}
 --- !u!224 &1660897473 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6159408630675659649, guid: d62b4d8f7004a1c43ada8165dea624b6, type: 3}
@@ -1932,6 +2004,7 @@ GameObject:
   - component: {fileID: 2042514704}
   - component: {fileID: 2042514703}
   - component: {fileID: 2042514702}
+  - component: {fileID: 2042514705}
   m_Layer: 5
   m_Name: Placeholder
   m_TagString: Untagged
@@ -2075,6 +2148,23 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2042514700}
   m_CullTransparentMesh: 1
+--- !u!114 &2042514705
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2042514700}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ae7e89c7f52c5145aae68c21ea84ba3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  localizationKey: text.enter_password
+  fallbackText: Enter password..
+  updateRightToLeft: 1
+  tmpText: {fileID: 2042514703}
+  uiText: {fileID: 0}
 --- !u!1001 &4388567107295433944
 PrefabInstance:
   m_ObjectHideFlags: 0
