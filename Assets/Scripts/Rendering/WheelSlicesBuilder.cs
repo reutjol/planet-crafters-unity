@@ -10,6 +10,11 @@ public class WheelSlicesBuilder : MonoBehaviour
     [SerializeField] private RectTransform slicesContainer;
     [SerializeField] private WheelSliceView slicePrefab;
 
+    [Header("Reference Wheel Layout")]
+    [SerializeField] private float rewardRadius = 345f;
+    [SerializeField] private Vector2 rewardViewSize = new Vector2(160f, 130f);
+    [SerializeField] private float firstRewardAngle = 90f;
+
     private IWheelRewardIconProvider iconProvider;
 
     public void Initialize(IWheelRewardIconProvider iconProvider)
@@ -77,16 +82,22 @@ public class WheelSlicesBuilder : MonoBehaviour
 
             sliceRect.anchorMin = new Vector2(0.5f, 0.5f);
             sliceRect.anchorMax = new Vector2(0.5f, 0.5f);
-            sliceRect.pivot = new Vector2(0.5f, 0f);
+            sliceRect.pivot = new Vector2(0.5f, 0.5f);
+            sliceRect.sizeDelta = rewardViewSize;
 
-            sliceRect.anchoredPosition = Vector2.zero;
+            float angle = firstRewardAngle - (i * angleStep);
+            sliceRect.anchoredPosition = AngleToPosition(angle, rewardRadius);
             sliceRect.localScale = Vector3.one;
-
-            float angle = 90 - (i * angleStep);
-            sliceRect.localRotation = Quaternion.Euler(0f, 0f, angle);
+            sliceRect.localRotation = Quaternion.identity;
         }
 
         Debug.Log("WheelSlicesBuilder: Build finished");
+    }
+
+    private static Vector2 AngleToPosition(float angleDegrees, float radius)
+    {
+        float radians = angleDegrees * Mathf.Deg2Rad;
+        return new Vector2(Mathf.Cos(radians), Mathf.Sin(radians)) * radius;
     }
 
     private void ClearContainer()

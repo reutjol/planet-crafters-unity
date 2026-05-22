@@ -62,8 +62,7 @@ public class WheelScreenPresenter
 
     private string GetCooldownText(TimeSpan remaining)
     {
-        return GetText("text.next_spin_in_time", "Next spin in {time}")
-            .Replace("{time}", remaining.ToString(@"hh\:mm\:ss"));
+        return remaining.ToString(@"hh\:mm\:ss");
     }
 
     private string GetText(string key, string fallbackText)
