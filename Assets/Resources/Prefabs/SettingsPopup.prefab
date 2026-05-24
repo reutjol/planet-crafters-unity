@@ -421,7 +421,7 @@ MonoBehaviour:
   m_text: LOGOUT
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 0e3ed8431660cf84f8eae34440eb2529, type: 2}
-  m_sharedMaterial: {fileID: 0}
+  m_sharedMaterial: {fileID: 8415435666526095410, guid: 0e3ed8431660cf84f8eae34440eb2529, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -923,7 +923,7 @@ MonoBehaviour:
   m_text: SETTINGS
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 0e3ed8431660cf84f8eae34440eb2529, type: 2}
-  m_sharedMaterial: {fileID: 0}
+  m_sharedMaterial: {fileID: 8415435666526095410, guid: 0e3ed8431660cf84f8eae34440eb2529, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1075,7 +1075,7 @@ MonoBehaviour:
   m_text: LANGUAGE
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 0e3ed8431660cf84f8eae34440eb2529, type: 2}
-  m_sharedMaterial: {fileID: 0}
+  m_sharedMaterial: {fileID: 8415435666526095410, guid: 0e3ed8431660cf84f8eae34440eb2529, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2167,6 +2167,7 @@ GameObject:
   - component: {fileID: 7833551718859803831}
   - component: {fileID: 90160631060636606}
   - component: {fileID: 2098253049254246056}
+  - component: {fileID: 2014874826869924757}
   m_Layer: 5
   m_Name: MusicButton
   m_TagString: Untagged
@@ -2276,6 +2277,25 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &2014874826869924757
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5502751664238450809}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32ed258388b450349a10281d0e0654bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  button: {fileID: 2098253049254246056}
+  iconImage: {fileID: 4511444086219245154}
+  backgroundImage: {fileID: 90160631060636606}
+  enabledIconColor: {r: 1, g: 1, b: 1, a: 1}
+  disabledIconColor: {r: 1, g: 1, b: 1, a: 0.38}
+  enabledBackgroundColor: {r: 1, g: 1, b: 1, a: 1}
+  disabledBackgroundColor: {r: 0.55, g: 0.55, b: 0.65, a: 0.82}
 --- !u!1 &5577606393630106058
 GameObject:
   m_ObjectHideFlags: 0
