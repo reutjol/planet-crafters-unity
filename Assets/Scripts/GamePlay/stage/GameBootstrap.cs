@@ -1,95 +1,81 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Serialization;
 
-/// <summary>
-/// Initializes the gameplay scene by loading templates and stage state from GameManager
-/// This component acts as a bridge between GameManager and the gameplay systems
-/// </summary>
 public class GameBootstrap : MonoBehaviour
 {
-    [SerializeField] private HexTileTemplateService templateService;
-    [SerializeField] private TileFactory tileFactory;
-    [SerializeField] private HandController handController;
-    [SerializeField] private MapController mapController;
-    [SerializeField] private GameConfig gameConfig;
-    [SerializeField] private GameObject gameOverPanel;
-    [SerializeField] private StageCompletePanel stageCompletePanel;
-    [SerializeField] private ScoreDisplay scoreDisplay;
+    [FormerlySerializedAs("templateService")] [SerializeField] private HexTileTemplateService _templateService;
+    [FormerlySerializedAs("tileFactory")]     [SerializeField] private TileFactory _tileFactory;
+    [FormerlySerializedAs("handController")]  [SerializeField] private HandController _handController;
+    [FormerlySerializedAs("mapController")]   [SerializeField] private MapController _mapController;
+    [FormerlySerializedAs("gameConfig")]      [SerializeField] private GameConfig _gameConfig;
+    [FormerlySerializedAs("gameOverPanel")]   [SerializeField] private GameObject _gameOverPanel;
+    [FormerlySerializedAs("stageCompletePanel")] [SerializeField] private StageCompletePanel _stageCompletePanel;
+    [FormerlySerializedAs("scoreDisplay")]    [SerializeField] private ScoreDisplay _scoreDisplay;
 
-    private bool isInitialized = false;
-    private System.Action<PlanetStageStateDto> currentStateLoadHandler;
+    private bool _isInitialized = false;
+    private System.Action<PlanetStageStateDto> _currentStateLoadHandler;
 
     private IEnumerator Start()
     {
-        // 0) Validate dependencies
         if (!ValidateDependencies()) yield break;
 
-        // 1) Load templates
         yield return LoadTemplates();
-        if (!templateService.IsReady)
+        if (!_templateService.IsReady)
         {
             Debug.LogError("[GameBootstrap] Templates not ready after loading");
             yield break;
         }
 
-        // Connect TileFactory to TemplateService
-        tileFactory.templateService = templateService;
+        _tileFactory.TemplateService = _templateService;
 
-        // 2) Check GameManager
         if (GameManager.Instance == null)
         {
             Debug.LogError("[GameBootstrap] GameManager.Instance is null!");
             yield break;
         }
 
-        // 3) Try to get cached state first
         var cachedState = GameManager.Instance.GetCachedPlanetStageState();
 
         if (cachedState != null && cachedState.targetScore > 0)
         {
-            Debug.Log("[GameBootstrap] Using cached state from GameManager");
             InitializeGameplay(cachedState);
             yield break;
         }
 
-        // 4) If no cache, request state from GameManager
-        Debug.Log("[GameBootstrap] No cached state, requesting from GameManager");
-
         bool stateLoaded = false;
         PlanetStageStateDto loadedState = null;
 
-        // Subscribe to GameManager event
-        currentStateLoadHandler = (state) =>
+        _currentStateLoadHandler = (state) =>
         {
             loadedState = state;
             stateLoaded = true;
         };
 
-        GameManager.Instance.OnPlanetStageStateLoaded += currentStateLoadHandler;
+        GameManager.Instance.OnPlanetStageStateLoaded += _currentStateLoadHandler;
 
         string loadError = null;
         System.Action<string> errorHandler = (err) => { loadError = err; stateLoaded = true; };
+        System.Action unauthorizedHandler = () => { loadError = "Unauthorized"; stateLoaded = true; };
         GameManager.Instance.OnError += errorHandler;
+        GameManager.Instance.OnUnauthorized += unauthorizedHandler;
 
-        // Request the state — force refresh if cache had no targetScore
         bool needsFresh = cachedState != null && cachedState.targetScore == 0;
-        Debug.Log($"[GameBootstrap] Requesting state. planetId={AppSession.Instance?.ActivePlanet?.planetId}, stageId={AppSession.Instance?.SelectedStageId}");
         GameManager.Instance.RequestPlanetStageState(forceRefresh: needsFresh);
 
-        // Wait for state to load (with timeout)
-        float timeout = 10f;
+        float timeout = 60f;
         float elapsed = 0f;
 
         while (!stateLoaded && elapsed < timeout)
         {
-            elapsed += Time.deltaTime;
+            elapsed += Time.unscaledDeltaTime;
             yield return null;
         }
 
-        // Unsubscribe
-        GameManager.Instance.OnPlanetStageStateLoaded -= currentStateLoadHandler;
+        GameManager.Instance.OnPlanetStageStateLoaded -= _currentStateLoadHandler;
         GameManager.Instance.OnError -= errorHandler;
-        currentStateLoadHandler = null;
+        GameManager.Instance.OnUnauthorized -= unauthorizedHandler;
+        _currentStateLoadHandler = null;
 
         if (!string.IsNullOrEmpty(loadError))
         {
@@ -103,129 +89,90 @@ public class GameBootstrap : MonoBehaviour
             yield break;
         }
 
-        // 5) Initialize gameplay with loaded state
         InitializeGameplay(loadedState);
     }
 
     private bool ValidateDependencies()
     {
-        if (templateService == null)
-        {
-            Debug.LogError("[GameBootstrap] templateService is null");
-            return false;
-        }
-        if (tileFactory == null)
-        {
-            Debug.LogError("[GameBootstrap] tileFactory is null");
-            return false;
-        }
-        if (handController == null)
-        {
-            Debug.LogError("[GameBootstrap] handController is null");
-            return false;
-        }
-        if (mapController == null)
-        {
-            Debug.LogError("[GameBootstrap] mapController is null");
-            return false;
-        }
+        if (_templateService == null) { Debug.LogError("[GameBootstrap] templateService is null"); return false; }
+        if (_tileFactory == null)     { Debug.LogError("[GameBootstrap] tileFactory is null"); return false; }
+        if (_handController == null)  { Debug.LogError("[GameBootstrap] handController is null"); return false; }
+        if (_mapController == null)   { Debug.LogError("[GameBootstrap] mapController is null"); return false; }
 
-        if (scoreDisplay == null)
-            scoreDisplay = FindObjectOfType<ScoreDisplay>(true);
+        if (_scoreDisplay == null)
+            _scoreDisplay = FindObjectOfType<ScoreDisplay>(true);
 
         return true;
     }
 
     private IEnumerator LoadTemplates()
     {
-        Debug.Log("[GameBootstrap] Loading tile templates...");
-        yield return templateService.LoadTemplates();
+        yield return _templateService.LoadTemplates();
     }
 
     private void InitializeGameplay(PlanetStageStateDto state)
     {
-        if (isInitialized)
+        if (_isInitialized)
         {
             Debug.LogWarning("[GameBootstrap] Already initialized, skipping");
             return;
         }
 
-        Debug.Log("[GameBootstrap] Initializing gameplay with state");
+        if (_gameConfig == null)
+            _gameConfig = Resources.Load<GameConfig>("GameConfig");
 
-        // Validate state parts
-        if (state.map?.placedTiles == null)
-            Debug.LogWarning("[GameBootstrap] state.map.placedTiles is null");
-        if (state.hand == null)
-            Debug.LogWarning("[GameBootstrap] state.hand is null");
-        if (state.deck == null)
-            Debug.LogWarning("[GameBootstrap] state.deck is null");
+        _handController.Initialize(_tileFactory, _mapController);
+        _mapController.SetTileFactory(_tileFactory);
 
-        // Ensure gameConfig is available
-        if (gameConfig == null)
-            gameConfig = Resources.Load<GameConfig>("GameConfig");
+        if (_scoreDisplay != null)
+            _scoreDisplay.SetTargetScore(state.targetScore);
 
-        // Connect controllers
-        handController.factory = tileFactory;
-        handController.mapController = mapController;
-        mapController.tileFactory = tileFactory;
+        _mapController.ApplyServerState(state);
+        _handController.LoadFromServer(state.hand, state.deck);
 
-        // Load initial state — subscribe to OnStageCompleted AFTER this call so we
-        // don't navigate away if the stage was already completed before this session.
-        if (scoreDisplay != null)
-            scoreDisplay.SetTargetScore(state.targetScore);
+        _mapController.OnStageCompleted += HandleStageCompleted;
+        _mapController.OnStageCompletedWithCoins += HandleStageCompletedWithCoins;
+        _handController.OnHandAndDeckEmpty += HandleGameOver;
 
-        mapController.ApplyServerState(state);
-        handController.LoadFromServer(state.hand, state.deck);
-
-        // Subscribe to future completions (not the initial load)
-        mapController.OnStageCompleted += HandleStageCompleted;
-        mapController.OnStageCompletedWithCoins += HandleStageCompletedWithCoins;
-        handController.OnHandAndDeckEmpty += HandleGameOver;
-
-        isInitialized = true;
-        Debug.Log("[GameBootstrap] Gameplay initialized successfully");
+        _isInitialized = true;
     }
 
     private void HandleStageCompletedWithCoins(int coins)
     {
-        if (stageCompletePanel != null)
-            stageCompletePanel.Show(coins);
+        if (_stageCompletePanel != null)
+            _stageCompletePanel.Show(coins);
     }
 
     private void HandleGameOver()
     {
-        Debug.Log("[GameBootstrap] Game Over — hand and deck empty.");
-        if (gameOverPanel != null)
+        if (_gameOverPanel != null)
         {
-            gameOverPanel.SetActive(true);
+            _gameOverPanel.SetActive(true);
             PopupManager.OnPopupOpened();
         }
     }
 
     private void HandleStageCompleted()
     {
-        Debug.Log("[GameBootstrap] Stage completed! Showing complete panel.");
-
         if (GameManager.Instance != null)
             GameManager.Instance.ClearCache();
     }
 
     private void OnDestroy()
     {
-        // Cleanup: Unsubscribe from events to prevent memory leaks
-        if (currentStateLoadHandler != null && GameManager.Instance != null)
+        if (_currentStateLoadHandler != null && GameManager.Instance != null)
         {
-            GameManager.Instance.OnPlanetStageStateLoaded -= currentStateLoadHandler;
-            currentStateLoadHandler = null;
+            GameManager.Instance.OnPlanetStageStateLoaded -= _currentStateLoadHandler;
+            _currentStateLoadHandler = null;
         }
 
-        if (mapController != null)
+        if (_mapController != null)
         {
-            mapController.OnStageCompleted -= HandleStageCompleted;
-            mapController.OnStageCompletedWithCoins -= HandleStageCompletedWithCoins;
+            _mapController.OnStageCompleted -= HandleStageCompleted;
+            _mapController.OnStageCompletedWithCoins -= HandleStageCompletedWithCoins;
         }
 
-        if (handController != null)
-            handController.OnHandAndDeckEmpty -= HandleGameOver;
+        if (_handController != null)
+            _handController.OnHandAndDeckEmpty -= HandleGameOver;
     }
 }

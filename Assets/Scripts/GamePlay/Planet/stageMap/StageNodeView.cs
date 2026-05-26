@@ -1,48 +1,41 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
-/// <summary>
-/// Visual representation of a stage node on the stage map.
-/// Stores stage metadata and shows a progress percentage for in-progress stages,
-/// or stars (1-3) for completed stages.
-/// </summary>
 public class StageNodeView : MonoBehaviour
 {
-    [Header("Stage Data")]
-    public string stageId;
-    public bool isUnlocked;
-    public bool isCompleted;
-    public string resourceType;
-    public int score;
-
     [Header("UI")]
-    [SerializeField] private TMPro.TextMeshPro progressText;
-    [SerializeField] private TMPro.TextMeshPro starsText;
+    [FormerlySerializedAs("progressText")] [SerializeField] private TMPro.TextMeshPro _progressText;
+    [FormerlySerializedAs("starsText")]    [SerializeField] private TMPro.TextMeshPro _starsText;
+
+    public string StageId { get; private set; }
+    public bool IsUnlocked { get; private set; }
+    public bool IsCompleted { get; private set; }
+    public string ResourceType { get; private set; }
+    public int Score { get; private set; }
 
     public void Init(string id, bool unlocked, bool completed, string resType, int stageScore, float developedPercent, int coinsAwarded)
     {
-        stageId = id;
-        isUnlocked = unlocked;
-        isCompleted = completed;
-        resourceType = resType;
-        score = stageScore;
+        StageId = id;
+        IsUnlocked = unlocked;
+        IsCompleted = completed;
+        ResourceType = resType;
+        Score = stageScore;
 
-        // Progress text (in-progress only)
-        if (progressText != null)
+        if (_progressText != null)
         {
             bool showProgress = unlocked && !completed && developedPercent > 0;
-            progressText.gameObject.SetActive(showProgress);
+            _progressText.gameObject.SetActive(showProgress);
             if (showProgress)
-                progressText.text = $"{Mathf.Min(Mathf.RoundToInt(developedPercent), 99)}%";
+                _progressText.text = $"{Mathf.Min(Mathf.RoundToInt(developedPercent), 99)}%";
         }
 
-        // Stars text (completed only)
-        if (starsText != null)
+        if (_starsText != null)
         {
-            starsText.gameObject.SetActive(completed);
+            _starsText.gameObject.SetActive(completed);
             if (completed)
             {
                 int stars = Mathf.Clamp(coinsAwarded > 0 ? coinsAwarded : 1, 1, 3);
-                starsText.text = $"{stars}/3";
+                _starsText.text = $"{stars}/3";
             }
         }
     }

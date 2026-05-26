@@ -30,6 +30,7 @@ public class GameManager : MonoBehaviour
     // Loading flags
     private bool isLoadingPlanet;
     private bool isLoadingPlanetStageState;
+    private Coroutine _loadStageStateCoroutine;
 
     // Cache for current stage state
     private PlanetStageStateDto currentPlanetStageState;
@@ -175,7 +176,7 @@ public class GameManager : MonoBehaviour
         Debug.Log($"[GameManager] Starting network request for stage state. planet={planetId}, stage={stageId}, token={!string.IsNullOrEmpty(AppSession.Instance?.AccessToken)}");
 
         EnsureApiRefs();
-        StartCoroutine(LoadPlanetStageStateRoutine(planetId, stageId));
+        _loadStageStateCoroutine = StartCoroutine(LoadPlanetStageStateRoutine(planetId, stageId));
     }
 
     private IEnumerator LoadPlanetStageStateRoutine(string planetId, string stageId)
@@ -190,6 +191,7 @@ public class GameManager : MonoBehaviour
         {
             Debug.LogError("[GameManager] planetStateApi is null, cannot load stage state");
             isLoadingPlanetStageState = false;
+            OnError?.Invoke("PlanetStateApiClient not available");
             yield break;
         }
 
@@ -209,9 +211,17 @@ public class GameManager : MonoBehaviour
         ));
 
         isLoadingPlanetStageState = false;
+        _loadStageStateCoroutine = null;
 
         if (!string.IsNullOrEmpty(errMsg))
+        {
+            if ((errMsg.Contains("401") || errMsg.Contains("Unauthorized")) &&
+                AppSession.Instance != null && AppSession.Instance.HasRefresh() && !isRefreshingToken)
+            {
+                pendingRequestsAfterRefresh.Enqueue(() => RequestPlanetStageState(forceRefresh: true));
+            }
             HandleError(errMsg);
+        }
     }
 
     // ---------- Save Stage State ----------
@@ -345,6 +355,11 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void ClearCache()
     {
+        if (_loadStageStateCoroutine != null)
+        {
+            StopCoroutine(_loadStageStateCoroutine);
+            _loadStageStateCoroutine = null;
+        }
         currentStageId = null;
         currentPlanetStageState = null;
         isLoadingPlanetStageState = false;

@@ -1,58 +1,47 @@
 using UnityEngine;
-using UnityEngine.EventSystems;
 
-/// <summary>
-/// Handles click interactions on stage nodes.
-/// Only allows entering unlocked stages, sets session state, and loads gameplay scene.
-/// </summary>
 [RequireComponent(typeof(StageNodeView))]
 public class StageNodeClick : MonoBehaviour
 {
-    [SerializeField] private GameConfig gameConfig;
-    private StageNodeView view;
+    [SerializeField] private GameConfig _gameConfig;
+    private StageNodeView _view;
 
     private void Awake()
     {
-        view = GetComponent<StageNodeView>();
-        if (view == null)
-            Debug.LogError("StageNodeView missing on this GameObject");
+        _view = GetComponent<StageNodeView>();
+        if (_view == null)
+            Debug.LogError("[StageNodeClick] StageNodeView missing on this GameObject");
 
-        if (gameConfig == null)
-        {
-            gameConfig = Resources.Load<GameConfig>("GameConfig");
-        }
+        if (_gameConfig == null)
+            _gameConfig = Resources.Load<GameConfig>("GameConfig");
     }
 
     private void OnMouseDown()
     {
-        if (view == null) return;
+        if (_view == null) return;
         if (PopupManager.IsAnyPopupOpen) return;
 
-        if (!view.isUnlocked)
+        if (!_view.IsUnlocked)
         {
-            Debug.Log($"[StageNodeClick] Stage {view.stageId} is locked");
+            Debug.Log($"[StageNodeClick] Stage {_view.StageId} is locked");
             return;
         }
 
         if (AppSession.Instance == null)
         {
-            Debug.LogError("AppSession.Instance is null");
+            Debug.LogError("[StageNodeClick] AppSession.Instance is null");
             return;
         }
 
-        if (string.IsNullOrEmpty(view.stageId))
+        if (string.IsNullOrEmpty(_view.StageId))
         {
-            Debug.LogError("stageId is empty on StageNodeView");
+            Debug.LogError("[StageNodeClick] stageId is empty on StageNodeView");
             return;
         }
 
-        AppSession.Instance.SetSelectedStage(view.stageId);
+        AppSession.Instance.SetSelectedStage(_view.StageId);
 
-        Debug.Log($"[StagesMap] Clicked unlocked stage: {view.stageId}");
-
-        if (SceneLoader.Instance != null && gameConfig != null)
-        {
-            SceneLoader.Instance.LoadScene(gameConfig.gameplaySceneIndex);
-        }
+        if (SceneLoader.Instance != null && _gameConfig != null)
+            SceneLoader.Instance.LoadScene(_gameConfig.gameplaySceneIndex);
     }
 }

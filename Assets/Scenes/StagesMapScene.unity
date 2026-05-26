@@ -316,7 +316,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rockPrefab: {fileID: 2955102385406506931, guid: e4d2c28d59eeb024887e205c57ebc1be, type: 3}
-  goldPrefab: {fileID: 6939156087593468095, guid: 1afefe213edcac74399fab02a567b6a5, type: 3}
+  terraPrefab: {fileID: 6939156087593468095, guid: 1afefe213edcac74399fab02a567b6a5, type: 3}
   bioPrefab: {fileID: 1302357279095870404, guid: 109ae987678a9c84bb147465c6a83db7, type: 3}
   crystalPrefab: {fileID: 3781915582919430650, guid: 58a13948cff2f104cb11183f949a2884, type: 3}
   lockedDarkness: 0.1
@@ -430,13 +430,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: abc257e565bc2b54689ed496a7f2feee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  panBoundX: 25
-  panBoundZ: 25
-  keyPanSpeed: 8
-  zoomSpeed: 2
-  minSize: 2
-  maxSize: 15
-  handCamera: {fileID: 0}
+  _panBoundX: 25
+  _panBoundZ: 25
+  _keyPanSpeed: 8
+  _zoomSpeed: 2
+  _minSize: 2
+  _maxSize: 15
+  _handCamera: {fileID: 0}
 --- !u!114 &1243651598
 MonoBehaviour:
   m_ObjectHideFlags: 0

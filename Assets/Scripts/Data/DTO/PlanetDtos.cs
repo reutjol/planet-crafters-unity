@@ -66,28 +66,11 @@ public class MapDto
 }
 
 [System.Serializable]
-public class FaceDataDto
-{
-    public string resource;
-    public int variant;
-    public int level;
-}
-
-[System.Serializable]
-public class CenterDataDto
-{
-    public string resource;
-    public int level;
-}
-
-[System.Serializable]
 public class PlacedTileDto
 {
     public CoordDto coord;
     public int rotation;
     public string tileId;
-    public System.Collections.Generic.List<FaceDataDto> faces;
-    public CenterDataDto center;
 }
 
 [System.Serializable]
@@ -129,6 +112,7 @@ public class PlanetStageStateDto
     public int coinsAwarded;
     public List<CoordDto> scoredConnections;
     public int bonusPoints;
+    public List<RoamingClusterDto> roamingClusters;
 }
 
 [System.Serializable]
@@ -146,6 +130,14 @@ public class StageStateInnerDto
     public HandDto hand;
     public DeckDto deck;
     public ProgressDto progress;
+}
+
+[System.Serializable]
+public class RoamingClusterDto
+{
+    public List<CoordDto> coords;
+    public int size;
+    public string resourceType;
 }
 
 [System.Serializable]

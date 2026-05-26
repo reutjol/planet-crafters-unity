@@ -12,7 +12,7 @@ public class ResourceTypeIcon : MonoBehaviour
 
     [Header("Sprites per resource")]
     [SerializeField] private Sprite rockSprite;
-    [SerializeField] private Sprite goldSprite;
+    [SerializeField] private Sprite terraSprite;
     [SerializeField] private Sprite bioSprite;
     [SerializeField] private Sprite crystalSprite;
 
@@ -41,7 +41,7 @@ public class ResourceTypeIcon : MonoBehaviour
     {
         Sprite sprite = resourceType switch
         {
-            "gold"    => goldSprite,
+            "terra"   => terraSprite,
             "bio"     => bioSprite,
             "crystal" => crystalSprite,
             _         => rockSprite,

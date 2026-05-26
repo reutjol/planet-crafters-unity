@@ -10,7 +10,7 @@ public class MapStageController : MonoBehaviour
 {
     [Header("Prefabs by Resource Type")]
     [SerializeField] private GameObject rockPrefab;
-    [SerializeField] private GameObject goldPrefab;
+    [SerializeField] private GameObject terraPrefab;
     [SerializeField] private GameObject bioPrefab;
     [SerializeField] private GameObject crystalPrefab;
 
@@ -156,7 +156,7 @@ public class MapStageController : MonoBehaviour
     {
         GameObject prefab = stage.meta.resourceType switch
         {
-            "gold"    => goldPrefab,
+            "terra"   => terraPrefab,
             "bio"     => bioPrefab,
             "crystal" => crystalPrefab,
             _         => rockPrefab,

@@ -10,7 +10,6 @@ public class HexTileTemplateDto
 {
     public string _id;
     public string type;
-    public string center;
     public string[] edges; // length 6
     public int level;
     public int __v;

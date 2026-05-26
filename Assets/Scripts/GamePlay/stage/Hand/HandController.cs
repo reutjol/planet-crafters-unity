@@ -1,29 +1,26 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
-using System;
+using UnityEngine.Serialization;
 
-/// <summary>
-/// Manages the player's hand of tiles (3 slots).
-/// Renders the hand state received from the server.
-/// Only the first slot is draggable.
-/// </summary>
 public class HandController : MonoBehaviour
 {
-    [Header("Hand Slots (size = 3)")]
-    public Transform[] slots; // Slot01, Slot02, Slot03
+    [FormerlySerializedAs("slots")] [SerializeField] private Transform[] _slots;
 
-    [Header("Refs")]
-    public MapController mapController;
-    public TileFactory factory;
+    private MapController _mapController;
+    private TileFactory _factory;
 
-    private DraggableTile[] tiles = new DraggableTile[3];
+    private readonly DraggableTile[] _tiles = new DraggableTile[3];
 
     public event Action OnHandStateChanged;
     public event Action OnHandAndDeckEmpty;
 
-    // ===============================
-    // Load hand from server state
-    // ===============================
+    public void Initialize(TileFactory factory, MapController mapController)
+    {
+        _factory = factory;
+        _mapController = mapController;
+    }
+
     public void LoadFromServer(HandDto hand, DeckDto deckDto)
     {
         ClearHandVisuals();
@@ -35,49 +32,45 @@ public class HandController : MonoBehaviour
             if (i < tilesInHand.Count && !string.IsNullOrEmpty(tilesInHand[i]))
                 SpawnSpecificTemplateToSlot(i, tilesInHand[i]);
             else
-                tiles[i] = null;
+                _tiles[i] = null;
         }
 
         UpdateInteractivity();
         OnHandStateChanged?.Invoke();
 
         bool handEmpty = tilesInHand.Count == 0;
-        bool deckEmpty = (deckDto?.remainingTiles == null || deckDto.remainingTiles.Count == 0);
+        bool deckEmpty = deckDto?.remainingTiles == null || deckDto.remainingTiles.Count == 0;
         if (handEmpty && deckEmpty)
             OnHandAndDeckEmpty?.Invoke();
     }
 
     private void SpawnSpecificTemplateToSlot(int slotIndex, string templateId)
     {
-        if (factory == null)
+        if (_factory == null)
         {
             Debug.LogError("[HandController] TileFactory is null");
             return;
         }
-        if (slots == null || slotIndex < 0 || slotIndex >= slots.Length || slots[slotIndex] == null)
+        if (_slots == null || slotIndex < 0 || slotIndex >= _slots.Length || _slots[slotIndex] == null)
         {
             Debug.LogError($"[HandController] Invalid slot index {slotIndex} or slots not assigned");
             return;
         }
 
-        var go = factory.CreateTileByTemplateId(templateId, slots[slotIndex]);
+        var go = _factory.CreateTileByTemplateId(templateId, _slots[slotIndex]);
         if (go == null) return;
 
-        // Move to "Hand" layer so the HandCamera renders it on top of the map.
-        // OnMouseDown still fires (camera eventMask is separate from cullingMask).
         int handLayer = LayerMask.NameToLayer("Hand");
         if (handLayer != -1)
             SetLayerRecursively(go, handLayer);
 
         var drag = go.GetComponent<DraggableTile>();
-        tiles[slotIndex] = drag;
+        _tiles[slotIndex] = drag;
 
         if (drag != null)
         {
-            drag.templateId = templateId;
-            drag.handController = this;
-            drag.mapController = mapController;
-            drag.SetHome(slots[slotIndex]);
+            drag.Initialize(templateId, this, _mapController);
+            drag.SetHome(_slots[slotIndex]);
             drag.SetDraggable(slotIndex == 0);
         }
     }
@@ -93,8 +86,8 @@ public class HandController : MonoBehaviour
     {
         for (int i = 0; i < 3; i++)
         {
-            if (tiles[i] != null) Destroy(tiles[i].gameObject);
-            tiles[i] = null;
+            if (_tiles[i] != null) Destroy(_tiles[i].gameObject);
+            _tiles[i] = null;
         }
     }
 
@@ -104,8 +97,8 @@ public class HandController : MonoBehaviour
     {
         for (int i = 0; i < 3; i++)
         {
-            if (tiles[i] != null)
-                tiles[i].SetDraggable(i == 0);
+            if (_tiles[i] != null)
+                _tiles[i].SetDraggable(i == 0);
         }
     }
 }
