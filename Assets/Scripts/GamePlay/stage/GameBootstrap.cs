@@ -40,6 +40,7 @@ public class GameBootstrap : MonoBehaviour
         if (cachedState != null && cachedState.targetScore > 0)
         {
             InitializeGameplay(cachedState);
+            NotifyReadyIfMatch();
             yield break;
         }
 
@@ -90,6 +91,7 @@ public class GameBootstrap : MonoBehaviour
         }
 
         InitializeGameplay(loadedState);
+        NotifyReadyIfMatch();
     }
 
     private bool ValidateDependencies()
@@ -137,8 +139,17 @@ public class GameBootstrap : MonoBehaviour
         _isInitialized = true;
     }
 
+    private void NotifyReadyIfMatch()
+    {
+        if (MatchSession.Instance != null && MatchSession.Instance.IsActive)
+            MatchManager.Instance?.NotifyStageReady();
+    }
+
     private void HandleStageCompletedWithCoins(int coins)
     {
+        if (MatchSession.Instance != null && MatchSession.Instance.IsActive)
+            return;
+
         if (_stageCompletePanel != null)
             _stageCompletePanel.Show(coins);
     }
@@ -150,6 +161,9 @@ public class GameBootstrap : MonoBehaviour
             _gameOverPanel.SetActive(true);
             PopupManager.OnPopupOpened();
         }
+
+        // Reset server state so re-entering the stage without explicit restart still gets a fresh map.
+        GameManager.Instance?.ResetCurrentStage();
     }
 
     private void HandleStageCompleted()

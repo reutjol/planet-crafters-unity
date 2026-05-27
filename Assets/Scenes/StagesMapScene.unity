@@ -315,14 +315,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 250a1bb9db31ebe4fa37102da4d98cbd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rockPrefab: {fileID: 2955102385406506931, guid: e4d2c28d59eeb024887e205c57ebc1be, type: 3}
-  terraPrefab: {fileID: 6939156087593468095, guid: 1afefe213edcac74399fab02a567b6a5, type: 3}
-  bioPrefab: {fileID: 1302357279095870404, guid: 109ae987678a9c84bb147465c6a83db7, type: 3}
-  crystalPrefab: {fileID: 3781915582919430650, guid: 58a13948cff2f104cb11183f949a2884, type: 3}
+  rockPrefab: {fileID: 7922530068312258672, guid: a97fe4bbb6be94b4aae5f606d75f07d1, type: 3}
+  terraPrefab: {fileID: 6431422318712848969, guid: 6506b4909b19f0548b58fe27f6b2f39e, type: 3}
+  bioPrefab: {fileID: 1343720309209230073, guid: dbf7a578ee9aa654aa3c9c3270e87779, type: 3}
+  crystalPrefab: {fileID: 2050373417381838941, guid: 96eeec5368ecb784388632160a526c05, type: 3}
   lockedDarkness: 0.1
   gameConfig: {fileID: 0}
   stagesParent: {fileID: 181527756}
-  hexSize: 1
+  hexSize: 0.97
   pointyTop: 1
 --- !u!1 &1243651593
 GameObject:

@@ -224,6 +224,38 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    // ---------- Single-player scene entry with loading hold ----------
+    public void LoadStageSceneWithHold(int sceneIndex)
+    {
+        StartCoroutine(LoadStageSceneWithHoldRoutine(sceneIndex));
+    }
+
+    private IEnumerator LoadStageSceneWithHoldRoutine(int sceneIndex)
+    {
+        SceneLoader.HoldActivation = true;
+        SceneLoader.Instance.LoadScene(sceneIndex);
+
+        bool done = false;
+        Action<PlanetStageStateDto> onLoaded = _ => done = true;
+        Action<string> onError = _ => { done = true; SceneLoader.HoldActivation = false; };
+        Action onUnauth = () => { done = true; SceneLoader.HoldActivation = false; };
+
+        OnPlanetStageStateLoaded += onLoaded;
+        OnError += onError;
+        OnUnauthorized += onUnauth;
+
+        RequestPlanetStageState(forceRefresh: true);
+
+        float elapsed = 0f;
+        while (!done && elapsed < 30f) { elapsed += Time.unscaledDeltaTime; yield return null; }
+
+        OnPlanetStageStateLoaded -= onLoaded;
+        OnError -= onError;
+        OnUnauthorized -= onUnauth;
+
+        SceneLoader.HoldActivation = false;
+    }
+
     // ---------- Save Stage State ----------
     /// <summary>
     /// Saves the current stage state to the server

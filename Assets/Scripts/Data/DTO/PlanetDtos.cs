@@ -35,6 +35,7 @@ public class StageMetaDto
     public bool isUnlocked;
     public bool isStarted;
     public bool isCompleted;
+    public bool isMatchStage;
     public int coinsAwarded;
     public string lastPlayedAt; // ISO string format
 }

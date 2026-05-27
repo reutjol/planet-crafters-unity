@@ -41,7 +41,7 @@ public class StageNodeClick : MonoBehaviour
 
         AppSession.Instance.SetSelectedStage(_view.StageId);
 
-        if (SceneLoader.Instance != null && _gameConfig != null)
-            SceneLoader.Instance.LoadScene(_gameConfig.gameplaySceneIndex);
+        if (GameManager.Instance != null && _gameConfig != null)
+            GameManager.Instance.LoadStageSceneWithHold(_gameConfig.gameplaySceneIndex);
     }
 }

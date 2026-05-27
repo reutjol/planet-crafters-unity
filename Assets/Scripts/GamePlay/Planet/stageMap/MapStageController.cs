@@ -120,6 +120,8 @@ public class MapStageController : MonoBehaviour
                 continue;
             }
 
+            if (stage.meta.isMatchStage) continue;
+
             if (stage.meta.coord == null)
             {
                 Debug.LogWarning($"[MapStageController] stage {stage.stageId}: meta.coord is NULL -> skip");
