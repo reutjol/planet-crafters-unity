@@ -1,22 +1,19 @@
-using UnityEngine;
-
 public sealed class PlayerPrefsMusicPreferenceStore : IMusicPreferenceStore
 {
-    private readonly string key;
+    private readonly IBoolPreferenceStore preferenceStore;
 
     public PlayerPrefsMusicPreferenceStore(string key)
     {
-        this.key = key;
+        preferenceStore = new PlayerPrefsBoolPreferenceStore(key);
     }
 
     public bool LoadMusicEnabled(bool defaultValue)
     {
-        return PlayerPrefs.GetInt(key, defaultValue ? 1 : 0) == 1;
+        return preferenceStore.Load(defaultValue);
     }
 
     public void SaveMusicEnabled(bool isEnabled)
     {
-        PlayerPrefs.SetInt(key, isEnabled ? 1 : 0);
-        PlayerPrefs.Save();
+        preferenceStore.Save(isEnabled);
     }
 }

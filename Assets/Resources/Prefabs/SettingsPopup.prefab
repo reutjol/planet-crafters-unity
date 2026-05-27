@@ -1170,6 +1170,7 @@ GameObject:
   - component: {fileID: 150133405670243248}
   - component: {fileID: 2349833928789964074}
   - component: {fileID: 4008069937740956263}
+  - component: {fileID: 6998999916660028572}
   m_Layer: 5
   m_Name: SFXButton
   m_TagString: Untagged
@@ -1279,6 +1280,25 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &6998999916660028572
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2829666659123157243}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f4f5ba0e449b6244a65fa07a4881cf3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  button: {fileID: 4008069937740956263}
+  iconImage: {fileID: 2900482418625810926}
+  backgroundImage: {fileID: 2349833928789964074}
+  enabledIconColor: {r: 1, g: 1, b: 1, a: 1}
+  disabledIconColor: {r: 1, g: 1, b: 1, a: 0.38}
+  enabledBackgroundColor: {r: 1, g: 1, b: 1, a: 1}
+  disabledBackgroundColor: {r: 0.55, g: 0.55, b: 0.65, a: 0.82}
 --- !u!1 &3164419220000714801
 GameObject:
   m_ObjectHideFlags: 0
