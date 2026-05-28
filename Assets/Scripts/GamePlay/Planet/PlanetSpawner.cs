@@ -18,7 +18,7 @@ public class PlanetSpawner : MonoBehaviour
 
         var clickable = current.GetComponentInChildren<PlanetClickable>(true);
         if (clickable != null && onClicked != null)
-            clickable.Clicked = onClicked;
+            clickable.Clicked += onClicked;
         else
             Debug.LogError("[PlanetSpawner] PlanetClickable missing on prefab (root/children)");
 

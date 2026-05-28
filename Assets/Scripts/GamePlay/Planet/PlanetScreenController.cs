@@ -56,6 +56,8 @@ public class PlanetScreenController : MonoBehaviour
 
    public void OnPlanetClicked()
     {
+        if (PopupManager.IsAnyPopupOpen) return;
+
         Debug.Log("[PlanetScreenController] OnPlanetClicked");
 
         if (SceneLoader.Instance != null && gameConfig != null)
@@ -66,6 +68,15 @@ public class PlanetScreenController : MonoBehaviour
         {
             Debug.LogWarning("[PlanetScreenController] SceneLoader or GameConfig is null");
         }
+    }
+
+    public void OnMultiplayerClicked()
+    {
+        var lobby = FindObjectOfType<MatchLobbyController>(true);
+        if (lobby != null)
+            lobby.Open();
+        else
+            Debug.LogWarning("[PlanetScreenController] MatchLobbyController not found in scene");
     }
 
 }

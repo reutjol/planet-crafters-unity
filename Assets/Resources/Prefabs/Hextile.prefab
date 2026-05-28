@@ -9,6 +9,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 97b1bf248c99d1f4f9a4ae42a48d7ad1, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 97b1bf248c99d1f4f9a4ae42a48d7ad1, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -129,12 +133,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8aac21b18e722c9459b9239bfe6b58e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  q: 0
-  r: 0
-  isPlusCell: 1
-  occupied: 0
-  rend: {fileID: 0}
-  highlightColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  _q: 0
+  _r: 0
+  _isPlusCell: 1
+  _occupied: 0
+  _rend: {fileID: 0}
+  _highlightColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
 --- !u!114 &-8385275816846115504
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -147,24 +151,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89829ab1f5eda4f458533a95e897d886, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  faces:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  center: {fileID: 0}
-  templateId: 
-  templateType: 
-  centerKey: 
-  edges:
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  baseRotationOffset: 0
 --- !u!1 &7418154256480737257 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5233112405309087440, guid: 97b1bf248c99d1f4f9a4ae42a48d7ad1, type: 3}

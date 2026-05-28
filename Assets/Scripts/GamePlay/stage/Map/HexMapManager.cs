@@ -1,91 +1,74 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
-/// <summary>
-/// Manages the hexagonal grid structure and cell spawning.
-/// Handles axial-to-world coordinate conversion and neighbor queries.
-/// </summary>
 public class HexMapManager : MonoBehaviour
 {
-    [Header("Prefabs")]
-    public HexCell plusCellPrefab;
+    [FormerlySerializedAs("plusCellPrefab")] [SerializeField] private HexCell _plusCellPrefab;
+    [FormerlySerializedAs("mapRoot")]        [SerializeField] private Transform _mapRoot;
+    [FormerlySerializedAs("hexSize")]        [SerializeField] private float _hexSize = 1f;
 
-    [Header("Map Root")]
-    public Transform mapRoot;
+    private readonly Dictionary<Vector2Int, HexCell> _cells = new();
 
-    [Header("Hex Settings")]
-    public float hexSize = 1f;
-
-    private Dictionary<Vector2Int, HexCell> cells =
-        new Dictionary<Vector2Int, HexCell>();
-
-    private static readonly Vector2Int[] axialDirs =
+    private static readonly Vector2Int[] AxialDirs =
     {
-        new Vector2Int(1, 0),
+        new Vector2Int(1,  0),
         new Vector2Int(1, -1),
         new Vector2Int(0, -1),
         new Vector2Int(-1, 0),
         new Vector2Int(-1, 1),
-        new Vector2Int(0, 1),
+        new Vector2Int(0,  1),
     };
 
     public HexCell GetCell(int q, int r)
     {
-        cells.TryGetValue(new Vector2Int(q, r), out HexCell cell);
+        _cells.TryGetValue(new Vector2Int(q, r), out HexCell cell);
         return cell;
     }
 
     public HexCell SpawnPlusCell(int q, int r)
     {
         var key = new Vector2Int(q, r);
-        if (cells.ContainsKey(key))
-            return cells[key];
+        if (_cells.TryGetValue(key, out HexCell existing))
+            return existing;
 
         Vector3 worldPos = AxialToWorld(q, r);
-        HexCell cell = Instantiate(
-            plusCellPrefab,
-            worldPos,
-            Quaternion.identity,
-            mapRoot
-        );
-
+        HexCell cell = Instantiate(_plusCellPrefab, worldPos, Quaternion.identity, _mapRoot);
         cell.Init(q, r, true);
-        cells[key] = cell;
+        _cells[key] = cell;
         return cell;
     }
 
     public IEnumerable<Vector2Int> GetNeighbors(int q, int r)
     {
-        foreach (var dir in axialDirs)
+        foreach (var dir in AxialDirs)
             yield return new Vector2Int(q + dir.x, r + dir.y);
     }
 
     public Vector3 AxialToWorld(int q, int r)
     {
-        // Axial -> XZ plane
-        float x = hexSize * (Mathf.Sqrt(3f) * q + Mathf.Sqrt(3f) / 2f * r);
-        float z = hexSize * (3f / 2f * r);
+        float x = _hexSize * (Mathf.Sqrt(3f) * q + Mathf.Sqrt(3f) / 2f * r);
+        float z = _hexSize * (3f / 2f * r);
         return new Vector3(x, 0f, z);
     }
 
     public void RemoveCell(int q, int r)
     {
         var key = new Vector2Int(q, r);
-        if (cells.TryGetValue(key, out HexCell cell))
+        if (_cells.TryGetValue(key, out HexCell cell))
         {
             Destroy(cell.gameObject);
-            cells.Remove(key);
+            _cells.Remove(key);
         }
     }
 
     public void ResetGrid()
     {
-        foreach (var kv in cells)
+        foreach (var kv in _cells)
         {
             if (kv.Value != null)
                 Destroy(kv.Value.gameObject);
         }
-        cells.Clear();
+        _cells.Clear();
     }
-
 }

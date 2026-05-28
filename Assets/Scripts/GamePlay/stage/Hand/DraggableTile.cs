@@ -1,71 +1,60 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
-/// <summary>
-/// Handles tile drag-and-drop gameplay for placing tiles on the hex map.
-/// Supports rotation with 'R' key and snapping to hex cells.
-/// On drop, sends the action to the server; server validates and returns updated state.
-/// </summary>
 public class DraggableTile : MonoBehaviour
 {
-    [Header("Refs (Injected by HandController)")]
-    public HandController handController;
-    public MapController mapController;
+    [SerializeField] private LayerMask _hexCellMask;
 
-    [Header("Drag Settings")]
-    public LayerMask hexCellMask;
-    public string templateId;
+    private Camera _cam;
+    private bool _dragging;
+    private HexCell _hoveredCell;
 
-    private Camera cam;
-    private bool dragging;
-    private HexCell hoveredCell;
+    private Transform _homeParent;
+    private Vector3 _homeLocalPos;
 
-    private Transform homeParent;
-    private Vector3 homeLocalPos;
+    private int _rotation = 0;
+    private Collider[] _myColliders;
+    private HexTileView _hexTileView;
 
-    private int rotation = 0;
-    private Collider[] myColliders;
+    private HandController _handController;
+    private MapController _mapController;
+    private string _templateId;
 
-    // ===============================
-    // Init
-    // ===============================
+    public void Initialize(string templateId, HandController hand, MapController map)
+    {
+        _templateId = templateId;
+        _handController = hand;
+        _mapController = map;
+    }
+
     private void Awake()
     {
-        cam = Camera.main;
-        myColliders = GetComponentsInChildren<Collider>(true);
+        _cam = Camera.main;
+        _myColliders = GetComponentsInChildren<Collider>(true);
+        _hexTileView = GetComponent<HexTileView>();
     }
 
-    // Called by HandController
     public void SetHome(Transform parent)
     {
-        homeParent = parent;
-        homeLocalPos = Vector3.zero;
+        _homeParent = parent;
+        _homeLocalPos = Vector3.zero;
     }
 
-    // Called by HandController
     public void SetDraggable(bool canDrag)
     {
         enabled = canDrag;
     }
 
-    // ===============================
-    // Mouse
-    // ===============================
     private void OnMouseDown()
     {
         if (!enabled) return;
         if (PopupManager.IsAnyPopupOpen) return;
 
-        dragging = true;
+        _dragging = true;
 
-        // Switch to Default layer so Main Camera renders it during drag
-        // (HandCamera is fixed; dragging must follow Main Camera's raycast)
         SetLayerRecursively(gameObject, LayerMask.NameToLayer("Default"));
 
-        // Refresh and disable all colliders (includes resource prefabs spawned after Awake)
-        myColliders = GetComponentsInChildren<Collider>(true);
-        foreach (var c in myColliders)
+        foreach (var c in _myColliders)
             c.enabled = false;
 
         transform.SetParent(null, true);
@@ -73,78 +62,66 @@ public class DraggableTile : MonoBehaviour
 
     private void Update()
     {
-        if (!dragging) return;
+        if (!_dragging) return;
 
-        // Rotation with R key
         if (Input.GetKeyDown(KeyCode.R))
         {
-            rotation = (rotation + 1) % 6;
-            transform.rotation = Quaternion.Euler(0, rotation * 60f, 0);
+            _rotation = (_rotation + 1) % 6;
+            transform.rotation = Quaternion.Euler(0, _rotation * 60f, 0);
         }
 
-        Ray ray = cam.ScreenPointToRay(Input.mousePosition);
+        Ray ray = _cam.ScreenPointToRay(Input.mousePosition);
 
-        // First try to snap to a hex cell
-        if (Physics.Raycast(ray, out RaycastHit hit, 200f, hexCellMask))
+        if (Physics.Raycast(ray, out RaycastHit hit, 200f, _hexCellMask))
         {
-            HexCell cell = hit.collider.GetComponentInParent<HexCell>();
-            if (cell != null)
+            if (HexCell.TryGetFromCollider(hit.collider, out HexCell cell))
             {
-                if (hoveredCell != cell)
+                if (_hoveredCell != cell)
                 {
-                    if (hoveredCell != null)
-                        hoveredCell.SetHighlight(false);
+                    if (_hoveredCell != null)
+                        _hoveredCell.SetHighlight(false);
 
-                    hoveredCell = cell;
-                    hoveredCell.SetHighlight(true);
+                    _hoveredCell = cell;
+                    _hoveredCell.SetHighlight(true);
                 }
 
                 Vector3 snap = cell.transform.position;
-                snap.y = mapController.tileHeightY;
+                snap.y = _mapController.TileHeightY;
                 transform.position = snap;
                 return;
             }
         }
 
-        // Fallback: free drag on plane
-        Plane plane = new Plane(Vector3.up, new Vector3(0, mapController.tileHeightY, 0));
+        Plane plane = new Plane(Vector3.up, new Vector3(0, _mapController.TileHeightY, 0));
         if (plane.Raycast(ray, out float enter))
-        {
             transform.position = ray.GetPoint(enter);
-        }
     }
 
     private void OnMouseUp()
     {
-        dragging = false;
+        _dragging = false;
 
-        // Re-enable colliders
-        foreach (var c in myColliders)
+        foreach (var c in _myColliders)
             c.enabled = true;
 
-        if (hoveredCell != null &&
-            hoveredCell.isPlusCell &&
-            !hoveredCell.occupied)
+        if (_hoveredCell != null &&
+            _hoveredCell.isPlusCell &&
+            !_hoveredCell.occupied)
         {
-            int q = hoveredCell.q;
-            int r = hoveredCell.r;
+            int q = _hoveredCell.q;
+            int r = _hoveredCell.r;
 
-            hoveredCell.SetHighlight(false);
-            hoveredCell = null;
+            _hoveredCell.SetHighlight(false);
+            _hoveredCell = null;
 
-            // Disable while waiting for server response
             enabled = false;
-
-            StartCoroutine(SendPlaceTileToServer(q, r, rotation));
+            StartCoroutine(SendPlaceTileToServer(q, r, _rotation));
             return;
         }
 
         ReturnHome();
     }
 
-    // ===============================
-    // Server call
-    // ===============================
     private IEnumerator SendPlaceTileToServer(int q, int r, int rot)
     {
         var planetId = AppSession.Instance?.ActivePlanet?.planetId;
@@ -159,11 +136,12 @@ public class DraggableTile : MonoBehaviour
             yield break;
         }
 
+        int serverRot = ((rot % 6) + 6) % 6;
         var dto = new PlaceTileRequestDto
         {
-            tileId = templateId,
+            tileId = _templateId,
             coord = new CoordDto { q = q, r = r },
-            rotation = rot
+            rotation = serverRot
         };
 
         PlanetStageStateDto newState = null;
@@ -177,10 +155,8 @@ public class DraggableTile : MonoBehaviour
 
         if (newState != null)
         {
-            // Re-render map and hand from server state
-            // LoadFromServer will destroy this GameObject via ClearHandVisuals (tiles[0])
-            mapController.ApplyServerState(newState);
-            handController.LoadFromServer(newState.hand, newState.deck);
+            _mapController.ApplyServerState(newState);
+            _handController.LoadFromServer(newState.hand, newState.deck);
         }
         else
         {
@@ -190,17 +166,13 @@ public class DraggableTile : MonoBehaviour
         }
     }
 
-    // ===============================
-    // Helpers
-    // ===============================
     private void ReturnHome()
     {
-        transform.SetParent(homeParent, true);
-        transform.localPosition = homeLocalPos;
+        transform.SetParent(_homeParent, true);
+        transform.localPosition = _homeLocalPos;
         transform.localRotation = Quaternion.identity;
-        rotation = 0;
+        _rotation = 0;
 
-        // Back in slot — restore Hand layer so HandCamera renders it on top
         SetLayerRecursively(gameObject, LayerMask.NameToLayer("Hand"));
     }
 
@@ -210,4 +182,5 @@ public class DraggableTile : MonoBehaviour
         foreach (Transform child in obj.transform)
             SetLayerRecursively(child.gameObject, layer);
     }
+
 }

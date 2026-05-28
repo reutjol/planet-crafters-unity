@@ -23,6 +23,10 @@ public class SceneLoader : MonoBehaviour
     private readonly Stack<int> history = new();
     public int PreviousSceneIndex => history.Count > 0 ? history.Peek() : -1;
 
+    // Set to true before calling LoadScene to keep the loading screen visible
+    // until the caller sets it back to false (e.g. while pre-fetching data).
+    public static bool HoldActivation = false;
+
     void Awake()
     {
         if (Instance == null)
@@ -70,6 +74,9 @@ public class SceneLoader : MonoBehaviour
         async.allowSceneActivation = false;
 
         while (async.progress < 0.9f) yield return null;
+
+        // Wait while caller is pre-fetching data (e.g. after restart)
+        while (HoldActivation) yield return null;
 
         if (LoadingSceneController.Instance != null)
             LoadingSceneController.Instance.OnSceneReady(() => { async.allowSceneActivation = true; isLoading = false; });

@@ -11,6 +11,12 @@ public class ScoreDisplay : MonoBehaviour
     {
         if (mapController == null)
             mapController = FindObjectOfType<MapController>();
+
+        if (MatchSession.Instance != null && MatchSession.Instance.IsActive)
+        {
+            gameObject.SetActive(false);
+            return;
+        }
     }
 
     private void OnEnable()
