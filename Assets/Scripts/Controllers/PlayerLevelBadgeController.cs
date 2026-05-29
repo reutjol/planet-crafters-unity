@@ -14,7 +14,16 @@ public sealed class PlayerLevelBadgeController : MonoBehaviour
 
     private void OnEnable()
     {
+        if (GameManager.Instance != null)
+            GameManager.Instance.OnPlanetLoaded += HandlePlanetLoaded;
+
         Refresh();
+    }
+
+    private void OnDisable()
+    {
+        if (GameManager.Instance != null)
+            GameManager.Instance.OnPlanetLoaded -= HandlePlanetLoaded;
     }
 
     private void OnValidate()
@@ -39,5 +48,10 @@ public sealed class PlayerLevelBadgeController : MonoBehaviour
             view = GetComponent<PlayerLevelBadgeView>();
 
         levelProvider = levelProviderBehaviour as IPlayerLevelProvider;
+    }
+
+    private void HandlePlanetLoaded(PlanetDto planet)
+    {
+        Refresh();
     }
 }

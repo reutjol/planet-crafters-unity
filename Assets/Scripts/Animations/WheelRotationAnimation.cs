@@ -9,7 +9,10 @@ public class WheelRotationAnimation : MonoBehaviour
     private Coroutine activeRoutine;
     private float currentZRotation;
 
+    public event Action<float> RotationChanged;
+
     public bool IsSpinning { get; private set; }
+    public float CurrentZRotation => currentZRotation;
 
     private void Awake()
     {
@@ -22,7 +25,7 @@ public class WheelRotationAnimation : MonoBehaviour
         currentZRotation = 0f;
 
         if (wheelRoot != null)
-            wheelRoot.localEulerAngles = new Vector3(0f, 0f, currentZRotation);
+            ApplyWheelRotation();
     }
 
     public void Play(float deltaAngle, float duration, Action onCompleted = null)
@@ -41,20 +44,19 @@ public class WheelRotationAnimation : MonoBehaviour
         IsSpinning = true;
 
         float rotated = 0f;
-        float angularSpeed = deltaAngle / duration; // ????? ??????
+        float angularSpeed = deltaAngle / duration;
 
         while (rotedLessThanTarget(rotated, deltaAngle))
         {
             float step = angularSpeed * Time.deltaTime;
 
-            // ?? ????? ?? ????
             if (rotated + step > deltaAngle)
                 step = deltaAngle - rotated;
 
             rotated += step;
             currentZRotation -= step; // clockwise
 
-            wheelRoot.localEulerAngles = new Vector3(0f, 0f, currentZRotation);
+            ApplyWheelRotation();
 
             yield return null;
         }
@@ -68,5 +70,11 @@ public class WheelRotationAnimation : MonoBehaviour
     private bool rotedLessThanTarget(float rotated, float target)
     {
         return rotated < target;
+    }
+
+    private void ApplyWheelRotation()
+    {
+        wheelRoot.localEulerAngles = new Vector3(0f, 0f, currentZRotation);
+        RotationChanged?.Invoke(currentZRotation);
     }
 }

@@ -17,6 +17,7 @@ public class PlanetDto
     public string planetId;
     public List<StageDto> stages;
     public int totalCoins;
+    public int playerLevel;
 }
 
 [System.Serializable]

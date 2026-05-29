@@ -114,7 +114,7 @@ public static class PlanetTopBarStyleApplier
         badgeImage.raycastTarget = false;
 
         TextMeshProUGUI levelText = ConfigureLevelText(badge.transform);
-        PlayerPrefsLevelProvider provider = EnsureComponent<PlayerPrefsLevelProvider>(topBarObject);
+        ServerPlayerLevelProvider provider = EnsureComponent<ServerPlayerLevelProvider>(topBarObject);
         PlayerLevelBadgeView badgeView = badge.GetComponent<PlayerLevelBadgeView>();
         PlayerLevelBadgeController badgeController = badge.GetComponent<PlayerLevelBadgeController>();
 

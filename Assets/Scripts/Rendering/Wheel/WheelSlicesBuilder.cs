@@ -16,6 +16,7 @@ public class WheelSlicesBuilder : MonoBehaviour
     [SerializeField] private float firstRewardAngle = 90f;
 
     private IWheelRewardIconProvider iconProvider;
+    private readonly List<WheelSliceView> activeSlices = new List<WheelSliceView>();
 
     public void Initialize(IWheelRewardIconProvider iconProvider)
     {
@@ -52,6 +53,7 @@ public class WheelSlicesBuilder : MonoBehaviour
         }
 
         ClearContainer();
+        activeSlices.Clear();
 
         List<WheelRewardDto> rewards = wheelConfig.rewards;
         int count = rewards.Count;
@@ -89,9 +91,27 @@ public class WheelSlicesBuilder : MonoBehaviour
             sliceRect.anchoredPosition = AngleToPosition(angle, rewardRadius);
             sliceRect.localScale = Vector3.one;
             sliceRect.localRotation = Quaternion.identity;
+
+            activeSlices.Add(slice);
         }
 
         Debug.Log("WheelSlicesBuilder: Build finished");
+    }
+
+    public void ApplyCounterRotation(float wheelZRotation)
+    {
+        for (int i = activeSlices.Count - 1; i >= 0; i--)
+        {
+            WheelSliceView slice = activeSlices[i];
+
+            if (slice == null)
+            {
+                activeSlices.RemoveAt(i);
+                continue;
+            }
+
+            slice.SetCounterRotation(wheelZRotation);
+        }
     }
 
     private static Vector2 AngleToPosition(float angleDegrees, float radius)

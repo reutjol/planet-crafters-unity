@@ -37,6 +37,9 @@ public class WheelScreenController : MonoBehaviour
         if (spinButtonView != null)
             spinButtonView.Clicked += HandleSpinClicked;
 
+        if (wheelRotationAnimation != null)
+            wheelRotationAnimation.RotationChanged += HandleWheelRotationChanged;
+
         cooldownRefreshCoroutine = StartCoroutine(CooldownRefreshRoutine());
     }
 
@@ -44,6 +47,9 @@ public class WheelScreenController : MonoBehaviour
     {
         if (spinButtonView != null)
             spinButtonView.Clicked -= HandleSpinClicked;
+
+        if (wheelRotationAnimation != null)
+            wheelRotationAnimation.RotationChanged -= HandleWheelRotationChanged;
 
         if (cooldownRefreshCoroutine != null)
         {
@@ -97,6 +103,9 @@ public class WheelScreenController : MonoBehaviour
             Debug.Log("WheelScreenController: wheelSlicesBuilder found");
             wheelSlicesBuilder.Initialize(wheelRewardIconProvider);
             wheelSlicesBuilder.Build();
+
+            if (wheelRotationAnimation != null)
+                wheelSlicesBuilder.ApplyCounterRotation(wheelRotationAnimation.CurrentZRotation);
         }
         else
         {
@@ -121,6 +130,11 @@ public class WheelScreenController : MonoBehaviour
 
             wheelScreenPresenter?.PresentCompleted(result);
         });
+    }
+
+    private void HandleWheelRotationChanged(float wheelZRotation)
+    {
+        wheelSlicesBuilder?.ApplyCounterRotation(wheelZRotation);
     }
 
     private IEnumerator CooldownRefreshRoutine()
