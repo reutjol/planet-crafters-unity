@@ -14,6 +14,7 @@ public class GameBootstrap : MonoBehaviour
     [FormerlySerializedAs("scoreDisplay")]    [SerializeField] private ScoreDisplay _scoreDisplay;
 
     private bool _isInitialized = false;
+    private bool _stageCompleted = false;
     private System.Action<PlanetStageStateDto> _currentStateLoadHandler;
 
     private IEnumerator Start()
@@ -156,6 +157,8 @@ public class GameBootstrap : MonoBehaviour
 
     private void HandleGameOver()
     {
+        if (_stageCompleted) return;
+
         if (_gameOverPanel != null)
         {
             _gameOverPanel.SetActive(true);
@@ -168,6 +171,7 @@ public class GameBootstrap : MonoBehaviour
 
     private void HandleStageCompleted()
     {
+        _stageCompleted = true;
         if (GameManager.Instance != null)
             GameManager.Instance.ClearCache();
     }
