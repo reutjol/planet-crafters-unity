@@ -26,7 +26,6 @@ public class MapStageController : MonoBehaviour
     [Header("Layout")]
     [SerializeField] private float hexSize = 1.0f;
     [SerializeField] private bool pointyTop = true;
-
     private readonly List<GameObject> spawned = new List<GameObject>();
 
     private void OnEnable()
@@ -137,6 +136,7 @@ public class MapStageController : MonoBehaviour
             if (!prefab) continue;
 
             var pos = AxialToWorld(q, r);
+            pos.y += prefab.transform.localPosition.y;
             var go = Instantiate(prefab, pos, prefab.transform.rotation, stagesParent);
             go.name = $"{stage.stageId} ({q},{r})";
             spawned.Add(go);

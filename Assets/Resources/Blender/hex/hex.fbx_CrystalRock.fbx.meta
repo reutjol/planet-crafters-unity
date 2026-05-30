@@ -1,9 +1,19 @@
 fileFormatVersion: 2
-guid: dd68c911194771d4aa6555c61491277e
+guid: 2dc578c1215b2e64aa95af2b3379fec1
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: hexagons_texture
+    second: {fileID: 2100000, guid: dc14ae87c5243284599f4979610c0a6d, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: hexagons_water_texture
+    second: {fileID: 2100000, guid: 7014a3b9fa7ea91498bc00ec22f78b2e, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
