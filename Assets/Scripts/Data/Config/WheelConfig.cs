@@ -14,5 +14,5 @@ public class WheelConfig : ScriptableObject
     public int extraFullRotations = 4;
 
     [Header("Cooldown Settings")]
-    public int cooldownHours = 24;
+    public int cooldownHours = 4;
 }

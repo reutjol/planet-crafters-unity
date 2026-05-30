@@ -72,4 +72,4 @@ MonoBehaviour:
   sliceCount: 8
   spinDuration: 3.2
   extraFullRotations: 4
-  cooldownHours: 0
+  cooldownHours: 4
