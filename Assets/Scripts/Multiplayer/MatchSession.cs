@@ -10,7 +10,9 @@ public class MatchSession : MonoBehaviour
     public int Duration { get; private set; }
     public long StartTimeMs { get; private set; } // 0 when match is waiting
     public string MyUserId { get; private set; }
+    public string MyUsername { get; private set; }
     public string OpponentUserId { get; private set; }
+    public string OpponentUsername { get; private set; }
     public int InitialScore { get; private set; }
     public int CurrentMatchScore { get; private set; }
 
@@ -29,11 +31,15 @@ public class MatchSession : MonoBehaviour
         Duration = match.duration;
         StartTimeMs = match.startTime ?? 0;
         MyUserId = myUserId;
+        MyUsername = AppSession.Instance?.Username ?? myUserId;
 
         foreach (var p in match.players)
         {
             if (p.userId != myUserId)
+            {
                 OpponentUserId = p.userId;
+                OpponentUsername = string.IsNullOrEmpty(p.username) ? p.userId : p.username;
+            }
         }
     }
 
@@ -69,7 +75,9 @@ public class MatchSession : MonoBehaviour
         Duration = 0;
         StartTimeMs = 0;
         MyUserId = null;
+        MyUsername = null;
         OpponentUserId = null;
+        OpponentUsername = null;
         InitialScore = 0;
     }
 }

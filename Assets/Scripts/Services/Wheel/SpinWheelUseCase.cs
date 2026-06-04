@@ -76,7 +76,8 @@ public class SpinWheelUseCase
 
         float targetAngle = wheelAngleCalculator.CalculateTargetAngle(
             selectedReward.sliceIndex,
-            wheelConfig.sliceCount
+            wheelConfig.sliceCount,
+            wheelRotationAnimation.CurrentZRotation
         );
 
         float finalSpinAngle = (wheelConfig.extraFullRotations * 360f) + targetAngle;

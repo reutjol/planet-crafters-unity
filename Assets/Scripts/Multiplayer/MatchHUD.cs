@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -24,11 +25,17 @@ public class MatchHUD : MonoBehaviour
     [SerializeField] private TextMeshProUGUI resultScoreText;
     [SerializeField] private Button resultBackButton;
 
+    [Header("AI Reaction Panel")]
+    [SerializeField] private GameObject reactionPanel;
+    [SerializeField] private TextMeshProUGUI reactionText;
+    [SerializeField] private float reactionDuration = 4f;
+
     private bool _matchActive;
     private bool _initialScoreSet;
     private int _myMatchScore;
     private int _opponentMatchScore;
     private bool _resultShown;
+    private Coroutine _reactionCoroutine;
 
     private void Start()
     {
@@ -52,7 +59,11 @@ public class MatchHUD : MonoBehaviour
         {
             MatchManager.Instance.OnMatchFinished += OnMatchFinished;
             MatchManager.Instance.OnMatchUpdated += OnMatchUpdated;
+            MatchManager.Instance.OnOpponentScoreUpdated += OnOpponentScoreUpdated;
+            MatchManager.Instance.OnAiReaction += ShowReaction;
         }
+
+        if (reactionPanel != null) reactionPanel.SetActive(false);
 
         // ApplyServerState may have fired before we subscribed — read from cache
         var cached = GameManager.Instance?.GetCachedPlanetStageState();
@@ -69,6 +80,8 @@ public class MatchHUD : MonoBehaviour
         {
             MatchManager.Instance.OnMatchFinished -= OnMatchFinished;
             MatchManager.Instance.OnMatchUpdated -= OnMatchUpdated;
+            MatchManager.Instance.OnOpponentScoreUpdated -= OnOpponentScoreUpdated;
+            MatchManager.Instance.OnAiReaction -= ShowReaction;
         }
     }
 
@@ -154,11 +167,36 @@ public class MatchHUD : MonoBehaviour
         }
     }
 
+    private void OnOpponentScoreUpdated(int score)
+    {
+        _opponentMatchScore = score;
+        RefreshScoreDisplay();
+    }
+
+    private void ShowReaction(string message)
+    {
+        Debug.Log($"[MatchHUD] ShowReaction called: '{message}' panel={reactionPanel} text={reactionText}");
+        if (reactionPanel == null || reactionText == null) return;
+        reactionText.text = message;
+        reactionPanel.SetActive(true);
+
+        if (_reactionCoroutine != null) StopCoroutine(_reactionCoroutine);
+        _reactionCoroutine = StartCoroutine(HideReactionAfterDelay());
+    }
+
+    private IEnumerator HideReactionAfterDelay()
+    {
+        yield return new WaitForSeconds(reactionDuration);
+        if (reactionPanel != null) reactionPanel.SetActive(false);
+    }
+
     private void OnResultBack()
     {
+        MatchManager.Instance?.CancelMatch();
+
         var config = Resources.Load<GameConfig>("GameConfig");
         if (config != null)
-            UnityEngine.SceneManagement.SceneManager.LoadScene(config.planetSceneIndex);
+            SceneLoader.Instance?.LoadScene(config.planetSceneIndex);
     }
 
     private void UpdateTimer()
@@ -172,7 +210,8 @@ public class MatchHUD : MonoBehaviour
 
     private void RefreshScoreDisplay()
     {
+        var oppName = MatchSession.Instance?.OpponentUsername ?? "Opp";
         if (myScoreText != null) myScoreText.text = $"You: {_myMatchScore}";
-        if (opponentScoreText != null) opponentScoreText.text = $"Opp: {_opponentMatchScore}";
+        if (opponentScoreText != null) opponentScoreText.text = $"{oppName}: {_opponentMatchScore}";
     }
 }

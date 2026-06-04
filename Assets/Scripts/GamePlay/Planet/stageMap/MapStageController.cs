@@ -185,12 +185,7 @@ public class MapStageController : MonoBehaviour
                 {
                     mat.color *= new Color(lockedDarkness, lockedDarkness, lockedDarkness, 1f);
                 }
-                else if (completed)
-                {
-                    mat.EnableKeyword("_EMISSION");
-                    if (mat.HasProperty("_EmissionColor"))
-                        mat.SetColor("_EmissionColor", new Color(0.4f, 0.4f, 0.15f));
-                }
+                // completed stages use default material — stars text indicates completion
             }
         }
     }

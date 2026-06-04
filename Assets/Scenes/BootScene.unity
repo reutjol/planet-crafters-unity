@@ -413,6 +413,8 @@ GameObject:
   - component: {fileID: 1731504957}
   - component: {fileID: 1731504956}
   - component: {fileID: 1731504955}
+  - component: {fileID: 1731504958}
+  - component: {fileID: 1731504959}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -434,6 +436,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   planetApi: {fileID: 1346548733}
   planetStateApi: {fileID: 1467079667}
+  boosterApi: {fileID: 0}
   defaultDeckSize: 30
 --- !u!4 &1731504954
 Transform:
@@ -487,6 +490,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96fe558ff455b064298f62128ee6bce4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1731504958
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1731504952}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7840ee073d84d442ac280a672539dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1731504959
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1731504952}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da82efe98d3eab342806ba2ee44f1e0a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameConfig: {fileID: 11400000, guid: 8ca2602c4e3d6c8478000ee637872472, type: 2}
 --- !u!1 &1915980364
 GameObject:
   m_ObjectHideFlags: 0

@@ -31,20 +31,30 @@ public class RegistrationMenuController : MonoBehaviour
             yield break;
         }
 
+        string newToken = null;
         yield return authApi.Refresh(
             AppSession.Instance.RefreshToken,
-            onSuccess: (newAccessToken) =>
-            {
-                Debug.Log("[RegistrationMenu] Auto-login successful");
-                AppSession.Instance.SetAccess(newAccessToken);
-                SceneLoader.Instance.LoadScene(gameConfig.planetSceneIndex);
-            },
-            onError: (err) =>
-            {
-                Debug.Log($"[RegistrationMenu] Refresh token expired ({err}), showing login screen");
-                AppSession.Instance.Logout();
-            }
+            onSuccess: t => { newToken = t; AppSession.Instance.SetAccess(t); },
+            onError: err => { Debug.Log($"[RegistrationMenu] Refresh expired ({err})"); AppSession.Instance.Logout(); }
         );
+
+        if (string.IsNullOrEmpty(newToken)) yield break;
+
+        Debug.Log("[RegistrationMenu] Auto-login successful");
+
+        // Fetch user info if not already stored
+        if (string.IsNullOrEmpty(AppSession.Instance.UserId) || string.IsNullOrEmpty(AppSession.Instance.Username))
+        {
+            var profileApi = FindObjectOfType<PlayerProfileApiClient>(true);
+            if (profileApi != null)
+            {
+                yield return profileApi.GetMyProfile(newToken,
+                    user => AppSession.Instance.SetUser(user.id, user.userName),
+                    _ => { });
+            }
+        }
+
+        SceneLoader.Instance.LoadScene(gameConfig.planetSceneIndex);
     }
 
     public void OnClickSignIn()

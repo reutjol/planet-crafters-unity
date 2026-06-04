@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -19,6 +20,18 @@ public class DraggableTile : MonoBehaviour
     private HandController _handController;
     private MapController _mapController;
     private string _templateId;
+
+    public static bool IsDragging { get; private set; }
+    public static DraggableTile ActiveTile { get; private set; }
+    public static event Action<bool> OnDragStateChanged;
+
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+    private static void ResetStaticState()
+    {
+        IsDragging = false;
+        ActiveTile = null;
+        OnDragStateChanged = null;
+    }
 
     public void Initialize(string templateId, HandController hand, MapController map)
     {
@@ -45,12 +58,22 @@ public class DraggableTile : MonoBehaviour
         enabled = canDrag;
     }
 
+    // Called by the rotate UI button (and R key on PC).
+    public void Rotate()
+    {
+        _rotation = (_rotation + 1) % 6;
+        transform.rotation = Quaternion.Euler(0, _rotation * 60f, 0);
+    }
+
     private void OnMouseDown()
     {
         if (!enabled) return;
         if (PopupManager.IsAnyPopupOpen) return;
 
         _dragging = true;
+        IsDragging = true;
+        ActiveTile = this;
+        OnDragStateChanged?.Invoke(true);
 
         SetLayerRecursively(gameObject, LayerMask.NameToLayer("Default"));
 
@@ -65,12 +88,10 @@ public class DraggableTile : MonoBehaviour
         if (!_dragging) return;
 
         if (Input.GetKeyDown(KeyCode.R))
-        {
-            _rotation = (_rotation + 1) % 6;
-            transform.rotation = Quaternion.Euler(0, _rotation * 60f, 0);
-        }
+            Rotate();
 
-        Ray ray = _cam.ScreenPointToRay(Input.mousePosition);
+        Vector2 screenPos = GetPointerScreenPosition();
+        Ray ray = _cam.ScreenPointToRay(screenPos);
 
         if (Physics.Raycast(ray, out RaycastHit hit, 200f, _hexCellMask))
         {
@@ -97,9 +118,20 @@ public class DraggableTile : MonoBehaviour
             transform.position = ray.GetPoint(enter);
     }
 
+    // Follows the active touch finger or falls back to mouse position.
+    private Vector2 GetPointerScreenPosition()
+    {
+        if (Input.touchCount > 0)
+            return Input.GetTouch(0).position;
+        return Input.mousePosition;
+    }
+
     private void OnMouseUp()
     {
         _dragging = false;
+        IsDragging = false;
+        ActiveTile = null;
+        OnDragStateChanged?.Invoke(false);
 
         foreach (var c in _myColliders)
             c.enabled = true;
@@ -137,17 +169,28 @@ public class DraggableTile : MonoBehaviour
         }
 
         int serverRot = ((rot % 6) + 6) % 6;
+        bool usingDoubleScore = BoosterController.Instance != null && BoosterController.Instance.IsDoubleScoreActive;
         var dto = new PlaceTileRequestDto
         {
             tileId = _templateId,
             coord = new CoordDto { q = q, r = r },
-            rotation = serverRot
+            rotation = serverRot,
+            activeBooster = usingDoubleScore ? "doubleScore" : null
         };
+
+        var placeApi = PlanetStateApiClient.Instance;
+        if (placeApi == null)
+        {
+            Debug.LogError("[DraggableTile] PlanetStateApiClient.Instance is null — cannot place tile");
+            ReturnHome();
+            enabled = true;
+            yield break;
+        }
 
         PlanetStageStateDto newState = null;
         string error = null;
 
-        yield return PlanetStateApiClient.Instance.PlaceTile(
+        yield return placeApi.PlaceTile(
             planetId, stageId, token, dto,
             onSuccess: state => newState = state,
             onError: err => error = err
@@ -155,6 +198,9 @@ public class DraggableTile : MonoBehaviour
 
         if (newState != null)
         {
+            if (usingDoubleScore)
+                BoosterController.Instance?.OnDoubleScoreConsumed();
+
             _mapController.ApplyServerState(newState);
             _handController.LoadFromServer(newState.hand, newState.deck);
         }
@@ -182,5 +228,4 @@ public class DraggableTile : MonoBehaviour
         foreach (Transform child in obj.transform)
             SetLayerRecursively(child.gameObject, layer);
     }
-
 }

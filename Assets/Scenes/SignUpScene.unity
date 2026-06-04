@@ -3576,7 +3576,7 @@ MonoBehaviour:
   passwordInput: {fileID: 717925180}
   confirmPasswordInput: {fileID: 766214146}
   errorMessageText: {fileID: 653301186}
-  successMessageText: {fileID: 653301186}
+  successMessageText: {fileID: 95894646}
 --- !u!1 &1819394463 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1261885926464194529, guid: 9a9c6ec60a23593479ac31b033f98e55, type: 3}

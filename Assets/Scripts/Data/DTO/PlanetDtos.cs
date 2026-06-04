@@ -148,4 +148,5 @@ public class PlaceTileRequestDto
     public string tileId;
     public CoordDto coord;
     public int rotation;
+    public string activeBooster; // "doubleScore" | null
 }

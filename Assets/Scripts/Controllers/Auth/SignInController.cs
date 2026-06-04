@@ -120,6 +120,7 @@ public class SignInController : MonoBehaviour
                 Debug.Log("[SignIn] Login successful!");
                 HideError();
                 AppSession.Instance.SetTokens(resp.accessToken, resp.refreshToken);
+                AppSession.Instance.SetUser(resp.user?.id, resp.user?.userName);
                 if (SceneLoader.Instance != null && gameConfig != null)
                 {
                     SceneLoader.Instance.LoadScene(gameConfig.planetSceneIndex);

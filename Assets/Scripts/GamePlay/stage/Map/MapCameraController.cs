@@ -21,6 +21,8 @@ public class MapCameraController : MonoBehaviour
     private Camera _cam;
     private bool _panning;
     private Vector3 _grabWorldPoint;
+    private int _panFingerId = -1;
+    private float _pinchStartSize;
 
     private static readonly Plane PanPlane = new Plane(Vector3.up, Vector3.zero);
 
@@ -35,6 +37,8 @@ public class MapCameraController : MonoBehaviour
         HandleKeyboardPan();
         HandleMousePan();
         HandleZoom();
+        HandleTouchPan();
+        HandlePinchZoom();
     }
 
     private void HandleKeyboardPan()
@@ -86,6 +90,67 @@ public class MapCameraController : MonoBehaviour
 
         _cam.orthographicSize = Mathf.Clamp(
             _cam.orthographicSize - scroll * _zoomSpeed,
+            _minSize,
+            _maxSize
+        );
+    }
+
+    // Single-finger drag to pan the camera (only when no tile is being dragged).
+    private void HandleTouchPan()
+    {
+        if (Input.touchCount != 1 || DraggableTile.IsDragging) return;
+
+        Touch touch = Input.GetTouch(0);
+
+        if (touch.phase == TouchPhase.Began)
+        {
+            _panFingerId = touch.fingerId;
+            if (TryGetWorldPoint(touch.position, out Vector3 wp))
+                _grabWorldPoint = wp;
+            _panning = true;
+        }
+        else if (touch.phase == TouchPhase.Ended || touch.phase == TouchPhase.Canceled)
+        {
+            if (touch.fingerId == _panFingerId)
+            {
+                _panning = false;
+                _panFingerId = -1;
+            }
+        }
+        else if (_panning && touch.fingerId == _panFingerId)
+        {
+            if (!TryGetWorldPoint(touch.position, out Vector3 current)) return;
+
+            Vector3 delta = _grabWorldPoint - current;
+            Vector3 newPos = transform.position + delta;
+            newPos.x = Mathf.Clamp(newPos.x, -_panBoundX, _panBoundX);
+            newPos.z = Mathf.Clamp(newPos.z, -_panBoundZ, _panBoundZ);
+            transform.position = newPos;
+        }
+    }
+
+    // Two-finger pinch to zoom.
+    private void HandlePinchZoom()
+    {
+        if (Input.touchCount != 2) return;
+
+        // Stop single-finger pan while pinching
+        _panning = false;
+
+        Touch t0 = Input.GetTouch(0);
+        Touch t1 = Input.GetTouch(1);
+
+        float currentDist = Vector2.Distance(t0.position, t1.position);
+        float prevDist = Vector2.Distance(
+            t0.position - t0.deltaPosition,
+            t1.position - t1.deltaPosition
+        );
+
+        float delta = prevDist - currentDist;
+        if (Mathf.Abs(delta) < 0.5f) return;
+
+        _cam.orthographicSize = Mathf.Clamp(
+            _cam.orthographicSize + delta * _zoomSpeed * 0.02f,
             _minSize,
             _maxSize
         );

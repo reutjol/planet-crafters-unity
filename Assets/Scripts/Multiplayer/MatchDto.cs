@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class MatchPlayerDto
 {
     public string userId;
+    public string username;
     public string planetId;
     public string stageId;
     public int score;
@@ -51,4 +52,11 @@ public class MatchScoreRequestDto
 public class MatchFinishRequestDto
 {
     public int finalScore;
+}
+
+[Serializable]
+public class LobbyPlayerDto
+{
+    public string userId;
+    public string username;
 }

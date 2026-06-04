@@ -1,52 +1,41 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-/// <summary>
-/// Controls the multiplayer lobby panel shown on the planet screen.
-/// Assign all UI references in the Inspector.
-/// </summary>
 public class MatchLobbyController : MonoBehaviour
 {
     [Header("Panel Root")]
     [SerializeField] private GameObject lobbyPanel;
-
-    [Header("Main Buttons Screen")]
-    [SerializeField] private GameObject mainButtonsScreen;
-    [SerializeField] private Button createButton;
-    [SerializeField] private Button joinButton;
     [SerializeField] private Button closeButton;
 
-    [Header("Create Room Screen")]
-    [SerializeField] private GameObject createRoomScreen;
-    [SerializeField] private TextMeshProUGUI roomCodeText;
-    [SerializeField] private TextMeshProUGUI waitingStatusText;
-    [SerializeField] private Button cancelCreateButton;
+    [Header("Lobby Screen")]
+    [SerializeField] private TextMeshProUGUI statusText;
+    [SerializeField] private Button randomButton;
+    [SerializeField] private Transform playerListContent;
+    [SerializeField] private GameObject playerRowPrefab;
 
-    [Header("Join Room Screen")]
-    [SerializeField] private GameObject joinRoomScreen;
-    [SerializeField] private TMP_InputField codeInputField;
-    [SerializeField] private Button confirmJoinButton;
-    [SerializeField] private Button cancelJoinButton;
-    [SerializeField] private TextMeshProUGUI joinErrorText;
+    private readonly List<GameObject> _playerRows = new List<GameObject>();
 
     private void Start()
     {
-        createButton?.onClick.AddListener(OnCreateClicked);
-        joinButton?.onClick.AddListener(OnJoinClicked);
         closeButton?.onClick.AddListener(OnCloseClicked);
-        cancelCreateButton?.onClick.AddListener(OnCancelCreateClicked);
-        confirmJoinButton?.onClick.AddListener(OnConfirmJoinClicked);
-        cancelJoinButton?.onClick.AddListener(OnCancelJoinClicked);
+        randomButton?.onClick.AddListener(OnRandomClicked);
 
         if (MatchManager.Instance != null)
-            MatchManager.Instance.OnMatchUpdated += OnMatchUpdated;
+        {
+            MatchManager.Instance.OnLobbyUpdated  += OnLobbyUpdated;
+            MatchManager.Instance.OnChallengeError += OnChallengeError;
+        }
     }
 
     private void OnDestroy()
     {
         if (MatchManager.Instance != null)
-            MatchManager.Instance.OnMatchUpdated -= OnMatchUpdated;
+        {
+            MatchManager.Instance.OnLobbyUpdated   -= OnLobbyUpdated;
+            MatchManager.Instance.OnChallengeError -= OnChallengeError;
+        }
     }
 
     // ── Public: open from PlanetScreenController ──
@@ -54,93 +43,90 @@ public class MatchLobbyController : MonoBehaviour
     public void Open()
     {
         lobbyPanel?.SetActive(true);
-        ShowScreen(mainButtonsScreen);
+        ShowStatus("Looking for players...");
         PopupManager.OnPopupOpened();
+        Debug.Log($"[Lobby] Open called. MatchManager={MatchManager.Instance} AppSession.UserId={AppSession.Instance?.UserId}");
+        MatchManager.Instance?.OpenLobby();
     }
 
     private void OnCloseClicked()
     {
-        MatchManager.Instance?.CancelMatch();
+        MatchManager.Instance?.CloseLobby();
         lobbyPanel?.SetActive(false);
         PopupManager.OnPopupClosed();
     }
 
-    // ── Create Room ──
+    // ── Lobby events ──
 
-    private void OnCreateClicked()
+    private void OnLobbyUpdated(List<LobbyPlayerDto> players)
     {
-        ShowScreen(createRoomScreen);
-        if (roomCodeText != null) roomCodeText.text = "...";
-        if (waitingStatusText != null) waitingStatusText.text = "Creating room...";
+        Debug.Log($"[Lobby] OnLobbyUpdated: {players?.Count ?? 0} players total");
+        var myId = AppSession.Instance?.UserId;
+        var others = players?.FindAll(p => p.userId != myId) ?? new List<LobbyPlayerDto>();
 
-        MatchManager.Instance?.CreateRoom(
-            onSuccess: match =>
-            {
-                if (roomCodeText != null) roomCodeText.text = match.code;
-                if (waitingStatusText != null) waitingStatusText.text = "Waiting for opponent...";
-            },
-            onError: err =>
-            {
-                if (waitingStatusText != null) waitingStatusText.text = $"Error: {err}";
-                Debug.LogError($"[MatchLobby] CreateRoom error: {err}");
-            });
-    }
+        // Update status text
+        ShowStatus(others.Count == 0 ? "Waiting for players..." : $"{others.Count} player(s) online");
 
-    private void OnCancelCreateClicked()
-    {
-        MatchManager.Instance?.CancelMatch();
-        ShowScreen(mainButtonsScreen);
-    }
+        // Enable/disable random button
+        if (randomButton != null) randomButton.interactable = others.Count > 0;
 
-    // ── Join Room ──
+        // Rebuild player rows
+        foreach (var row in _playerRows) Destroy(row);
+        _playerRows.Clear();
 
-    private void OnJoinClicked()
-    {
-        if (joinErrorText != null) joinErrorText.text = "";
-        if (codeInputField != null) codeInputField.text = "";
-        ShowScreen(joinRoomScreen);
-    }
+        if (playerListContent == null || playerRowPrefab == null) return;
 
-    private void OnConfirmJoinClicked()
-    {
-        var code = codeInputField?.text?.Trim().ToUpper();
-        if (string.IsNullOrEmpty(code))
+        foreach (var player in others)
         {
-            if (joinErrorText != null) joinErrorText.text = "Enter a room code";
-            return;
-        }
+            var row = Instantiate(playerRowPrefab, playerListContent);
+            _playerRows.Add(row);
 
-        if (confirmJoinButton != null) confirmJoinButton.interactable = false;
-        if (joinErrorText != null) joinErrorText.text = "Joining...";
+            var nameText = row.GetComponentInChildren<TextMeshProUGUI>();
+            if (nameText != null) nameText.text = player.username;
 
-        MatchManager.Instance?.JoinRoom(code,
-            onSuccess: _ => { /* EnterMatch is called inside MatchManager */ },
-            onError: err =>
+            var btn = row.GetComponentInChildren<Button>();
+            if (btn != null)
             {
-                if (joinErrorText != null) joinErrorText.text = err;
-                if (confirmJoinButton != null) confirmJoinButton.interactable = true;
-            });
+                var id = player.userId;
+                btn.onClick.AddListener(() => OnChallengeClicked(id));
+            }
+        }
     }
 
-    private void OnCancelJoinClicked()
+    private void OnChallengeError(string err)
     {
-        ShowScreen(mainButtonsScreen);
+        ShowStatus($"Error: {err}");
     }
 
-    // ── Match state updates (while waiting in lobby) ──
+    // ── Buttons ──
 
-    private void OnMatchUpdated(MatchDto match)
+    private void OnRandomClicked()
     {
-        if (match.status == "active" && waitingStatusText != null)
-            waitingStatusText.text = "Match starting...";
+        DisableAllButtons();
+        ShowStatus("Challenging random player...");
+        MatchManager.Instance?.ChallengeRandom();
     }
 
-    // ── Helpers ──
-
-    private void ShowScreen(GameObject screen)
+    private void OnChallengeClicked(string targetUserId)
     {
-        if (mainButtonsScreen != null) mainButtonsScreen.SetActive(mainButtonsScreen == screen);
-        if (createRoomScreen != null) createRoomScreen.SetActive(createRoomScreen == screen);
-        if (joinRoomScreen != null) joinRoomScreen.SetActive(joinRoomScreen == screen);
+        DisableAllButtons();
+        ShowStatus("Challenging...");
+        MatchManager.Instance?.ChallengePlayer(targetUserId);
+    }
+
+    private void DisableAllButtons()
+    {
+        if (randomButton != null) randomButton.interactable = false;
+        foreach (var row in _playerRows)
+        {
+            if (row == null) continue;
+            var btn = row.GetComponentInChildren<Button>();
+            if (btn != null) btn.interactable = false;
+        }
+    }
+
+    private void ShowStatus(string msg)
+    {
+        if (statusText != null) statusText.text = msg;
     }
 }

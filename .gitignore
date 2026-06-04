@@ -23,3 +23,9 @@ sysinfo.txt
 
 *.md
 
+# Build outputs
+*.apk
+*.aab
+*_BurstDebugInformation_DoNotShip/
+*_BackUpThisFolder_ButDontShipItWithYourGame/
+

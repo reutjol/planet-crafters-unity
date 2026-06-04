@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Newtonsoft.Json.Linq;
 using UnityEngine;
 
 public class MatchManager : MonoBehaviour
@@ -8,6 +9,10 @@ public class MatchManager : MonoBehaviour
 
     public event Action<MatchDto> OnMatchUpdated;
     public event Action<MatchDto> OnMatchFinished;
+    public event Action<int> OnOpponentScoreUpdated;
+    public event Action<string> OnAiReaction;
+    public event Action<System.Collections.Generic.List<LobbyPlayerDto>> OnLobbyUpdated;
+    public event Action<string> OnChallengeError;
 
     private const float LobbyPollInterval = 3f;
     private const float GameplayPollInterval = 5f;
@@ -106,7 +111,8 @@ public class MatchManager : MonoBehaviour
 
             MatchDto match = null;
             yield return MatchApiClient.Instance.GetMatch(matchId, token,
-                m => match = m, _ => { });
+                m => match = m,
+                err => Debug.LogWarning($"[MatchManager] LobbyPoll GetMatch failed: {err}"));
 
             if (match == null) continue;
 
@@ -182,7 +188,8 @@ public class MatchManager : MonoBehaviour
 
         MatchDto result = null;
         yield return MatchApiClient.Instance.SendReady(matchId, token,
-            m => result = m, _ => { });
+            m => result = m,
+            err => Debug.LogWarning($"[MatchManager] SendReady failed: {err}"));
 
         if (result?.startTime != null && MatchSession.Instance != null && MatchSession.Instance.StartTimeMs == 0)
             MatchSession.Instance.SetStartTime(result.startTime.Value);
@@ -191,34 +198,55 @@ public class MatchManager : MonoBehaviour
     public void BeginGameplayPolling(int initialScore)
     {
         MatchSession.Instance.SetInitialScore(initialScore);
+
+        // Connect socket for real-time score sync and AI reactions
+        var config = Resources.Load<GameConfig>("GameConfig");
+        var serverUrl = config?.serverBaseUrl ?? "http://localhost:3000";
+        var matchId = MatchSession.Instance?.MatchId;
+        var userId = MatchSession.Instance?.MyUserId;
+
+        if (MatchSocketClient.Instance != null && !string.IsNullOrEmpty(matchId))
+        {
+            MatchSocketClient.Instance.OnMatchStateReceived += HandleSocketMatchState;
+            MatchSocketClient.Instance.OnReactionReceived += HandleSocketReaction;
+            MatchSocketClient.Instance.OnOpponentLeft += HandleOpponentLeft;
+            MatchSocketClient.Instance.Connect(serverUrl, matchId, userId);
+        }
+
         StopPolling();
         _pollCoroutine = StartCoroutine(GameplayPollRoutine());
+    }
+
+    private void HandleSocketMatchState(JArray players)
+    {
+        if (players == null) return;
+        var myId = MatchSession.Instance?.MyUserId;
+        foreach (var p in players)
+        {
+            var uid = p["userId"]?.ToString();
+            var score = p["score"]?.Value<int>() ?? 0;
+            if (uid != myId)
+            {
+                OnOpponentScoreUpdated?.Invoke(score);
+                break;
+            }
+        }
+    }
+
+    private void HandleSocketReaction(string message)
+    {
+        if (!string.IsNullOrEmpty(message))
+            OnAiReaction?.Invoke(message);
     }
 
     public void PushScore()
     {
         if (MatchSession.Instance == null || !MatchSession.Instance.IsActive) return;
         var matchId = MatchSession.Instance?.MatchId;
-        var token = AppSession.Instance?.AccessToken;
+        var userId = MatchSession.Instance?.MyUserId;
         if (string.IsNullOrEmpty(matchId)) return;
-        StartCoroutine(PushScoreRoutine(matchId, GetCurrentMatchScore(), token));
-    }
 
-    private IEnumerator PushScoreRoutine(string matchId, int score, string token)
-    {
-        MatchDto result = null;
-        yield return MatchApiClient.Instance.UpdateScore(matchId, score, token,
-            m => result = m, _ => { });
-
-        if (result == null) yield break;
-
-        OnMatchUpdated?.Invoke(result);
-
-        if (result.status == "finished")
-        {
-            OnMatchFinished?.Invoke(result);
-            MatchSession.Instance?.Clear();
-        }
+        MatchSocketClient.Instance?.EmitScore(matchId, userId, GetCurrentMatchScore());
     }
 
     private IEnumerator GameplayPollRoutine()
@@ -235,7 +263,8 @@ public class MatchManager : MonoBehaviour
             // Poll only to sync startTime until it arrives; safety net for match finish
             MatchDto match = null;
             yield return MatchApiClient.Instance.GetMatch(matchId, token,
-                m => match = m, _ => { });
+                m => match = m,
+                err => Debug.LogWarning($"[MatchManager] GameplayPoll GetMatch failed: {err}"));
 
             if (match != null)
             {
@@ -246,6 +275,9 @@ public class MatchManager : MonoBehaviour
 
                 if (match.status == "finished")
                 {
+                    if (_finishSubmitted) yield break;
+                    _finishSubmitted = true;
+                    DisconnectSocket();
                     OnMatchFinished?.Invoke(match);
                     MatchSession.Instance.Clear();
                     yield break;
@@ -266,19 +298,74 @@ public class MatchManager : MonoBehaviour
         _finishSubmitted = true;
 
         StopPolling();
+        DisconnectSocket();
 
         var matchId = MatchSession.Instance?.MatchId;
         var token = AppSession.Instance?.AccessToken;
         var finalScore = GetCurrentMatchScore();
 
         MatchDto result = null;
+        string finishErr = null;
         yield return MatchApiClient.Instance.FinishMatch(matchId, finalScore, token,
-            m => result = m, _ => { });
+            m => result = m,
+            err => { finishErr = err; Debug.LogWarning($"[MatchManager] FinishMatch failed: {err}"); });
 
         if (result != null)
             OnMatchFinished?.Invoke(result);
+        else
+            Debug.LogWarning("[MatchManager] FinishMatch returned no result — match may not be recorded on server");
 
         MatchSession.Instance?.Clear();
+    }
+
+    // ── Lobby ────────────────────────────────────────────────────
+
+    public void OpenLobby()
+    {
+        var (planetId, stageId) = GetMatchStage();
+        Debug.Log($"[MatchManager] OpenLobby: userId={AppSession.Instance?.UserId} username={AppSession.Instance?.Username} planetId={planetId}");
+
+        MatchSocketClient.Instance.OnLobbyUpdated   += OnLobbyPlayersUpdated;
+        MatchSocketClient.Instance.OnMatchReady     += OnMatchReadyReceived;
+        MatchSocketClient.Instance.OnChallengeError += err => OnChallengeError?.Invoke(err);
+
+        EnsureSocketConnected(() =>
+        {
+            Debug.Log("[MatchManager] Socket ready — joining lobby");
+            MatchSocketClient.Instance.JoinLobby(
+                AppSession.Instance?.UserId,
+                AppSession.Instance?.Username,
+                planetId, stageId);
+        });
+    }
+
+    public void CloseLobby()
+    {
+        if (MatchSocketClient.Instance == null) return;
+        MatchSocketClient.Instance.OnLobbyUpdated   -= OnLobbyPlayersUpdated;
+        MatchSocketClient.Instance.OnMatchReady     -= OnMatchReadyReceived;
+        MatchSocketClient.Instance.OnChallengeError -= err => OnChallengeError?.Invoke(err);
+        MatchSocketClient.Instance.LeaveLobby();
+    }
+
+    public void ChallengePlayer(string targetUserId) =>
+        MatchSocketClient.Instance?.ChallengePlayer(targetUserId);
+
+    public void ChallengeRandom() =>
+        MatchSocketClient.Instance?.ChallengeRandom();
+
+    private void OnLobbyPlayersUpdated(System.Collections.Generic.List<LobbyPlayerDto> players) =>
+        OnLobbyUpdated?.Invoke(players);
+
+    private void OnMatchReadyReceived(MatchDto match) => EnterMatch(match);
+
+    private void EnsureSocketConnected(System.Action onConnected = null)
+    {
+        if (MatchSocketClient.Instance == null) return;
+        var config = Resources.Load<GameConfig>("GameConfig");
+        var serverUrl = config?.serverBaseUrl ?? "http://localhost:3000";
+        var userId = AppSession.Instance?.UserId ?? "";
+        MatchSocketClient.Instance.Connect(serverUrl, "", userId, onConnected);
     }
 
     // ── Helpers ──
@@ -295,7 +382,23 @@ public class MatchManager : MonoBehaviour
     public void CancelMatch()
     {
         StopPolling();
+        DisconnectSocket();
         MatchSession.Instance?.Clear();
+    }
+
+    private void HandleOpponentLeft()
+    {
+        Debug.Log("[MatchManager] Opponent left — submitting final score");
+        SubmitFinalScore();
+    }
+
+    private void DisconnectSocket()
+    {
+        if (MatchSocketClient.Instance == null) return;
+        MatchSocketClient.Instance.OnMatchStateReceived -= HandleSocketMatchState;
+        MatchSocketClient.Instance.OnReactionReceived -= HandleSocketReaction;
+        MatchSocketClient.Instance.OnOpponentLeft -= HandleOpponentLeft;
+        MatchSocketClient.Instance.Disconnect();
     }
 
     private int GetCurrentMatchScore()

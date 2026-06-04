@@ -11,9 +11,11 @@ public class TotalCoinsDisplay : MonoBehaviour
     private void OnEnable()
     {
         if (GameManager.Instance != null)
+        {
             GameManager.Instance.OnPlanetLoaded += OnPlanetLoaded;
+            GameManager.Instance.OnCoinsChanged += Refresh;
+        }
 
-        // In case planet is already loaded
         var planet = AppSession.Instance?.ActivePlanet;
         if (planet != null)
             Refresh(planet.totalCoins);
@@ -22,7 +24,10 @@ public class TotalCoinsDisplay : MonoBehaviour
     private void OnDisable()
     {
         if (GameManager.Instance != null)
+        {
             GameManager.Instance.OnPlanetLoaded -= OnPlanetLoaded;
+            GameManager.Instance.OnCoinsChanged -= Refresh;
+        }
     }
 
     private void OnPlanetLoaded(PlanetDto planet)

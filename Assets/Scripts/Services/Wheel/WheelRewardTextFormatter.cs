@@ -17,7 +17,7 @@ public static class WheelRewardTextFormatter
             case WheelRewardType.Swap:
             case WheelRewardType.Refresh:
             case WheelRewardType.Random:
-                return reward.amount.ToString();
+                return $"x{reward.amount}";
 
             default:
                 return string.Empty;

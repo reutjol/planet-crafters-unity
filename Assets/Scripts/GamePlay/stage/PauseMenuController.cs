@@ -45,6 +45,8 @@ public class PauseMenuController : MonoBehaviour
     // ── "Return to Map" button ──
     public void OnReturnToMapClicked()
     {
+        MatchManager.Instance?.CancelMatch();
+
         if (GameManager.Instance != null)
             GameManager.Instance.ClearCache();
 

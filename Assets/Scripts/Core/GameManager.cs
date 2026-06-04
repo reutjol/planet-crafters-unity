@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
     [Header("API Clients (assign or auto-find)")]
     [SerializeField] private PlanetApiClient planetApi;
     [SerializeField] private PlanetStateApiClient planetStateApi;
+    [SerializeField] private BoosterApiClient boosterApi;
 
     [Header("Settings")]
     [SerializeField] private int defaultDeckSize = 30;
@@ -26,6 +27,7 @@ public class GameManager : MonoBehaviour
     public event Action<PlanetStageStateDto> OnPlanetStageStateLoaded;
     public event Action<string> OnError;
     public event Action OnUnauthorized;
+    public event Action<int> OnCoinsChanged;
 
     // Loading flags
     private bool isLoadingPlanet;
@@ -52,25 +54,39 @@ public class GameManager : MonoBehaviour
             planetApi = FindObjectOfType<PlanetApiClient>(true);
         if (planetStateApi == null)
             planetStateApi = FindObjectOfType<PlanetStateApiClient>(true);
+        if (boosterApi == null)
+            boosterApi = FindObjectOfType<BoosterApiClient>(true);
 
         if (planetApi == null)
             Debug.LogWarning("[GameManager] PlanetApiClient not found at startup - will retry later");
         if (planetStateApi == null)
             Debug.LogWarning("[GameManager] PlanetStateApiClient not found at startup - will retry later");
+        if (boosterApi == null)
+            Debug.LogWarning("[GameManager] BoosterApiClient not found at startup - will retry later");
     }
 
     private void EnsureApiRefs()
     {
-        // Only retry if not cached yet
-        if (planetApi == null || planetStateApi == null)
-        {
+        if (planetApi == null || planetStateApi == null || boosterApi == null)
             CacheApiReferences();
-        }
 
         if (planetApi == null)
             Debug.LogError("[GameManager] PlanetApiClient not found/assigned.");
         if (planetStateApi == null)
             Debug.LogError("[GameManager] PlanetStateApiClient not found/assigned.");
+        if (boosterApi == null)
+            Debug.LogError("[GameManager] BoosterApiClient not found/assigned.");
+    }
+
+    public void NotifyCoinsChanged(int totalCoins) => OnCoinsChanged?.Invoke(totalCoins);
+
+    public BoosterApiClient BoosterApi
+    {
+        get
+        {
+            if (boosterApi == null) CacheApiReferences();
+            return boosterApi;
+        }
     }
 
     public bool HasAccess() => AppSession.Instance != null && AppSession.Instance.HasAccess();

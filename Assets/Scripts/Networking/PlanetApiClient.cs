@@ -24,6 +24,22 @@ public class PlanetApiClient : BaseApiClient
         DontDestroyOnLoad(gameObject);
     }
 
+    public IEnumerator AddCoins(
+        string planetId,
+        int amount,
+        string accessToken,
+        Action<int> onSuccess,
+        Action<string> onError)
+    {
+        yield return PostRequest<object, AddCoinsResponseDto>(
+            $"/api/planets/{planetId}/add-coins",
+            new AddCoinsRequestDto { amount = amount },
+            accessToken,
+            response => onSuccess?.Invoke(response.totalCoins),
+            onError
+        );
+    }
+
     public IEnumerator GetActivePlanet(
         string accessToken,
         Action<PlanetDto> onSuccess,

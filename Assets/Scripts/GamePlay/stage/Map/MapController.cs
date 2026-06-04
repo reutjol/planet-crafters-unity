@@ -34,6 +34,7 @@ public class MapController : MonoBehaviour
         public float moveSpeed = 2.5f;
         public bool snapToTileSurface = false;
         public float surfaceOffset = 0.05f;
+        public bool useWaypoints = false;
     }
 
     private TileFactory _tileFactory;
@@ -272,7 +273,34 @@ public class MapController : MonoBehaviour
 
             var adj = BuildAdjacency(cluster.coords);
 
-            if (_activeRoamers.TryGetValue(key, out var existing) && existing != null)
+            bool useWaypoints = cfg != null && cfg.useWaypoints;
+
+            if (useWaypoints)
+            {
+                var tiles = new List<GameObject>();
+                foreach (var c in cluster.coords)
+                {
+                    _liveTiles.TryGetValue(new Vector2Int(c.q, c.r), out var tileGo);
+                    tiles.Add(tileGo);
+                }
+
+                if (_activeRoamers.TryGetValue(key, out var existing) && existing != null)
+                {
+                    existing.GetComponent<WaypointRoamer>()?.UpdateTiles(tiles, adj);
+                }
+                else
+                {
+                    var prefab = cfg.prefab ?? _defaultRoamerPrefab;
+                    if (prefab == null) continue;
+
+                    var go = Instantiate(prefab);
+                    var roamer = go.GetComponent<WaypointRoamer>() ?? go.AddComponent<WaypointRoamer>();
+                    go.transform.localScale = Vector3.one * cfg.scale;
+                    roamer.Initialize(tiles, adj, resource, cfg.moveSpeed);
+                    _activeRoamers[key] = go;
+                }
+            }
+            else if (_activeRoamers.TryGetValue(key, out var existing) && existing != null)
             {
                 existing.GetComponent<ClusterRoamer>()?.UpdatePositions(positions, adj);
             }

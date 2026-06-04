@@ -9,11 +9,15 @@ public class AppSession : MonoBehaviour
 {
     public static AppSession Instance { get; private set; }
 
-    private const string AccessKey = "JWT_ACCESS";
+    private const string AccessKey  = "JWT_ACCESS";
     private const string RefreshKey = "JWT_REFRESH";
+    private const string UserIdKey  = "USER_ID";
+    private const string UsernameKey = "USERNAME";
 
     public string AccessToken { get; private set; }
     public string RefreshToken { get; private set; }
+    public string UserId { get; private set; }
+    public string Username { get; private set; }
 
     public string SelectedStageId { get; private set; }
     public PlanetDto ActivePlanet { get; set; }
@@ -46,12 +50,23 @@ public class AppSession : MonoBehaviour
         ActivePlanet = null;
         SelectedStageId = null;
 
-        AccessToken = PlayerPrefs.GetString(AccessKey, "");
+        AccessToken  = PlayerPrefs.GetString(AccessKey, "");
         RefreshToken = PlayerPrefs.GetString(RefreshKey, "");
+        UserId   = PlayerPrefs.GetString(UserIdKey, "");
+        Username = PlayerPrefs.GetString(UsernameKey, "");
     }
 
     public bool HasAccess() => !string.IsNullOrEmpty(AccessToken);
     public bool HasRefresh() => !string.IsNullOrEmpty(RefreshToken);
+
+    public void SetUser(string userId, string username)
+    {
+        UserId = userId;
+        Username = username;
+        PlayerPrefs.SetString(UserIdKey, userId ?? "");
+        PlayerPrefs.SetString(UsernameKey, username ?? "");
+        PlayerPrefs.Save();
+    }
 
     public void SetTokens(string access, string refresh)
     {
@@ -78,6 +93,8 @@ public class AppSession : MonoBehaviour
         SelectedStageId = null;
         PlayerPrefs.DeleteKey(AccessKey);
         PlayerPrefs.DeleteKey(RefreshKey);
+        PlayerPrefs.DeleteKey(UserIdKey);
+        PlayerPrefs.DeleteKey(UsernameKey);
         PlayerPrefs.Save();
     }
 

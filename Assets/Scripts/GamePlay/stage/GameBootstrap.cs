@@ -12,6 +12,7 @@ public class GameBootstrap : MonoBehaviour
     [FormerlySerializedAs("gameOverPanel")]   [SerializeField] private GameObject _gameOverPanel;
     [FormerlySerializedAs("stageCompletePanel")] [SerializeField] private StageCompletePanel _stageCompletePanel;
     [FormerlySerializedAs("scoreDisplay")]    [SerializeField] private ScoreDisplay _scoreDisplay;
+    [SerializeField] private BoosterController _boosterController;
 
     private bool _isInitialized = false;
     private bool _stageCompleted = false;
@@ -25,6 +26,7 @@ public class GameBootstrap : MonoBehaviour
         if (!_templateService.IsReady)
         {
             Debug.LogError("[GameBootstrap] Templates not ready after loading");
+            SceneLoader.Instance?.GoBack();
             yield break;
         }
 
@@ -33,6 +35,7 @@ public class GameBootstrap : MonoBehaviour
         if (GameManager.Instance == null)
         {
             Debug.LogError("[GameBootstrap] GameManager.Instance is null!");
+            SceneLoader.Instance?.GoBack();
             yield break;
         }
 
@@ -82,12 +85,14 @@ public class GameBootstrap : MonoBehaviour
         if (!string.IsNullOrEmpty(loadError))
         {
             Debug.LogError($"[GameBootstrap] GameManager error: {loadError}");
+            SceneLoader.Instance?.GoBack();
             yield break;
         }
 
         if (!stateLoaded || loadedState == null)
         {
-            Debug.LogError("[GameBootstrap] Failed to load stage state from GameManager");
+            Debug.LogError("[GameBootstrap] Failed to load stage state — timed out or null");
+            SceneLoader.Instance?.GoBack();
             yield break;
         }
 
@@ -136,6 +141,10 @@ public class GameBootstrap : MonoBehaviour
         _mapController.OnStageCompleted += HandleStageCompleted;
         _mapController.OnStageCompletedWithCoins += HandleStageCompletedWithCoins;
         _handController.OnHandAndDeckEmpty += HandleGameOver;
+
+        if (_boosterController == null)
+            _boosterController = FindObjectOfType<BoosterController>(true);
+        _boosterController?.Initialize(_mapController, _handController);
 
         _isInitialized = true;
     }
