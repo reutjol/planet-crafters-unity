@@ -1,4 +1,4 @@
 public interface IWheelAngleCalculator
 {
-    float CalculateTargetAngle(int sliceIndex, int sliceCount);
+    float CalculateTargetAngle(int sliceIndex, int sliceCount, float currentWheelZRotation);
 }

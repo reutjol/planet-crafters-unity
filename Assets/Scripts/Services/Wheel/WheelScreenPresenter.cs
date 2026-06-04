@@ -21,7 +21,10 @@ public class WheelScreenPresenter
 
     public void PresentInitial()
     {
-        RefreshAvailability();
+        if (spinAvailabilityService == null)
+            return;
+
+        spinAvailabilityService.Refresh(RefreshAvailability);
     }
 
     public void PresentSpinning()
@@ -41,7 +44,10 @@ public class WheelScreenPresenter
 
     public void PresentCompleted(WheelSpinExecutionResult result)
     {
-        RefreshAvailability();
+        if (spinAvailabilityService == null)
+            return;
+
+        spinAvailabilityService.Refresh(RefreshAvailability);
     }
 
     public void RefreshAvailability()
@@ -55,9 +61,17 @@ public class WheelScreenPresenter
         spinButtonView?.SetInteractable(canSpin);
 
         if (canSpin)
+        {
             cooldownTextView?.SetText(GetText("text.free_spin_available", "Free spin available"));
-        else
+        }
+        else if (remaining > TimeSpan.Zero)
+        {
             cooldownTextView?.SetText(GetCooldownText(remaining));
+        }
+        else
+        {
+            cooldownTextView?.SetText(GetText("text.spin_not_available", "Spin not available"));
+        }
     }
 
     private string GetCooldownText(TimeSpan remaining)

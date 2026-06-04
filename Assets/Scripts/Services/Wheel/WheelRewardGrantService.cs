@@ -17,15 +17,15 @@ public class WheelRewardGrantService : IWheelRewardGrantService
                 GrantExtraSpin(reward.amount);
                 break;
 
-            case WheelRewardType.Jocker:
+            case WheelRewardType.AddTile:
                 GrantJocker(reward.amount);
                 break;
 
-            case WheelRewardType.Swap:
+            case WheelRewardType.RemoveTile:
                 GrantSwap(reward.amount);
                 break;
 
-            case WheelRewardType.Refresh:
+            case WheelRewardType.Multiply:
                 GrantRefresh(reward.amount);
                 break;
 

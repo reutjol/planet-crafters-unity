@@ -20,16 +20,16 @@ MonoBehaviour:
     weight: 28
     sliceIndex: 0
     iconKey: Coins
-  - id: Booster_Swap
-    title: Swap
-    rewardType: 3
+  - id: Booster_AddTile
+    title: AddTile
+    rewardType: 2
     amount: 2
     weight: 12
     sliceIndex: 1
-    iconKey: Swap
+    iconKey: addTile
   - id: Spin
     title: Spin
-    rewardType: 2
+    rewardType: 5
     amount: 1
     weight: 8
     sliceIndex: 2
@@ -41,20 +41,20 @@ MonoBehaviour:
     weight: 18
     sliceIndex: 3
     iconKey: Coins
-  - id: Booster_Joker
-    title: Joker
+  - id: Booster_Multiply
+    title: Multiply
     rewardType: 4
     amount: 2
     weight: 10
     sliceIndex: 4
-    iconKey: Joker
-  - id: Booster_Refresh
-    title: Refresh
-    rewardType: 5
+    iconKey: multiplication
+  - id: Booster_RemoveTile
+    title: RemoveTile
+    rewardType: 3
     amount: 2
     weight: 10
     sliceIndex: 5
-    iconKey: Refresh
+    iconKey: removeTile
   - id: Coins_150
     title: 150 Coins
     rewardType: 1
@@ -72,4 +72,4 @@ MonoBehaviour:
   sliceCount: 8
   spinDuration: 3.2
   extraFullRotations: 4
-  cooldownHours: 4
+  cooldownHours: 24

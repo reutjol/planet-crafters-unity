@@ -63,6 +63,25 @@ public class SpinWheelUseCase
             return;
         }
 
+        spinAvailabilityService.ConsumeSpin(consumeResult =>
+        {
+            if (consumeResult == null || !consumeResult.success)
+            {
+                result.success = false;
+                result.remainingCooldown = consumeResult != null
+                    ? consumeResult.remainingCooldown
+                    : spinAvailabilityService.GetRemainingCooldown();
+                result.message = consumeResult?.message ?? "Spin is on cooldown.";
+                onCompleted?.Invoke(result);
+                return;
+            }
+
+            StartSpin(result, onCompleted);
+        });
+    }
+
+    private void StartSpin(WheelSpinExecutionResult result, Action<WheelSpinExecutionResult> onCompleted)
+    {
         List<WheelRewardDto> rewards = wheelConfig.rewards;
         WheelRewardDto selectedReward = wheelRewardResolver.ResolveReward(rewards);
 
@@ -76,7 +95,8 @@ public class SpinWheelUseCase
 
         float targetAngle = wheelAngleCalculator.CalculateTargetAngle(
             selectedReward.sliceIndex,
-            wheelConfig.sliceCount
+            wheelConfig.sliceCount,
+            wheelRotationAnimation.CurrentZRotation
         );
 
         float finalSpinAngle = (wheelConfig.extraFullRotations * 360f) + targetAngle;
@@ -84,7 +104,6 @@ public class SpinWheelUseCase
         wheelRotationAnimation.Play(finalSpinAngle, wheelConfig.spinDuration, () =>
         {
             wheelRewardGrantService.GrantReward(selectedReward);
-            spinAvailabilityService.ConsumeSpin();
 
             result.success = true;
             result.reward = selectedReward;

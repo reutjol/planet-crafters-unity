@@ -13,9 +13,9 @@ public static class WheelRewardTextFormatter
             case WheelRewardType.Spin:
                 return "+1";
 
-            case WheelRewardType.Jocker:
-            case WheelRewardType.Swap:
-            case WheelRewardType.Refresh:
+            case WheelRewardType.AddTile:
+            case WheelRewardType.RemoveTile:
+            case WheelRewardType.Multiply:
             case WheelRewardType.Random:
                 return reward.amount.ToString();
 

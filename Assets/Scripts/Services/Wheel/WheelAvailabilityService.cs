@@ -47,4 +47,21 @@ public class WheelAvailabilityService : ISpinAvailabilityService
 
         stateRepository.Save(state);
     }
+
+    public void ConsumeSpin(Action<WheelSpinConsumeResult> onCompleted)
+    {
+        ConsumeSpin();
+
+        onCompleted?.Invoke(new WheelSpinConsumeResult
+        {
+            success = true,
+            remainingCooldown = GetRemainingCooldown(),
+            message = "Spin consumed."
+        });
+    }
+
+    public void Refresh(Action onCompleted = null)
+    {
+        onCompleted?.Invoke();
+    }
 }

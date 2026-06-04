@@ -33,7 +33,7 @@ EditorBuildSettings:
     path: Assets/Scenes/Wheel.unity
     guid: 5bc8b7e7176ac45408a614133cb7f96a
   - enabled: 1
-    path: Assets/Scenes/not used/ShopScene.unity
+    path: Assets/Scenes/ShopScene.unity
     guid: 758fce67c52ce234c9d3ded56a6cfe72
   - enabled: 1
     path: Assets/Scenes/AchievementsScene.unity
