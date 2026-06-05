@@ -2,9 +2,9 @@ public enum WheelRewardType
 {
     None,
     Coins,
+    AddTile,
+    RemoveTile,
+    Multiply,
     Spin,
-    Swap,
-    Jocker,
-    Refresh,
     Random
 }

@@ -18,6 +18,9 @@ public class AuthApiClient : BaseApiClient
     private class RefreshBody { public string refreshToken; }
 
     [Serializable]
+    private class GoogleLoginBody { public string idToken; }
+
+    [Serializable]
     private class AccessTokenWrapper { public string accessToken; }
 
     public IEnumerator Login(string email, string password,
@@ -56,6 +59,28 @@ public class AuthApiClient : BaseApiClient
                 if (string.IsNullOrEmpty(resp.accessToken))
                 {
                     onError?.Invoke("Auth failed: missing accessToken");
+                    return;
+                }
+                onSuccess?.Invoke(resp);
+            },
+            onError
+        );
+    }
+
+    public IEnumerator GoogleLogin(string idToken,
+        Action<AuthResponseDto> onSuccess,
+        Action<string> onError)
+    {
+        var body = new GoogleLoginBody { idToken = idToken };
+        yield return PostRequest<GoogleLoginBody, AuthResponseDto>(
+            "/api/auth/google",
+            body,
+            null,
+            resp =>
+            {
+                if (string.IsNullOrEmpty(resp.accessToken))
+                {
+                    onError?.Invoke("Google auth failed: missing accessToken");
                     return;
                 }
                 onSuccess?.Invoke(resp);

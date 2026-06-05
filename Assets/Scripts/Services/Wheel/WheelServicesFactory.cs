@@ -11,10 +11,7 @@ public static class WheelServicesFactory
         IWheelStateRepository wheelStateRepository,
         WheelConfig wheelConfig)
     {
-        return new WheelAvailabilityService(
-            wheelStateRepository,
-            TimeSpan.FromHours(wheelConfig.cooldownHours)
-        );
+        return new ServerWheelAvailabilityService(WheelApiClient.GetOrCreate());
     }
 
     public static IWheelRewardResolver CreateRewardResolver()

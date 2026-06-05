@@ -1,4 +1,3 @@
-using System.Collections;
 using UnityEngine;
 
 public class WheelRewardGrantService : IWheelRewardGrantService
@@ -18,16 +17,16 @@ public class WheelRewardGrantService : IWheelRewardGrantService
                 GrantExtraSpin(reward.amount);
                 break;
 
-            case WheelRewardType.Jocker:
-                GrantServerBooster("doubleScore", reward.amount);
+            case WheelRewardType.AddTile:
+                GrantJocker(reward.amount);
                 break;
 
-            case WheelRewardType.Swap:
-                GrantServerBooster("cancelPlacement", reward.amount);
+            case WheelRewardType.RemoveTile:
+                GrantSwap(reward.amount);
                 break;
 
-            case WheelRewardType.Refresh:
-                GrantServerBooster("addHex", reward.amount);
+            case WheelRewardType.Multiply:
+                GrantRefresh(reward.amount);
                 break;
 
             case WheelRewardType.Random:
@@ -39,84 +38,53 @@ public class WheelRewardGrantService : IWheelRewardGrantService
                 break;
         }
     }
-
     private void GrantCoins(int amount)
     {
-        var token = AppSession.Instance?.AccessToken;
-        var planetId = AppSession.Instance?.ActivePlanet?.planetId;
-        var api = PlanetApiClient.Instance;
-
-        if (string.IsNullOrEmpty(token) || string.IsNullOrEmpty(planetId) || api == null)
-        {
-            Debug.LogWarning($"[WheelRewardGrantService] Cannot grant coins — missing session data");
-            return;
-        }
-
-        api.StartCoroutine(api.AddCoins(
-            planetId, amount, token,
-            onSuccess: total =>
-            {
-                Debug.Log($"[WheelRewardGrantService] +{amount} coins → total: {total}");
-                GameManager.Instance?.NotifyCoinsChanged(total);
-            },
-            onError: err => Debug.LogError($"[WheelRewardGrantService] AddCoins failed: {err}")
-        ));
+        Debug.Log($"Grant Coins: {amount}");
+        // TODO: connect to your real coins system
     }
 
     private void GrantExtraSpin(int amount)
     {
         Debug.Log($"Grant Extra Spin: {amount}");
+        // TODO: connect to your real spin system
     }
 
-    private void GrantServerBooster(string boosterType, int amount)
+    private void GrantJocker(int amount)
     {
-        var token = AppSession.Instance?.AccessToken;
-        if (string.IsNullOrEmpty(token))
-        {
-            Debug.LogWarning($"[WheelRewardGrantService] No token — cannot grant booster {boosterType}");
-            return;
-        }
-
-        var api = GameManager.Instance?.BoosterApi;
-        if (api == null)
-        {
-            Debug.LogWarning("[WheelRewardGrantService] BoosterApiClient not available via GameManager");
-            return;
-        }
-
-        api.StartCoroutine(GrantBoosterCoroutine(boosterType, amount, token));
+        Debug.Log($"Grant Booster A (Joker) x{amount}");
+        // TODO: connect to your real booster inventory
     }
 
-    private IEnumerator GrantBoosterCoroutine(string boosterType, int amount, string token)
+    private void GrantSwap(int amount)
     {
-        for (int i = 0; i < amount; i++)
-        {
-            bool done = false;
-            yield return GameManager.Instance.BoosterApi.GrantBooster(
-                boosterType,
-                token,
-                onSuccess: inventory =>
-                {
-                    Debug.Log($"[WheelRewardGrantService] Granted {boosterType}. New counts: " +
-                              $"doubleScore={inventory.doubleScore}, " +
-                              $"cancelPlacement={inventory.cancelPlacement}, " +
-                              $"addHex={inventory.addHex}");
-                    BoosterController.Instance?.RefreshFromInventory(inventory);
-                    done = true;
-                },
-                onError: err =>
-                {
-                    Debug.LogError($"[WheelRewardGrantService] Failed to grant {boosterType}: {err}");
-                    done = true;
-                }
-            );
-        }
+        Debug.Log($"Grant Booster B (Swap 2 placed tiles) x{amount}");
+        // TODO: connect to your real booster inventory
+    }
+
+    private void GrantRefresh(int amount)
+    {
+        Debug.Log($"Grant Booster C (Refresh 3 algorithm tiles) x{amount}");
+        // TODO: connect to your real booster inventory
     }
 
     private void GrantRandomBooster(int amount)
     {
-        string[] types = { "doubleScore", "cancelPlacement", "addHex" };
-        string chosen = types[Random.Range(0, types.Length)];
-        GrantServerBooster(chosen, amount);
+        int randomIndex = Random.Range(0, 3);
+
+        switch (randomIndex)
+        {
+            case 0:
+                GrantJocker(amount);
+                break;
+
+            case 1:
+                GrantSwap(amount);
+                break;
+
+            case 2:
+                GrantRefresh(amount);
+                break;
+        }
     }
 }
