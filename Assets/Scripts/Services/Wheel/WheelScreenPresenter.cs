@@ -62,7 +62,9 @@ public class WheelScreenPresenter
 
         if (canSpin)
         {
-            cooldownTextView?.SetText(GetText("text.free_spin_available", "Free spin available"));
+            int credits = spinAvailabilityService.GetSpinCredits();
+            string creditsText = credits > 0 ? $"Spins: {credits}" : GetText("text.free_spin_available", "Free spin available");
+            cooldownTextView?.SetText(creditsText);
         }
         else if (remaining > TimeSpan.Zero)
         {

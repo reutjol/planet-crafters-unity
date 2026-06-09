@@ -58,8 +58,6 @@ public class PlanetScreenController : MonoBehaviour
     {
         if (PopupManager.IsAnyPopupOpen) return;
 
-        Debug.Log("[PlanetScreenController] OnPlanetClicked");
-
         if (SceneLoader.Instance != null && gameConfig != null)
         {
             SceneLoader.Instance.LoadScene(gameConfig.stagesMapSceneIndex);

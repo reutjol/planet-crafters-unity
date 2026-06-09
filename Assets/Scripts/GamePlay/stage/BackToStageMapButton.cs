@@ -20,9 +20,6 @@ public class BackToStageMapButton : MonoBehaviour
     /// </summary>
     public void OnBackClicked()
     {
-        if (gameConfig == null)
-            gameConfig = Resources.Load<GameConfig>("GameConfig");
-
         if (GameManager.Instance != null)
             GameManager.Instance.ClearCache();
 

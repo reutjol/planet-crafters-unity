@@ -22,10 +22,7 @@ public class StageNodeClick : MonoBehaviour
         if (PopupManager.IsAnyPopupOpen) return;
 
         if (!_view.IsUnlocked)
-        {
-            Debug.Log($"[StageNodeClick] Stage {_view.StageId} is locked");
             return;
-        }
 
         if (AppSession.Instance == null)
         {

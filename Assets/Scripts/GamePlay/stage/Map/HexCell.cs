@@ -57,13 +57,6 @@ public class HexCell : MonoBehaviour
         _occupied = false;
     }
 
-    public void SetOccupied(bool value)
-    {
-        _occupied = value;
-        _isPlusCell = !value;
-        SetHighlight(false);
-    }
-
     public void SetHighlight(bool on)
     {
         if (_rend == null) return;

@@ -22,7 +22,6 @@ public class MapCameraController : MonoBehaviour
     private bool _panning;
     private Vector3 _grabWorldPoint;
     private int _panFingerId = -1;
-    private float _pinchStartSize;
 
     private static readonly Plane PanPlane = new Plane(Vector3.up, Vector3.zero);
 

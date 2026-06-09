@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -52,7 +53,8 @@ public class ProfilePopupView : MonoBehaviour
         emailSaveButton?.onClick.AddListener(() => { OnEmailSave?.Invoke(emailInput.text); SetEditMode(emailText, emailInput, emailEditButton, emailSaveButton, false); });
     }
 
-    public void BindProfile(PlayerProfileDto profile, Sprite[] avatarSprites, Action<int> onAvatarClicked)
+    public void BindProfile(PlayerProfileDto profile, Sprite[] avatarSprites, string[] avatarIds,
+        List<string> ownedAvatars, ShopProfileDto shopProfile, Action<string> onAvatarClicked)
     {
         if (profile == null) return;
 
@@ -65,17 +67,42 @@ public class ProfilePopupView : MonoBehaviour
 
         if (avatarSprites == null || avatarSprites.Length == 0) return;
 
-        int safeIndex = Mathf.Clamp(profile.selectedAvatarIndex, 0, avatarSprites.Length - 1);
+        string selected = profile.user?.selectedAvatar ?? "avatar";
 
         if (profileImage != null)
-            profileImage.sprite = avatarSprites[safeIndex];
+        {
+            int selIdx = Array.IndexOf(avatarIds, selected);
+            if (selIdx >= 0 && selIdx < avatarSprites.Length)
+                profileImage.sprite = avatarSprites[selIdx];
+        }
 
         if (avatarSlots == null) return;
 
         for (int i = 0; i < avatarSlots.Length; i++)
         {
-            if (avatarSlots[i] == null || i >= avatarSprites.Length) continue;
-            avatarSlots[i].Setup(i, avatarSprites[i], i == safeIndex, onAvatarClicked);
+            if (avatarSlots[i] == null || i >= avatarSprites.Length || i >= avatarIds.Length) continue;
+
+            string id = avatarIds[i];
+            bool isOwned = ownedAvatars != null && ownedAvatars.Contains(id);
+            bool isSelected = id == selected;
+            AvatarSlotView.SlotState slotState = AvatarSlotView.SlotState.Owned;
+            int stageRequired = 0;
+
+            if (!isOwned && shopProfile?.catalog != null)
+            {
+                var entry = shopProfile.catalog.Find(c => c.id == id);
+                if (entry != null && entry.unlockType == "stage")
+                {
+                    slotState = AvatarSlotView.SlotState.StageUnlock;
+                    stageRequired = entry.stageRequired;
+                }
+                else
+                {
+                    slotState = AvatarSlotView.SlotState.Locked;
+                }
+            }
+
+            avatarSlots[i].Setup(id, avatarSprites[i], slotState, isSelected, onAvatarClicked, stageRequired);
         }
     }
 
@@ -89,21 +116,20 @@ public class ProfilePopupView : MonoBehaviour
         }
     }
 
-    public void UpdateSelectedAvatar(int selectedIndex, Sprite[] avatarSprites)
+    public void UpdateSelectedAvatar(string selectedId, string[] avatarIds, Sprite[] avatarSprites)
     {
         if (avatarSprites == null || avatarSprites.Length == 0) return;
 
-        int safeIndex = Mathf.Clamp(selectedIndex, 0, avatarSprites.Length - 1);
-
-        if (profileImage != null)
-            profileImage.sprite = avatarSprites[safeIndex];
+        int selIdx = Array.IndexOf(avatarIds, selectedId);
+        if (profileImage != null && selIdx >= 0 && selIdx < avatarSprites.Length)
+            profileImage.sprite = avatarSprites[selIdx];
 
         if (avatarSlots == null) return;
 
-        for (int i = 0; i < avatarSlots.Length; i++)
+        for (int i = 0; i < avatarSlots.Length && i < avatarIds.Length; i++)
         {
             if (avatarSlots[i] != null)
-                avatarSlots[i].SetSelected(i == safeIndex);
+                avatarSlots[i].SetSelected(avatarIds[i] == selectedId);
         }
     }
 

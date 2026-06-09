@@ -1,4 +1,3 @@
-using TMPro;
 using UnityEngine;
 
 /// <summary>
@@ -20,31 +19,13 @@ public class StageCompletePanel : MonoBehaviour
     [SerializeField, Range(0f, 0.5f)] private float successSoundVolume = 0.3f;
     [SerializeField] private SoundEffectService soundEffectService;
 
-    [Header("Refs")]
-    [SerializeField] private MapController mapController;
-
     private void Awake()
     {
-        if (mapController == null)
-            mapController = FindObjectOfType<MapController>();
-
         if (soundEffectService == null)
             soundEffectService = SoundEffectService.Instance;
 
         if (panel != null)
             panel.SetActive(false);
-    }
-
-    private void Start()
-    {
-        if (mapController != null)
-            mapController.OnStageCompletedWithCoins += Show;
-    }
-
-    private void OnDestroy()
-    {
-        if (mapController != null)
-            mapController.OnStageCompletedWithCoins -= Show;
     }
 
     public void Show(int coins)

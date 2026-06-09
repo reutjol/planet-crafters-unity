@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: MainWheelConfig
   m_EditorClassIdentifier: 
   rewards:
-  - id: Coins_50
-    title: 50 Coins
+  - id: Coins_2
+    title: 2 Coins
     rewardType: 1
-    amount: 50
+    amount: 2
     weight: 28
     sliceIndex: 0
     iconKey: Coins
@@ -34,10 +34,10 @@ MonoBehaviour:
     weight: 8
     sliceIndex: 2
     iconKey: Spin
-  - id: Coins_100
-    title: 100 Coins
+  - id: Coins_5
+    title: 5 Coins
     rewardType: 1
-    amount: 100
+    amount: 5
     weight: 18
     sliceIndex: 3
     iconKey: Coins
@@ -55,10 +55,10 @@ MonoBehaviour:
     weight: 10
     sliceIndex: 5
     iconKey: removeTile
-  - id: Coins_150
-    title: 150 Coins
+  - id: Coins_10
+    title: 10 Coins
     rewardType: 1
-    amount: 150
+    amount: 10
     weight: 8
     sliceIndex: 6
     iconKey: Coins

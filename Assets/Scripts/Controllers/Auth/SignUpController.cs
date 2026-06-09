@@ -141,12 +141,9 @@ public class SignUpController : MonoBehaviour
             return;
         }
 
-        Debug.Log($"[SignUp] Attempting registration for email: {email}");
-
         StartCoroutine(api.Register(name, email, userName, pass,
             onSuccess: (resp) =>
             {
-                Debug.Log("[SignUp] Registration successful!");
                 ShowSuccess("Registration successful! Redirecting to login...");
 
                 // Wait a bit to show success message before navigating

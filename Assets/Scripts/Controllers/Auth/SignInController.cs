@@ -112,15 +112,12 @@ public class SignInController : MonoBehaviour
             return;
         }
 
-        Debug.Log($"[SignIn] Attempting login with email: {email}");
-
         StartCoroutine(api.Login(email, pass,
             onSuccess: (resp) =>
             {
-                Debug.Log("[SignIn] Login successful!");
                 HideError();
                 AppSession.Instance.SetTokens(resp.accessToken, resp.refreshToken);
-                AppSession.Instance.SetUser(resp.user?.id, resp.user?.userName);
+                AppSession.Instance.SetUser(resp.user?.id, resp.user?.userName, resp.user?.selectedAvatar);
                 if (SceneLoader.Instance != null && gameConfig != null)
                 {
                     SceneLoader.Instance.LoadScene(gameConfig.planetSceneIndex);

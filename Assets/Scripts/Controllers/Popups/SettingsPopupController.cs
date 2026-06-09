@@ -22,14 +22,14 @@ public class SettingsPopupController : MonoBehaviour, IClosablePopup
     [SerializeField] private string termsOfUseUrl = "";
 
     private IPlayerProfileService playerProfileService;
-    private Sprite[] avatarSprites;
+    private System.Collections.Generic.Dictionary<string, Sprite> avatarSpriteMap;
 
     public bool IsOpen => view != null && view.IsVisible;
 
     private void Awake()
     {
         playerProfileService = profileService;
-        avatarSprites = Resources.LoadAll<Sprite>("Sprites/avatar Sprites");
+        EnsureAvatarSpriteMap();
 
         if (profilePopupController == null)
             profilePopupController = FindObjectOfType<ProfilePopupController>(true);
@@ -95,27 +95,60 @@ public class SettingsPopupController : MonoBehaviour, IClosablePopup
         view?.Hide();
     }
 
+    private void EnsureAvatarSpriteMap()
+    {
+        if (avatarSpriteMap != null) return;
+        var allSprites = Resources.LoadAll<Sprite>("Sprites/avatar Sprites");
+        avatarSpriteMap = new System.Collections.Generic.Dictionary<string, Sprite>();
+        foreach (var s in allSprites)
+            avatarSpriteMap[s.name.ToLower()] = s;
+    }
+
     private void LoadProfileImage()
     {
-        if (playerProfileService == null || avatarSprites == null || avatarSprites.Length == 0)
+        // Use session avatar first (set at login) — always immediate
+        var sessionAvatar = AppSession.Instance?.SelectedAvatar;
+        if (!string.IsNullOrEmpty(sessionAvatar))
+        {
+            ApplyAvatarSprite(sessionAvatar);
             return;
+        }
 
-        playerProfileService.LoadProfileFromServer(
+        // Fall back to cached profile
+        var cached = playerProfileService?.GetProfile();
+        if (cached?.user != null)
+        {
+            ApplyAvatarSprite(cached.user.selectedAvatar);
+            return;
+        }
+
+        // Last resort: load from server
+        playerProfileService?.LoadProfileFromServer(
             onSuccess: () =>
             {
-                PlayerProfileDto profile = playerProfileService.GetProfile();
-
-                if (profile == null)
-                    return;
-
-                int safeIndex = Mathf.Clamp(profile.selectedAvatarIndex, 0, avatarSprites.Length - 1);
-                view.SetProfileImage(avatarSprites[safeIndex]);
+                var profile = playerProfileService.GetProfile();
+                var avatarId = profile?.user?.selectedAvatar;
+                AppSession.Instance?.SetSelectedAvatar(avatarId);
+                // Only update view if popup is still open
+                if (IsOpen)
+                    ApplyAvatarSprite(avatarId);
             },
             onError: error =>
             {
                 Debug.LogError($"[SettingsPopupController] Failed to load profile: {error}");
             }
         );
+    }
+
+    private void ApplyAvatarSprite(string avatarId)
+    {
+        if (string.IsNullOrEmpty(avatarId))
+            avatarId = "avatar";
+
+        EnsureAvatarSpriteMap();
+
+        if (avatarSpriteMap.TryGetValue(avatarId.ToLower(), out var sprite) && view != null)
+            view.SetProfileImage(sprite);
     }
 
     private void Logout()
@@ -141,11 +174,13 @@ public class SettingsPopupController : MonoBehaviour, IClosablePopup
 
     private void OpenPrivacyPolicy()
     {
-        Application.OpenURL(privacyPolicyUrl);
+        if (!string.IsNullOrWhiteSpace(privacyPolicyUrl))
+            Application.OpenURL(privacyPolicyUrl);
     }
 
     private void OpenTermsOfUse()
     {
-        Application.OpenURL(termsOfUseUrl);
+        if (!string.IsNullOrWhiteSpace(termsOfUseUrl))
+            Application.OpenURL(termsOfUseUrl);
     }
 }

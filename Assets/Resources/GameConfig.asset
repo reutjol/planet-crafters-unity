@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75bd4555945edf04f9cde943c28b06f5, type: 3}
   m_Name: GameConfig
   m_EditorClassIdentifier: 
-  serverBaseUrl: http://192.168.1.43:3000
+  serverBaseUrl: https://planet-crafters-server.onrender.com
   bootSceneIndex: 0
   loadingSceneIndex: 1
   registrationMenuSceneIndex: 2

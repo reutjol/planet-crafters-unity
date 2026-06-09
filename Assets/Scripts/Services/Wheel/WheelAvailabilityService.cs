@@ -24,6 +24,8 @@ public class WheelAvailabilityService : ISpinAvailabilityService
         return elapsed >= cooldown;
     }
 
+    public int GetSpinCredits() => 0;
+
     public TimeSpan GetRemainingCooldown()
     {
         WheelState state = stateRepository.Load();

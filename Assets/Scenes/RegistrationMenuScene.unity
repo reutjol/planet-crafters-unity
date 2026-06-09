@@ -141,7 +141,19 @@ PrefabInstance:
     - target: {fileID: 1623488122755984983, guid: 9a9c6ec60a23593479ac31b033f98e55, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 883d9d1fc338b0f4682052f56bd60f0e, type: 3}
+      objectReference: {fileID: 21300000, guid: f8bacda94a24a984aa155e90de5dd6b0, type: 3}
+    - target: {fileID: 1623488122755984983, guid: 9a9c6ec60a23593479ac31b033f98e55, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1623488122755984983, guid: 9a9c6ec60a23593479ac31b033f98e55, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1623488122755984983, guid: 9a9c6ec60a23593479ac31b033f98e55, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5634772494752224833, guid: 9a9c6ec60a23593479ac31b033f98e55, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -168,11 +180,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5634772494752224833, guid: 9a9c6ec60a23593479ac31b033f98e55, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 484.637
+      value: 400
       objectReference: {fileID: 0}
     - target: {fileID: 5634772494752224833, guid: 9a9c6ec60a23593479ac31b033f98e55, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 160
+      value: 71.7074
       objectReference: {fileID: 0}
     - target: {fileID: 5634772494752224833, guid: 9a9c6ec60a23593479ac31b033f98e55, type: 3}
       propertyPath: m_LocalPosition.x
@@ -204,11 +216,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5634772494752224833, guid: 9a9c6ec60a23593479ac31b033f98e55, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 6.944
+      value: 5.0007
       objectReference: {fileID: 0}
     - target: {fileID: 5634772494752224833, guid: 9a9c6ec60a23593479ac31b033f98e55, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -454
+      value: -456
       objectReference: {fileID: 0}
     - target: {fileID: 5634772494752224833, guid: 9a9c6ec60a23593479ac31b033f98e55, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -287,7 +299,8 @@ PrefabInstance:
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 1261885926464194529, guid: 9a9c6ec60a23593479ac31b033f98e55, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 646626743652004224, guid: 9a9c6ec60a23593479ac31b033f98e55, type: 3}
@@ -296,29 +309,21 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 646626743652004224, guid: 9a9c6ec60a23593479ac31b033f98e55, type: 3}
       insertIndex: -1
       addedObject: {fileID: 47515658}
-    - targetCorrespondingSourceObject: {fileID: 1261885926464194529, guid: 9a9c6ec60a23593479ac31b033f98e55, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 47515657}
   m_SourcePrefab: {fileID: 100100000, guid: 9a9c6ec60a23593479ac31b033f98e55, type: 3}
 --- !u!224 &47515653 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5634772494752224833, guid: 9a9c6ec60a23593479ac31b033f98e55, type: 3}
   m_PrefabInstance: {fileID: 47515652}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &47515654 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1261885926464194529, guid: 9a9c6ec60a23593479ac31b033f98e55, type: 3}
-  m_PrefabInstance: {fileID: 47515652}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &47515655 stripped
+--- !u!114 &47515654 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7277013070088413911, guid: 9a9c6ec60a23593479ac31b033f98e55, type: 3}
+  m_CorrespondingSourceObject: {fileID: 7972478180258929021, guid: 9a9c6ec60a23593479ac31b033f98e55, type: 3}
   m_PrefabInstance: {fileID: 47515652}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 47515654}
+  m_GameObject: {fileID: 47515656}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &47515656 stripped
@@ -326,23 +331,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 646626743652004224, guid: 9a9c6ec60a23593479ac31b033f98e55, type: 3}
   m_PrefabInstance: {fileID: 47515652}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &47515657
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 47515654}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1ae7e89c7f52c5145aae68c21ea84ba3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  localizationKey: text.sign_up
-  fallbackText: connect with  google
-  updateRightToLeft: 1
-  tmpText: {fileID: 47515655}
-  uiText: {fileID: 0}
 --- !u!114 &47515658
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -355,7 +343,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9792987a597af64ca23d1a32f4fa1e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameConfig: {fileID: 0}
+  gameConfig: {fileID: 11400000, guid: 8ca2602c4e3d6c8478000ee637872472, type: 2}
 --- !u!114 &47515659
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -369,9 +357,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   authApi: {fileID: 47515658}
-  gameConfig: {fileID: 0}
-  googleSignInButton: {fileID: 0}
-  googleWebClientId: 578252044385-bar7nkb5805qvgnt5efutj9bnconlu9f.apps.googleusercontent.com
+  gameConfig: {fileID: 11400000, guid: 8ca2602c4e3d6c8478000ee637872472, type: 2}
+  googleSignInButton: {fileID: 47515654}
+  googleWebClientId: 283464708395-4cbj9ei0j60i3d3bei059nqdt77tkbpp.apps.googleusercontent.com
 --- !u!224 &172402013 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5715290832353797798, guid: 02d370770cc99434fb28ad1913372f9a, type: 3}
@@ -578,9 +566,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   authApi: {fileID: 782847861}
-  gameConfig: {fileID: 0}
+  gameConfig: {fileID: 11400000, guid: 8ca2602c4e3d6c8478000ee637872472, type: 2}
   googleSignInButton: {fileID: 0}
-  googleWebClientId: 578252044385-bar7nkb5805qvgnt5efutj9bnconlu9f.apps.googleusercontent.com
+  googleWebClientId: 283464708395-4cbj9ei0j60i3d3bei059nqdt77tkbpp.apps.googleusercontent.com
 --- !u!114 &782847861
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -593,7 +581,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9792987a597af64ca23d1a32f4fa1e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameConfig: {fileID: 0}
+  gameConfig: {fileID: 11400000, guid: 8ca2602c4e3d6c8478000ee637872472, type: 2}
 --- !u!1 &782847862 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1261885926464194529, guid: 9a9c6ec60a23593479ac31b033f98e55, type: 3}
@@ -1213,9 +1201,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   authApi: {fileID: 5579338908840850170}
-  gameConfig: {fileID: 0}
+  gameConfig: {fileID: 11400000, guid: 8ca2602c4e3d6c8478000ee637872472, type: 2}
   googleSignInButton: {fileID: 0}
-  googleWebClientId: 578252044385-bar7nkb5805qvgnt5efutj9bnconlu9f.apps.googleusercontent.com
+  googleWebClientId: 283464708395-4cbj9ei0j60i3d3bei059nqdt77tkbpp.apps.googleusercontent.com
 --- !u!114 &5579338908840850170
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1228,7 +1216,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9792987a597af64ca23d1a32f4fa1e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameConfig: {fileID: 0}
+  gameConfig: {fileID: 11400000, guid: 8ca2602c4e3d6c8478000ee637872472, type: 2}
 --- !u!1 &5579338908840850171 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1261885926464194529, guid: 9a9c6ec60a23593479ac31b033f98e55, type: 3}

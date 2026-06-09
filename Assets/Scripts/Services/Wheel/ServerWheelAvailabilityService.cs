@@ -8,6 +8,7 @@ public class ServerWheelAvailabilityService : ISpinAvailabilityService
     private bool statusLoaded;
     private bool canSpin;
     private DateTime nextSpinUtc;
+    private int spinCredits;
     private bool refreshInProgress;
     private bool consumeInProgress;
 
@@ -32,6 +33,8 @@ public class ServerWheelAvailabilityService : ISpinAvailabilityService
 
         return false;
     }
+
+    public int GetSpinCredits() => spinCredits;
 
     public TimeSpan GetRemainingCooldown()
     {
@@ -121,11 +124,12 @@ public class ServerWheelAvailabilityService : ISpinAvailabilityService
 
         statusLoaded = true;
         canSpin = status.canSpin;
+        spinCredits = status.spinCredits;
 
         int remainingSeconds = Math.Max(0, status.remainingSeconds);
         nextSpinUtc = DateTime.UtcNow.AddSeconds(remainingSeconds);
 
-        if (remainingSeconds <= 0)
+        if (remainingSeconds <= 0 || spinCredits > 0)
             canSpin = true;
     }
 

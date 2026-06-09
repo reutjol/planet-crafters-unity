@@ -34,18 +34,6 @@ public class PlanetStateApiClient : BaseApiClient
         yield return GetRequest<PlanetStageStateDto>(endpoint, accessToken, onSuccess, onError);
     }
 
-    public IEnumerator SavePlanetStageState(
-        string planetId,
-        string stageId,
-        string accessToken,
-        SaveStageStateRequestDto dto,
-        Action onSuccess,
-        Action<string> onError)
-    {
-        var endpoint = $"/api/planet-state/{planetId}/{stageId}";
-        yield return PutRequest(endpoint, dto, accessToken, onSuccess, onError);
-    }
-
     public IEnumerator PlaceTile(
         string planetId,
         string stageId,

@@ -42,6 +42,20 @@ public class WheelApiClient : BaseApiClient
         );
     }
 
+    public IEnumerator GrantSpin(
+        string accessToken,
+        Action<WheelStatusDto> onSuccess,
+        Action<string> onError)
+    {
+        yield return PostRequest<WheelSpinRequestDto, WheelStatusDto>(
+            "/api/wheel/grant-spin",
+            new WheelSpinRequestDto(),
+            accessToken,
+            onSuccess,
+            onError
+        );
+    }
+
     public IEnumerator ConsumeSpin(
         string accessToken,
         Action<WheelStatusDto> onSuccess,

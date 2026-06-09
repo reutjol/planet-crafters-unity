@@ -27,7 +27,6 @@ public class GameManager : MonoBehaviour
     public event Action<PlanetStageStateDto> OnPlanetStageStateLoaded;
     public event Action<string> OnError;
     public event Action OnUnauthorized;
-    public event Action<int> OnCoinsChanged;
 
     // Loading flags
     private bool isLoadingPlanet;
@@ -77,8 +76,6 @@ public class GameManager : MonoBehaviour
         if (boosterApi == null)
             Debug.LogError("[GameManager] BoosterApiClient not found/assigned.");
     }
-
-    public void NotifyCoinsChanged(int totalCoins) => OnCoinsChanged?.Invoke(totalCoins);
 
     public BoosterApiClient BoosterApi
     {
@@ -178,7 +175,6 @@ public class GameManager : MonoBehaviour
         // Use cache if available and not forcing refresh
         if (!forceRefresh && currentPlanetStageState != null && currentStageId == stageId)
         {
-            Debug.Log("[GameManager] Using cached PlanetStageState");
             OnPlanetStageStateLoaded?.Invoke(currentPlanetStageState);
             return;
         }
@@ -189,8 +185,6 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        Debug.Log($"[GameManager] Starting network request for stage state. planet={planetId}, stage={stageId}, token={!string.IsNullOrEmpty(AppSession.Instance?.AccessToken)}");
-
         EnsureApiRefs();
         _loadStageStateCoroutine = StartCoroutine(LoadPlanetStageStateRoutine(planetId, stageId));
     }
@@ -199,8 +193,6 @@ public class GameManager : MonoBehaviour
     {
         isLoadingPlanetStageState = true;
         string errMsg = null;
-
-        Debug.Log($"[GameManager] Loading PlanetStageState for planet={planetId}, stage={stageId}");
 
         var api = planetStateApi ?? PlanetStateApiClient.Instance;
         if (api == null)
@@ -220,7 +212,6 @@ public class GameManager : MonoBehaviour
             {
                 currentPlanetStageState = state;
                 currentStageId = stageId;
-                Debug.Log("[GameManager] PlanetStageState loaded successfully");
                 OnPlanetStageStateLoaded?.Invoke(state);
             },
             onError: (err) => errMsg = err
@@ -272,63 +263,6 @@ public class GameManager : MonoBehaviour
         SceneLoader.HoldActivation = false;
     }
 
-    // ---------- Save Stage State ----------
-    /// <summary>
-    /// Saves the current stage state to the server
-    /// </summary>
-    public void SavePlanetStageState(SaveStageStateRequestDto stateDto, Action onSuccess = null, Action<string> onError = null)
-    {
-        if (!HasAccess())
-        {
-            OnUnauthorized?.Invoke();
-            onError?.Invoke("Unauthorized");
-            return;
-        }
-
-        var planetId = AppSession.Instance?.ActivePlanet?.planetId;
-        var stageId = AppSession.Instance?.SelectedStageId;
-
-        if (string.IsNullOrEmpty(planetId) || string.IsNullOrEmpty(stageId))
-        {
-            var error = "Cannot save: missing planetId or stageId";
-            OnError?.Invoke(error);
-            onError?.Invoke(error);
-            return;
-        }
-
-        EnsureApiRefs();
-        StartCoroutine(SavePlanetStageStateRoutine(planetId, stageId, stateDto, onSuccess, onError));
-    }
-
-    private IEnumerator SavePlanetStageStateRoutine(
-        string planetId,
-        string stageId,
-        SaveStageStateRequestDto stateDto,
-        Action onSuccess,
-        Action<string> onError)
-    {
-        string errMsg = null;
-
-        yield return StartCoroutine(planetStateApi.SavePlanetStageState(
-            planetId,
-            stageId,
-            AppSession.Instance.AccessToken,
-            stateDto,
-            onSuccess: () =>
-            {
-                Debug.Log("[GameManager] Stage state saved successfully");
-                onSuccess?.Invoke();
-            },
-            onError: (err) => errMsg = err
-        ));
-
-        if (!string.IsNullOrEmpty(errMsg))
-        {
-            HandleError(errMsg);
-            onError?.Invoke(errMsg);
-        }
-    }
-
     // ---------- Reset Stage ----------
     /// <summary>
     /// Resets the current stage to initial state
@@ -375,8 +309,6 @@ public class GameManager : MonoBehaviour
             AppSession.Instance.AccessToken,
             onSuccess: () =>
             {
-                Debug.Log("[GameManager] Stage reset successfully");
-                // Cache already cleared before the async call started
                 onSuccess?.Invoke();
             },
             onError: (err) => errMsg = err
@@ -462,7 +394,6 @@ public class GameManager : MonoBehaviour
             field?.SetValue(authApi, gameConfig);
         }
 
-        bool refreshDone = false;
         bool refreshSuccess = false;
         string newAccessToken = null;
 
@@ -470,35 +401,22 @@ public class GameManager : MonoBehaviour
             AppSession.Instance.RefreshToken,
             onSuccess: (token) =>
             {
-                refreshDone = true;
                 refreshSuccess = true;
                 newAccessToken = token;
             },
             onError: (err) =>
             {
-                refreshDone = true;
                 refreshSuccess = false;
                 Debug.LogError($"[GameManager] Token refresh failed: {err}");
             }
         );
 
-        // Cleanup temp GameObject
         Destroy(authApiGO);
-
-        // Wait for refresh to complete
-        float timeout = 5f;
-        float elapsed = 0f;
-        while (!refreshDone && elapsed < timeout)
-        {
-            elapsed += Time.deltaTime;
-            yield return null;
-        }
 
         isRefreshingToken = false;
 
         if (refreshSuccess && !string.IsNullOrEmpty(newAccessToken))
         {
-            Debug.Log("[GameManager] Token refreshed successfully");
             AppSession.Instance.SetAccess(newAccessToken);
 
             // Process any pending requests

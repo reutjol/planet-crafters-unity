@@ -16,12 +16,7 @@ MonoBehaviour:
   m_Data:
     m_SerializedData: []
   m_GUID: 9c342dc70d7b106459e6c65237eacb86
-  m_SerializeEntries:
-  - m_GUID: 109ae987678a9c84bb147465c6a83db7
-    m_Address: Prefabs/hex1/stage_bio
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
+  m_SerializeEntries: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 6787ade8d5af0ef4285dc757b432c7e3, type: 2}
   m_SchemaSet:

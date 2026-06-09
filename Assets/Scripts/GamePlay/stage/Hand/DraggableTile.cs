@@ -203,6 +203,13 @@ public class DraggableTile : MonoBehaviour
 
             _mapController.ApplyServerState(newState);
             _handController.LoadFromServer(newState.hand, newState.deck);
+
+            if (newState.userCoins.HasValue && newState.userCoins.Value > 0)
+            {
+                UserCoinsDisplay.UpdateCoins(newState.userCoins.Value);
+                if (AppSession.Instance?.ActivePlanet != null)
+                    AppSession.Instance.ActivePlanet.totalCoins = newState.userCoins.Value;
+            }
         }
         else
         {

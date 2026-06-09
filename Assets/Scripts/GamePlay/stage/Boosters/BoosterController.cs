@@ -128,7 +128,6 @@ public class BoosterController : MonoBehaviour
         if (_inventory.doubleScore <= 0) return;
         _doubleScoreActive = !_doubleScoreActive;
         UpdateUI();
-        Debug.Log($"[BoosterController] DoubleScore {(_doubleScoreActive ? "ACTIVATED" : "DEACTIVATED")}");
     }
 
     /// Called by DraggableTile after a successful placement when doubleScore was active.

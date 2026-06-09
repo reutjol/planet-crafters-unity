@@ -43,7 +43,6 @@ public class MapController : MonoBehaviour
 
     private readonly HashSet<Vector2Int> _occupied = new();
     private readonly Dictionary<Vector2Int, GameObject> _liveTiles = new();
-    private readonly List<PlacedTileDto> _placedTiles = new();
     private readonly List<GameObject> _starPool = new();
     private readonly Dictionary<string, GameObject> _activeRoamers = new();
 
@@ -85,7 +84,6 @@ public class MapController : MonoBehaviour
 
         var newKeys = new HashSet<Vector2Int>();
         _occupied.Clear();
-        _placedTiles.Clear();
 
         foreach (var t in list)
         {
@@ -97,7 +95,6 @@ public class MapController : MonoBehaviour
 
             newKeys.Add(key);
             _occupied.Add(key);
-            _placedTiles.Add(t);
 
             if (_liveTiles.ContainsKey(key)) continue;
 
@@ -383,7 +380,6 @@ public class MapController : MonoBehaviour
     public void ClearMap()
     {
         _occupied.Clear();
-        _placedTiles.Clear();
         _liveTiles.Clear();
         foreach (var kv in _activeRoamers)
             if (kv.Value != null) Destroy(kv.Value);

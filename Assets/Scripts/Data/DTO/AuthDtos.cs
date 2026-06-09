@@ -1,8 +1,5 @@
 using System;
-
-/// <summary>
-/// Data Transfer Objects for authentication API responses.
-/// </summary>
+using System.Collections.Generic;
 
 [Serializable]
 public class AuthResponseDto
@@ -19,4 +16,7 @@ public class UserDto
     public string name;
     public string userName;
     public string email;
+    public int coins;
+    public string selectedAvatar;
+    public List<string> ownedAvatars;
 }

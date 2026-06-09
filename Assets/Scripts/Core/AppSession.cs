@@ -9,10 +9,11 @@ public class AppSession : MonoBehaviour
 {
     public static AppSession Instance { get; private set; }
 
-    private const string AccessKey  = "JWT_ACCESS";
-    private const string RefreshKey = "JWT_REFRESH";
-    private const string UserIdKey  = "USER_ID";
-    private const string UsernameKey = "USERNAME";
+    private const string AccessKey       = "JWT_ACCESS";
+    private const string RefreshKey      = "JWT_REFRESH";
+    private const string UserIdKey       = "USER_ID";
+    private const string UsernameKey     = "USERNAME";
+    private const string SelectedAvatarKey = "SELECTED_AVATAR";
 
     public string AccessToken { get; private set; }
     public string RefreshToken { get; private set; }
@@ -21,6 +22,7 @@ public class AppSession : MonoBehaviour
 
     public string SelectedStageId { get; private set; }
     public PlanetDto ActivePlanet { get; set; }
+    public string SelectedAvatar { get; private set; }
 
     private int previousSceneIndex = -1;
     public int PreviousSceneIndex => previousSceneIndex;
@@ -50,21 +52,35 @@ public class AppSession : MonoBehaviour
         ActivePlanet = null;
         SelectedStageId = null;
 
-        AccessToken  = PlayerPrefs.GetString(AccessKey, "");
-        RefreshToken = PlayerPrefs.GetString(RefreshKey, "");
-        UserId   = PlayerPrefs.GetString(UserIdKey, "");
-        Username = PlayerPrefs.GetString(UsernameKey, "");
+        AccessToken    = PlayerPrefs.GetString(AccessKey, "");
+        RefreshToken   = PlayerPrefs.GetString(RefreshKey, "");
+        UserId         = PlayerPrefs.GetString(UserIdKey, "");
+        Username       = PlayerPrefs.GetString(UsernameKey, "");
+        SelectedAvatar = PlayerPrefs.GetString(SelectedAvatarKey, "");
     }
 
     public bool HasAccess() => !string.IsNullOrEmpty(AccessToken);
     public bool HasRefresh() => !string.IsNullOrEmpty(RefreshToken);
 
-    public void SetUser(string userId, string username)
+    public void SetUser(string userId, string username, string selectedAvatar = null)
     {
         UserId = userId;
         Username = username;
         PlayerPrefs.SetString(UserIdKey, userId ?? "");
         PlayerPrefs.SetString(UsernameKey, username ?? "");
+        if (!string.IsNullOrEmpty(selectedAvatar))
+        {
+            SelectedAvatar = selectedAvatar;
+            PlayerPrefs.SetString(SelectedAvatarKey, selectedAvatar);
+        }
+        PlayerPrefs.Save();
+    }
+
+    public void SetSelectedAvatar(string avatarId)
+    {
+        if (string.IsNullOrEmpty(avatarId)) return;
+        SelectedAvatar = avatarId;
+        PlayerPrefs.SetString(SelectedAvatarKey, avatarId);
         PlayerPrefs.Save();
     }
 
@@ -91,10 +107,12 @@ public class AppSession : MonoBehaviour
         RefreshToken = "";
         ActivePlanet = null;
         SelectedStageId = null;
+        SelectedAvatar = "";
         PlayerPrefs.DeleteKey(AccessKey);
         PlayerPrefs.DeleteKey(RefreshKey);
         PlayerPrefs.DeleteKey(UserIdKey);
         PlayerPrefs.DeleteKey(UsernameKey);
+        PlayerPrefs.DeleteKey(SelectedAvatarKey);
         PlayerPrefs.Save();
     }
 

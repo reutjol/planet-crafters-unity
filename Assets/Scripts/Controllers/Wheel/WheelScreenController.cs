@@ -96,11 +96,8 @@ public class WheelScreenController : MonoBehaviour
 
         wheelRewardIconProvider = new WheelRewardIconProvider();
 
-        Debug.Log("WheelScreenController: trying to build slices");
-
         if (wheelSlicesBuilder != null)
         {
-            Debug.Log("WheelScreenController: wheelSlicesBuilder found");
             wheelSlicesBuilder.Initialize(wheelRewardIconProvider);
             wheelSlicesBuilder.Build();
 

@@ -13,7 +13,7 @@ public class RegistrationMenuController : MonoBehaviour
     [SerializeField] private AuthApiClient authApi;
     [SerializeField] private GameConfig gameConfig;
     [SerializeField] private Button googleSignInButton;
-    [SerializeField] private string googleWebClientId = "578252044385-bar7nkb5805qvgnt5efutj9bnconlu9f.apps.googleusercontent.com";
+    [SerializeField] private string googleWebClientId = "283464708395-4cbj9ei0j60i3d3bei059nqdt77tkbpp.apps.googleusercontent.com";
 
     private static RegistrationMenuController activeController;
 
@@ -94,12 +94,10 @@ public class RegistrationMenuController : MonoBehaviour
         yield return authApi.Refresh(
             AppSession.Instance.RefreshToken,
             onSuccess: t => { newToken = t; AppSession.Instance.SetAccess(t); },
-            onError: err => { Debug.Log($"[RegistrationMenu] Refresh expired ({err})"); AppSession.Instance.Logout(); }
+            onError: err => { Debug.LogWarning($"[RegistrationMenu] Refresh expired ({err})"); AppSession.Instance.Logout(); }
         );
 
         if (string.IsNullOrEmpty(newToken)) yield break;
-
-        Debug.Log("[RegistrationMenu] Auto-login successful");
 
         // Fetch user info if not already stored
         if (string.IsNullOrEmpty(AppSession.Instance.UserId) || string.IsNullOrEmpty(AppSession.Instance.Username))
@@ -108,7 +106,7 @@ public class RegistrationMenuController : MonoBehaviour
             if (profileApi != null)
             {
                 yield return profileApi.GetMyProfile(newToken,
-                    user => AppSession.Instance.SetUser(user.id, user.userName),
+                    user => AppSession.Instance.SetUser(user.id, user.userName, user.selectedAvatar),
                     _ => { });
             }
         }
@@ -118,12 +116,12 @@ public class RegistrationMenuController : MonoBehaviour
 
     public void OnClickSignIn()
     {
-        SceneLoader.Instance.LoadScene(3);
+        SceneLoader.Instance.LoadScene(gameConfig.signInSceneIndex);
     }
 
     public void OnClickSignUp()
     {
-        SceneLoader.Instance.LoadScene(4);
+        SceneLoader.Instance.LoadScene(gameConfig.signUpSceneIndex);
     }
 
     public void OnClickGoogleSignIn()
@@ -205,7 +203,7 @@ public class RegistrationMenuController : MonoBehaviour
             onSuccess: resp =>
             {
                 AppSession.Instance.SetTokens(resp.accessToken, resp.refreshToken);
-                Debug.Log("[RegistrationMenu] Google login successful");
+                AppSession.Instance.SetUser(resp.user?.id, resp.user?.userName, resp.user?.selectedAvatar);
                 SceneLoader.Instance.LoadScene(gameConfig.planetSceneIndex);
             },
             onError: err =>

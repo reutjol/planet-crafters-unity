@@ -112,26 +112,10 @@ public class PlanetStageStateDto
     public ProgressDto progress;
     public int targetScore;
     public int coinsAwarded;
+    public int? userCoins;
     public List<CoordDto> scoredConnections;
     public int bonusPoints;
     public List<RoamingClusterDto> roamingClusters;
-}
-
-[System.Serializable]
-public class SaveStageStateRequestDto
-{
-    public string planetId;
-    public string stageId;
-    public StageStateInnerDto state;
-}
-
-[System.Serializable]
-public class StageStateInnerDto
-{
-    public MapDto map;
-    public HandDto hand;
-    public DeckDto deck;
-    public ProgressDto progress;
 }
 
 [System.Serializable]
