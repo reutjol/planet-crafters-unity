@@ -61,8 +61,9 @@ public class ShopController : MonoBehaviour
 
     // ── Profile ───────────────────────────────────────────────────────────────
 
-    private void LoadProfile()
+    private void LoadProfile(bool isRetry = false)
     {
+        token = AppSession.Instance?.AccessToken;
         StartCoroutine(api.GetProfile(token,
             profile =>
             {
@@ -70,7 +71,15 @@ public class ShopController : MonoBehaviour
                 UserCoinsDisplay.UpdateCoins(profile.coins);
                 SetupAvatarSlots(profile);
             },
-            err => Debug.LogError($"[ShopController] Failed to load profile: {err}")
+            err =>
+            {
+                if (!isRetry && (err.Contains("401") || err.Contains("Unauthorized")))
+                {
+                    GameManager.Instance?.HandleUnauthorizedAndRetry(() => LoadProfile(isRetry: true));
+                    return;
+                }
+                Debug.LogError($"[ShopController] Failed to load profile: {err}");
+            }
         ));
     }
 
@@ -83,8 +92,9 @@ public class ShopController : MonoBehaviour
 
     // ── Boosters ──────────────────────────────────────────────────────────────
 
-    private void BuyBooster(string boosterType)
+    private void BuyBooster(string boosterType, bool isRetry = false)
     {
+        token = AppSession.Instance?.AccessToken;
         SetBoosterButtonsInteractable(false);
 
         StartCoroutine(api.BuyBooster(token, boosterType,
@@ -103,6 +113,11 @@ public class ShopController : MonoBehaviour
             },
             err =>
             {
+                if (!isRetry && (err.Contains("401") || err.Contains("Unauthorized")))
+                {
+                    GameManager.Instance?.HandleUnauthorizedAndRetry(() => BuyBooster(boosterType, isRetry: true));
+                    return;
+                }
                 SetBoosterButtonsInteractable(true);
                 Debug.LogError($"[ShopController] BuyBooster failed: {err}");
             }

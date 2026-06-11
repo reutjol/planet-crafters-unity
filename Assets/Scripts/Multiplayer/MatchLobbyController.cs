@@ -24,9 +24,12 @@ public class MatchLobbyController : MonoBehaviour
 
         if (MatchManager.Instance != null)
         {
-            MatchManager.Instance.OnLobbyUpdated  += OnLobbyUpdated;
+            MatchManager.Instance.OnLobbyUpdated   += OnLobbyUpdated;
             MatchManager.Instance.OnChallengeError += OnChallengeError;
         }
+
+        if (MatchSocketClient.Instance != null)
+            MatchSocketClient.Instance.OnChallenged += OnChallenged;
     }
 
     private void OnDestroy()
@@ -36,6 +39,9 @@ public class MatchLobbyController : MonoBehaviour
             MatchManager.Instance.OnLobbyUpdated   -= OnLobbyUpdated;
             MatchManager.Instance.OnChallengeError -= OnChallengeError;
         }
+
+        if (MatchSocketClient.Instance != null)
+            MatchSocketClient.Instance.OnChallenged -= OnChallenged;
     }
 
     // ── Public: open from PlanetScreenController ──
@@ -43,7 +49,7 @@ public class MatchLobbyController : MonoBehaviour
     public void Open()
     {
         lobbyPanel?.SetActive(true);
-        ShowStatus("Looking for players...");
+        ShowStatus(L("text.looking_for_players", "Looking for players..."));
         PopupManager.OnPopupOpened();
         Debug.Log($"[Lobby] Open called. MatchManager={MatchManager.Instance} AppSession.UserId={AppSession.Instance?.UserId}");
         MatchManager.Instance?.OpenLobby();
@@ -65,7 +71,9 @@ public class MatchLobbyController : MonoBehaviour
         var others = players?.FindAll(p => p.userId != myId) ?? new List<LobbyPlayerDto>();
 
         // Update status text
-        ShowStatus(others.Count == 0 ? "Waiting for players..." : $"{others.Count} player(s) online");
+        ShowStatus(others.Count == 0
+            ? L("text.waiting_for_players", "Waiting for players...")
+            : $"{others.Count} {L("text.players_online", "player(s) online")}");
 
         // Enable/disable random button
         if (randomButton != null) randomButton.interactable = others.Count > 0;
@@ -93,6 +101,12 @@ public class MatchLobbyController : MonoBehaviour
         }
     }
 
+    private void OnChallenged()
+    {
+        DisableAllButtons();
+        ShowStatus(L("text.someone_selected_you", "Someone selected you! Starting match..."));
+    }
+
     private void OnChallengeError(string err)
     {
         ShowStatus($"Error: {err}");
@@ -103,14 +117,14 @@ public class MatchLobbyController : MonoBehaviour
     private void OnRandomClicked()
     {
         DisableAllButtons();
-        ShowStatus("Challenging random player...");
+        ShowStatus(L("text.challenging_random", "Challenging random player..."));
         MatchManager.Instance?.ChallengeRandom();
     }
 
     private void OnChallengeClicked(string targetUserId)
     {
         DisableAllButtons();
-        ShowStatus("Challenging...");
+        ShowStatus(L("text.challenging", "Challenging..."));
         MatchManager.Instance?.ChallengePlayer(targetUserId);
     }
 
@@ -125,8 +139,16 @@ public class MatchLobbyController : MonoBehaviour
         }
     }
 
+    private static string L(string key, string fallback) =>
+        UnityLocalizationService.Instance != null
+            ? UnityLocalizationService.Instance.GetText(key, fallback)
+            : fallback;
+
     private void ShowStatus(string msg)
     {
-        if (statusText != null) statusText.text = msg;
+        if (statusText == null) return;
+        statusText.text = msg;
+        var svc = UnityLocalizationService.Instance;
+        if (svc != null) statusText.isRightToLeftText = svc.IsRightToLeft;
     }
 }

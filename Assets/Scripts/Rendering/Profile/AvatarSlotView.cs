@@ -37,9 +37,17 @@ public class AvatarSlotView : MonoBehaviour
         if (lockLabel != null)
         {
             lockLabel.gameObject.SetActive(locked);
+            var svc = UnityLocalizationService.Instance;
+            bool rtl = svc != null && svc.IsRightToLeft;
+            string availableText = L("text.available_from_stage", "Available from stage");
+            string stageStr = stageRequired.ToString();
+            char[] stageChars = stageStr.ToCharArray();
+            if (rtl) Array.Reverse(stageChars);
+            string stageDisplay = rtl ? new string(stageChars) : stageStr;
             lockLabel.text = slotState == SlotState.StageUnlock
-                ? $"Available from stage {stageRequired}"
-                : "Buy in Shop";
+                ? (rtl ? $"{availableText} {stageDisplay}" : $"{availableText} {stageRequired}")
+                : L("text.buy_in_shop", "Buy in Shop");
+            lockLabel.isRightToLeftText = rtl;
         }
 
         if (avatarImage != null)
@@ -57,6 +65,11 @@ public class AvatarSlotView : MonoBehaviour
         if (selectedMark != null)
             selectedMark.SetActive(state == SlotState.Owned && isSelected);
     }
+
+    private static string L(string key, string fallback) =>
+        UnityLocalizationService.Instance != null
+            ? UnityLocalizationService.Instance.GetText(key, fallback)
+            : fallback;
 
     private void HandleClick()
     {

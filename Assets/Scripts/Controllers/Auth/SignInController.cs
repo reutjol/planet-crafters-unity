@@ -17,6 +17,7 @@ public class SignInController : MonoBehaviour
     [SerializeField] private TMP_InputField passwordInput;
 
     [Header("UI Elements")]
+    [SerializeField] private Button submitButton;
     [SerializeField] private TMP_Text errorMessageText;
     [SerializeField] private Button showPasswordButton;
     [SerializeField] private Image showPasswordIcon;
@@ -112,22 +113,43 @@ public class SignInController : MonoBehaviour
             return;
         }
 
+        if (submitButton != null) submitButton.interactable = false;
+
         StartCoroutine(api.Login(email, pass,
             onSuccess: (resp) =>
             {
                 HideError();
+
+                if (AppSession.Instance == null)
+                {
+                    Debug.LogError("[SignIn] AppSession.Instance is null — cannot save tokens!");
+                    ShowError("Session error, please restart the app");
+                    return;
+                }
+
                 AppSession.Instance.SetTokens(resp.accessToken, resp.refreshToken);
                 AppSession.Instance.SetUser(resp.user?.id, resp.user?.userName, resp.user?.selectedAvatar);
-                if (SceneLoader.Instance != null && gameConfig != null)
+
+                if (SceneLoader.Instance == null)
                 {
-                    SceneLoader.Instance.LoadScene(gameConfig.planetSceneIndex);
+                    Debug.LogError("[SignIn] SceneLoader.Instance is null — falling back to direct scene load");
+                    UnityEngine.SceneManagement.SceneManager.LoadScene(gameConfig != null ? gameConfig.planetSceneIndex : 5);
+                    return;
                 }
+
+                if (gameConfig == null)
+                {
+                    Debug.LogError("[SignIn] gameConfig is null — falling back to hardcoded scene index");
+                    SceneLoader.Instance.LoadScene(5);
+                    return;
+                }
+
+                SceneLoader.Instance.LoadScene(gameConfig.planetSceneIndex);
             },
             onError: (err) =>
             {
                 Debug.LogError($"[SignIn] Login failed: {err}");
 
-                // Parse error and show user-friendly message
                 if (err.Contains("401") || err.Contains("Unauthorized") || err.Contains("Invalid credentials"))
                 {
                     ShowError("Invalid email or password");

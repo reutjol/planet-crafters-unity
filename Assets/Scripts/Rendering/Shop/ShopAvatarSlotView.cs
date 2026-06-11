@@ -18,12 +18,27 @@ public class ShopAvatarSlotView : MonoBehaviour
     [SerializeField] private string avatarId;
 
     private ShopProfileDto profile;
+    private UnityLocalizationService _locSvc;
 
     private void Start()
     {
         if (actionButton != null)
             actionButton.onClick.AddListener(OnBuyClicked);
     }
+
+    private void OnEnable()
+    {
+        _locSvc = UnityLocalizationService.Instance;
+        if (_locSvc != null) _locSvc.LanguageChanged += OnLanguageChanged;
+    }
+
+    private void OnDisable()
+    {
+        if (_locSvc != null) _locSvc.LanguageChanged -= OnLanguageChanged;
+        _locSvc = null;
+    }
+
+    private void OnLanguageChanged(string _) => LoadAvatarVisuals();
 
     public void Setup(ShopProfileDto shopProfile)
     {
@@ -42,7 +57,10 @@ public class ShopAvatarSlotView : MonoBehaviour
 
         if (entry != null && entry.unlockType == "stage")
         {
-            SetStatus($"Available from stage {entry.stageRequired}");
+            var svcRtl = UnityLocalizationService.Instance;
+            bool isRtl = svcRtl != null && svcRtl.IsRightToLeft;
+            string availableText = L("text.available_from_stage", "Available from stage");
+            SetStatus(isRtl ? $"{entry.stageRequired} {availableText}" : $"{availableText} {entry.stageRequired}");
             SetButtonState(false);
             DimAvatar(true);
             return;
@@ -67,14 +85,20 @@ public class ShopAvatarSlotView : MonoBehaviour
             if (nameLabel != null)
             {
                 string displayName = char.ToUpper(avatarId[0]) + avatarId[1..];
-                nameLabel.text = $"{displayName} avatar";
+                string translatedName = L($"text.avatar_name_{avatarId}", displayName);
+                var svc = UnityLocalizationService.Instance;
+                bool rtl = svc != null && svc.IsRightToLeft;
+                string avatarWord = L("text.avatar", "avatar");
+                nameLabel.text = rtl ? $"{avatarWord} {translatedName}" : $"{translatedName} {avatarWord}";
+                nameLabel.isRightToLeftText = rtl;
+                nameLabel.horizontalAlignment = LocalizedTextView.FlipAlignment(nameLabel.horizontalAlignment, rtl);
             }
         }
     }
 
     private void ApplyOwnedState()
     {
-        SetStatus("Already owned");
+        SetStatus(L("text.already_owned", "Already owned"));
         if (actionButton != null) actionButton.interactable = false;
         if (priceObject != null) priceObject.SetActive(false);
         DimAvatar(false);
@@ -100,8 +124,8 @@ public class ShopAvatarSlotView : MonoBehaviour
                 {
                     actionButton.interactable = true;
                     SetStatus(result.reason == "insufficient_coins"
-                        ? "Not enough coins"
-                        : "Purchase failed");
+                        ? L("text.not_enough_coins", "Not enough coins")
+                        : L("text.purchase_failed", "Purchase failed"));
                     return;
                 }
 
@@ -119,7 +143,7 @@ public class ShopAvatarSlotView : MonoBehaviour
             err =>
             {
                 actionButton.interactable = true;
-                SetStatus("Error, try again");
+                SetStatus(L("text.error_try_again", "Error, try again"));
                 Debug.LogError($"[ShopAvatarSlotView] BuyAvatar {avatarId} failed: {err}");
             }
         ));
@@ -127,14 +151,21 @@ public class ShopAvatarSlotView : MonoBehaviour
 
     public void SetStatus(string message)
     {
-        if (statusLabel != null)
-            statusLabel.text = message;
+        if (statusLabel == null) return;
+        statusLabel.text = message;
+        var svc = UnityLocalizationService.Instance;
+        if (svc != null) statusLabel.isRightToLeftText = svc.IsRightToLeft;
     }
 
     private void SetButtonState(bool interactable)
     {
         if (actionButton != null) actionButton.interactable = interactable;
     }
+
+    private static string L(string key, string fallback) =>
+        UnityLocalizationService.Instance != null
+            ? UnityLocalizationService.Instance.GetText(key, fallback)
+            : fallback;
 
     private void DimAvatar(bool dim)
     {

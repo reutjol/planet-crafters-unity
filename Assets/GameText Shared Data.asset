@@ -763,6 +763,146 @@ MonoBehaviour:
     m_Key: text.winning_streak
     m_Metadata:
       m_Items: []
+  - m_Id: 64591200813242
+    m_Key: text.buy
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813243
+    m_Key: text.shop
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813244
+    m_Key: text.multiplayer
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813245
+    m_Key: text.find_random
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813246
+    m_Key: text.next_free_spin_in
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813247
+    m_Key: text.buy_in_shop
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813248
+    m_Key: text.available_from_stage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813249
+    m_Key: text.already_owned
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813250
+    m_Key: text.not_enough_coins
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813251
+    m_Key: text.purchase_failed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813252
+    m_Key: text.error_try_again
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813253
+    m_Key: text.looking_for_players
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813254
+    m_Key: text.waiting_for_players
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813255
+    m_Key: text.challenging_random
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813256
+    m_Key: text.challenging
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813257
+    m_Key: text.someone_selected_you
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813258
+    m_Key: text.players_online
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813259
+    m_Key: text.boosters
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813260
+    m_Key: text.x2_last_tile
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813261
+    m_Key: text.x2_last_tile_desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813262
+    m_Key: text.remove_tile
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813263
+    m_Key: text.remove_tile_desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813264
+    m_Key: text.extra_hex
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813265
+    m_Key: text.extra_hex_desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813266
+    m_Key: text.earn_more_coins
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813267
+    m_Key: text.earn_more_coins_desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813268
+    m_Key: text.get_coins
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813269
+    m_Key: text.avatar_name_alien
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813270
+    m_Key: text.avatar_name_boy
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813271
+    m_Key: text.avatar_name_cat
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813272
+    m_Key: text.avatar_name_colorfully
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813273
+    m_Key: text.avatar_name_dinosaur
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813274
+    m_Key: text.avatar_name_girl
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813275
+    m_Key: text.avatar_name_mexican
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813276
+    m_Key: text.avatar_name_superman
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

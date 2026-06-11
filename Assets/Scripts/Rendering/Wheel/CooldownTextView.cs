@@ -4,12 +4,6 @@ using UnityEngine;
 public class CooldownTextView : MonoBehaviour
 {
     [SerializeField] private TMP_Text textLabel;
-    private ILocalizationService localizationService;
-
-    private void Awake()
-    {
-        localizationService = UnityLocalizationService.Instance;
-    }
 
     public void SetText(string value)
     {
@@ -17,8 +11,7 @@ public class CooldownTextView : MonoBehaviour
         {
             textLabel.text = value;
 
-            if (localizationService != null)
-                textLabel.isRightToLeftText = localizationService.IsRightToLeft;
+            textLabel.isRightToLeftText = false;
         }
     }
 

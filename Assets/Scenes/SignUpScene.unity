@@ -647,6 +647,7 @@ MonoBehaviour:
   localizationKey: text.enter_password_2
   fallbackText: Enter password...
   updateRightToLeft: 1
+  hebrewFont: {fileID: 11400000, guid: 464f1e777137d2d418be351c3be4aea4, type: 2}
   tmpText: {fileID: 96973099}
   uiText: {fileID: 0}
 --- !u!1 &202969742
@@ -851,6 +852,7 @@ MonoBehaviour:
   localizationKey: text.sign_up
   fallbackText: sign up
   updateRightToLeft: 1
+  hebrewFont: {fileID: 11400000, guid: 464f1e777137d2d418be351c3be4aea4, type: 2}
   tmpText: {fileID: 238949478}
   uiText: {fileID: 0}
 --- !u!1 &289825190
@@ -2437,6 +2439,7 @@ MonoBehaviour:
   localizationKey: text.enter_full_name
   fallbackText: Enter full name...
   updateRightToLeft: 1
+  hebrewFont: {fileID: 11400000, guid: 464f1e777137d2d418be351c3be4aea4, type: 2}
   tmpText: {fileID: 992932143}
   uiText: {fileID: 0}
 --- !u!1 &1126481158
@@ -2610,6 +2613,7 @@ MonoBehaviour:
   localizationKey: text.confirm_password
   fallbackText: Confirm password...
   updateRightToLeft: 1
+  hebrewFont: {fileID: 11400000, guid: 464f1e777137d2d418be351c3be4aea4, type: 2}
   tmpText: {fileID: 1126481159}
   uiText: {fileID: 0}
 --- !u!1 &1148514957
@@ -2783,6 +2787,7 @@ MonoBehaviour:
   localizationKey: text.enter_user_name
   fallbackText: Enter user name...
   updateRightToLeft: 1
+  hebrewFont: {fileID: 11400000, guid: 464f1e777137d2d418be351c3be4aea4, type: 2}
   tmpText: {fileID: 1148514960}
   uiText: {fileID: 0}
 --- !u!1 &1495144588
@@ -2971,6 +2976,17 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1696939384 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7972478180258929021, guid: 9a9c6ec60a23593479ac31b033f98e55, type: 3}
+  m_PrefabInstance: {fileID: 1819394459}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1819394461}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1740319735
 GameObject:
   m_ObjectHideFlags: 0
@@ -3142,6 +3158,7 @@ MonoBehaviour:
   localizationKey: text.enter_email
   fallbackText: Enter email...
   updateRightToLeft: 1
+  hebrewFont: {fileID: 11400000, guid: 464f1e777137d2d418be351c3be4aea4, type: 2}
   tmpText: {fileID: 1740319738}
   uiText: {fileID: 0}
 --- !u!1001 &1803777185
@@ -3575,6 +3592,7 @@ MonoBehaviour:
   emailInput: {fileID: 81413820}
   passwordInput: {fileID: 717925180}
   confirmPasswordInput: {fileID: 766214146}
+  submitButton: {fileID: 1696939384}
   errorMessageText: {fileID: 653301186}
   successMessageText: {fileID: 95894646}
 --- !u!1 &1819394463 stripped
@@ -3608,6 +3626,7 @@ MonoBehaviour:
   localizationKey: text.create
   fallbackText: Create
   updateRightToLeft: 1
+  hebrewFont: {fileID: 11400000, guid: 464f1e777137d2d418be351c3be4aea4, type: 2}
   tmpText: {fileID: 1819394464}
   uiText: {fileID: 0}
 --- !u!1 &1829198071

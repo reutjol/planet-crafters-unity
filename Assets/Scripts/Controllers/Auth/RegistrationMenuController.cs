@@ -91,11 +91,29 @@ public class RegistrationMenuController : MonoBehaviour
         }
 
         string newToken = null;
+        string refreshError = null;
         yield return authApi.Refresh(
             AppSession.Instance.RefreshToken,
             onSuccess: t => { newToken = t; AppSession.Instance.SetAccess(t); },
-            onError: err => { Debug.LogWarning($"[RegistrationMenu] Refresh expired ({err})"); AppSession.Instance.Logout(); }
+            onError: err => { refreshError = err; }
         );
+
+        if (!string.IsNullOrEmpty(refreshError))
+        {
+            bool isAuthFailure = refreshError.Contains("401") || refreshError.Contains("403") ||
+                                 refreshError.Contains("Unauthorized") || refreshError.Contains("Forbidden") ||
+                                 refreshError.Contains("invalid") || refreshError.Contains("expired");
+            if (isAuthFailure)
+            {
+                Debug.LogWarning($"[RegistrationMenu] Refresh token invalid/expired, logging out: {refreshError}");
+                AppSession.Instance.Logout();
+            }
+            else
+            {
+                Debug.LogWarning($"[RegistrationMenu] Auto-login skipped due to network error: {refreshError}");
+            }
+            yield break;
+        }
 
         if (string.IsNullOrEmpty(newToken)) yield break;
 

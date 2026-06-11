@@ -768,6 +768,146 @@ MonoBehaviour:
     m_Localized: Winning Streak
     m_Metadata:
       m_Items: []
+  - m_Id: 64591200813242
+    m_Localized: BUY
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813243
+    m_Localized: SHOP
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813244
+    m_Localized: MultiPlayer
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813245
+    m_Localized: Find Random
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813246
+    m_Localized: NEXT FREE SPIN IN
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813247
+    m_Localized: Buy in Shop
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813248
+    m_Localized: Available from stage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813249
+    m_Localized: Already owned
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813250
+    m_Localized: Not enough coins
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813251
+    m_Localized: Purchase failed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813252
+    m_Localized: 'Error, try again'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813253
+    m_Localized: Looking for players...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813254
+    m_Localized: Waiting for players...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813255
+    m_Localized: Challenging random player...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813256
+    m_Localized: Challenging...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813257
+    m_Localized: 'Someone selected you! Starting match...'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813258
+    m_Localized: player(s) online
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813259
+    m_Localized: BOOSTERS
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813260
+    m_Localized: X2 LAST TILE
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813261
+    m_Localized: Multiply the score from the last placed hexagon.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813262
+    m_Localized: REMOVE TILE
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813263
+    m_Localized: Remove one placed hexagon from the map.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813264
+    m_Localized: EXTRA HEX
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813265
+    m_Localized: Add one extra hexagon
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813266
+    m_Localized: EARN MORE COINS
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813267
+    m_Localized: 'Complete levels, watch ads, and collect daily rewards!'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813268
+    m_Localized: GET COINS
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813269
+    m_Localized: Alien
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813270
+    m_Localized: Boy
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813271
+    m_Localized: Cat
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813272
+    m_Localized: Colorfully
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813273
+    m_Localized: Dinosaur
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813274
+    m_Localized: Girl
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813275
+    m_Localized: Mexican
+    m_Metadata:
+      m_Items: []
+  - m_Id: 64591200813276
+    m_Localized: Superman
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

@@ -18,6 +18,12 @@ public class GameBootstrap : MonoBehaviour
     private bool _stageCompleted = false;
     private System.Action<PlanetStageStateDto> _currentStateLoadHandler;
 
+    private void Awake()
+    {
+        if (_gameOverPanel != null)
+            _gameOverPanel.SetActive(false);
+    }
+
     private IEnumerator Start()
     {
         if (!ValidateDependencies()) yield break;
@@ -135,12 +141,12 @@ public class GameBootstrap : MonoBehaviour
         if (_scoreDisplay != null)
             _scoreDisplay.SetTargetScore(state.targetScore);
 
-        _mapController.ApplyServerState(state);
-        _handController.LoadFromServer(state.hand, state.deck);
-
         _mapController.OnStageCompleted += HandleStageCompleted;
         _mapController.OnStageCompletedWithCoins += HandleStageCompletedWithCoins;
         _handController.OnHandAndDeckEmpty += HandleGameOver;
+
+        _mapController.ApplyServerState(state);
+        _handController.LoadFromServer(state.hand, state.deck);
 
         if (_boosterController == null)
             _boosterController = FindObjectOfType<BoosterController>(true);

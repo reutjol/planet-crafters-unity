@@ -613,6 +613,7 @@ MonoBehaviour:
   localizationKey: text.sign_in_2
   fallbackText: sign In
   updateRightToLeft: 1
+  hebrewFont: {fileID: 11400000, guid: 464f1e777137d2d418be351c3be4aea4, type: 2}
   tmpText: {fileID: 782847863}
   uiText: {fileID: 0}
 --- !u!1 &817012704
@@ -1248,6 +1249,7 @@ MonoBehaviour:
   localizationKey: text.sign_up
   fallbackText: sign up
   updateRightToLeft: 1
+  hebrewFont: {fileID: 11400000, guid: 464f1e777137d2d418be351c3be4aea4, type: 2}
   tmpText: {fileID: 5579338908840850172}
   uiText: {fileID: 0}
 --- !u!1660057539 &9223372036854775807

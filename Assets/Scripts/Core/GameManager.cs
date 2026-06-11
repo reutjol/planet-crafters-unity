@@ -181,7 +181,7 @@ public class GameManager : MonoBehaviour
 
         if (isLoadingPlanetStageState)
         {
-            Debug.LogWarning("[GameManager] Already loading PlanetStageState - SKIPPING");
+            Debug.Log("[GameManager] Already loading PlanetStageState - SKIPPING");
             return;
         }
 
@@ -343,6 +343,20 @@ public class GameManager : MonoBehaviour
         currentStageId = null;
         currentPlanetStageState = null;
         isLoadingPlanetStageState = false;
+    }
+
+    public void HandleUnauthorizedAndRetry(System.Action onRefreshed)
+    {
+        if (AppSession.Instance != null && AppSession.Instance.HasRefresh() && !isRefreshingToken)
+        {
+            pendingRequestsAfterRefresh.Enqueue(onRefreshed);
+            StartCoroutine(RefreshTokenAndRetry());
+        }
+        else
+        {
+            AppSession.Instance?.Logout();
+            OnUnauthorized?.Invoke();
+        }
     }
 
     private void HandleError(string err)

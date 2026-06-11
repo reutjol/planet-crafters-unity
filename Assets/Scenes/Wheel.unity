@@ -533,6 +533,7 @@ MonoBehaviour:
   localizationKey: text.spin_2
   fallbackText: SPIN
   updateRightToLeft: 1
+  hebrewFont: {fileID: 11400000, guid: 464f1e777137d2d418be351c3be4aea4, type: 2}
   tmpText: {fileID: 249114542}
   uiText: {fileID: 0}
 --- !u!114 &249114542
@@ -1118,7 +1119,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -90}
+  m_AnchoredPosition: {x: 0, y: -165}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &776374049
@@ -1404,7 +1405,6 @@ GameObject:
   - component: {fileID: 890100440}
   - component: {fileID: 890100439}
   - component: {fileID: 890100441}
-  - component: {fileID: 890100438}
   m_Layer: 5
   m_Name: CooldownText
   m_TagString: Untagged
@@ -1431,23 +1431,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -24}
   m_SizeDelta: {x: 500, y: 72}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &890100438
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 890100436}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1ae7e89c7f52c5145aae68c21ea84ba3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  localizationKey: text.next_spin_in_04_00_00
-  fallbackText: Next spin in 04:00:00
-  updateRightToLeft: 1
-  tmpText: {fileID: 890100439}
-  uiText: {fileID: 0}
 --- !u!114 &890100439
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2600,6 +2583,7 @@ MonoBehaviour:
   localizationKey: text.lucky_wheel
   fallbackText: Lucky Wheel
   updateRightToLeft: 1
+  hebrewFont: {fileID: 11400000, guid: 464f1e777137d2d418be351c3be4aea4, type: 2}
   tmpText: {fileID: 1468212750}
   uiText: {fileID: 0}
 --- !u!114 &1468212750
@@ -3895,6 +3879,7 @@ GameObject:
   - component: {fileID: 2079326465}
   - component: {fileID: 2079326467}
   - component: {fileID: 2079326466}
+  - component: {fileID: 2079326468}
   m_Layer: 0
   m_Name: CooldownLabel
   m_TagString: Untagged
@@ -4018,6 +4003,24 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2079326464}
   m_CullTransparentMesh: 1
+--- !u!114 &2079326468
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2079326464}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ae7e89c7f52c5145aae68c21ea84ba3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  localizationKey: text.next_free_spin_in
+  fallbackText: NEXT FREE SPIN IN
+  updateRightToLeft: 1
+  hebrewFont: {fileID: 11400000, guid: 464f1e777137d2d418be351c3be4aea4, type: 2}
+  tmpText: {fileID: 2079326466}
+  uiText: {fileID: 0}
 --- !u!1 &2107063526
 GameObject:
   m_ObjectHideFlags: 0

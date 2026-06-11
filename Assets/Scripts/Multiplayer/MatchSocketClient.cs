@@ -19,6 +19,7 @@ public class MatchSocketClient : MonoBehaviour
     public event Action<MatchDto> OnMatchReady;
     public event Action<string> OnChallengeError;
     public event Action OnOpponentLeft;
+    public event Action OnChallenged;
 
     private ClientWebSocket _ws;
     private CancellationTokenSource _cts;
@@ -228,6 +229,9 @@ public class MatchSocketClient : MonoBehaviour
                     break;
                 case "opponentLeft":
                     OnOpponentLeft?.Invoke();
+                    break;
+                case "challenged":
+                    OnChallenged?.Invoke();
                     break;
             }
         }

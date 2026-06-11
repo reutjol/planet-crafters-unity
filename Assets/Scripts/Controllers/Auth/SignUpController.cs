@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 /// <summary>
@@ -19,6 +20,7 @@ public class SignUpController : MonoBehaviour
     [SerializeField] private TMP_InputField confirmPasswordInput;
 
     [Header("UI Elements")]
+    [SerializeField] private Button submitButton;
     [SerializeField] private TMP_Text errorMessageText;
     [SerializeField] private TMP_Text successMessageText;
 
@@ -141,19 +143,18 @@ public class SignUpController : MonoBehaviour
             return;
         }
 
+        if (submitButton != null) submitButton.interactable = false;
+
         StartCoroutine(api.Register(name, email, userName, pass,
             onSuccess: (resp) =>
             {
                 ShowSuccess("Registration successful! Redirecting to login...");
-
-                // Wait a bit to show success message before navigating
                 StartCoroutine(NavigateAfterDelay(1.5f));
             },
             onError: (err) =>
             {
                 Debug.LogError($"[SignUp] Registration failed: {err}");
 
-                // Parse error and show user-friendly message
                 if (err.Contains("409") || err.Contains("already exists") || err.Contains("duplicate"))
                 {
                     ShowError("Email or username already exists");

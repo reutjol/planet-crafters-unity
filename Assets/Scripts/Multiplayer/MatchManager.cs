@@ -310,11 +310,23 @@ public class MatchManager : MonoBehaviour
             m => result = m,
             err => { finishErr = err; Debug.LogWarning($"[MatchManager] FinishMatch failed: {err}"); });
 
-        if (result != null)
-            OnMatchFinished?.Invoke(result);
-        else
+        if (result == null)
+        {
             Debug.LogWarning("[MatchManager] FinishMatch returned no result — match may not be recorded on server");
+            MatchSession.Instance?.Clear();
+            yield break;
+        }
 
+        // Wait briefly so last-second tile placements from the opponent
+        // have time to reach the server before we fetch the final state.
+        yield return new WaitForSeconds(1.5f);
+
+        MatchDto finalResult = null;
+        yield return MatchApiClient.Instance.GetMatch(matchId, token,
+            m => finalResult = m,
+            _ => { });
+
+        OnMatchFinished?.Invoke(finalResult ?? result);
         MatchSession.Instance?.Clear();
     }
 

@@ -20,6 +20,7 @@ public class DraggableTile : MonoBehaviour
     private HandController _handController;
     private MapController _mapController;
     private string _templateId;
+    private int _activeFingerId = -1;
 
     public static bool IsDragging { get; private set; }
     public static DraggableTile ActiveTile { get; private set; }
@@ -70,6 +71,16 @@ public class DraggableTile : MonoBehaviour
         if (!enabled) return;
         if (PopupManager.IsAnyPopupOpen) return;
 
+        _activeFingerId = -1;
+        for (int i = 0; i < Input.touchCount; i++)
+        {
+            if (Input.GetTouch(i).phase == UnityEngine.TouchPhase.Began)
+            {
+                _activeFingerId = Input.GetTouch(i).fingerId;
+                break;
+            }
+        }
+
         _dragging = true;
         IsDragging = true;
         ActiveTile = this;
@@ -118,9 +129,18 @@ public class DraggableTile : MonoBehaviour
             transform.position = ray.GetPoint(enter);
     }
 
-    // Follows the active touch finger or falls back to mouse position.
+    // Follows the specific finger that started the drag, or falls back to mouse position.
     private Vector2 GetPointerScreenPosition()
     {
+        if (_activeFingerId >= 0)
+        {
+            for (int i = 0; i < Input.touchCount; i++)
+            {
+                var t = Input.GetTouch(i);
+                if (t.fingerId == _activeFingerId)
+                    return t.position;
+            }
+        }
         if (Input.touchCount > 0)
             return Input.GetTouch(0).position;
         return Input.mousePosition;
