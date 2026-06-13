@@ -48,6 +48,7 @@ public class MapController : MonoBehaviour
 
     private int _previousScore = 0;
     private Vector2Int? _lastPlacedCoord = null;
+    private bool _hasLoadedServerMap = false;
 
     public event Action OnMapStateChanged;
     public event Action<ProgressDto> OnProgressChanged;
@@ -63,7 +64,7 @@ public class MapController : MonoBehaviour
         _mapManager.SpawnPlusCell(0, 0);
     }
 
-    public void LoadPlacedTilesFromServer(IEnumerable<PlacedTileDto> tiles, TileFactory factory)
+    public void LoadPlacedTilesFromServer(IEnumerable<PlacedTileDto> tiles, TileFactory factory, bool animateNewTiles = false)
     {
         var list = tiles != null
             ? ((tiles as IList<PlacedTileDto>) ?? new List<PlacedTileDto>(tiles))
@@ -79,8 +80,6 @@ public class MapController : MonoBehaviour
         if (_mapManager == null) { Debug.LogError("[MapController] mapManager is null"); return; }
         if (_mapRoot == null)    { Debug.LogError("[MapController] MapRoot is null"); return; }
         if (factory == null)     { Debug.LogError("[MapController] TileFactory is null"); return; }
-
-        bool isInitialLoad = _liveTiles.Count == 0;
 
         var newKeys = new HashSet<Vector2Int>();
         _occupied.Clear();
@@ -112,9 +111,10 @@ public class MapController : MonoBehaviour
 
             _liveTiles[key] = go;
 
-            if (!isInitialLoad)
+            if (animateNewTiles)
             {
                 _lastPlacedCoord = key;
+                PlayAttachedSfx(go);
                 StartCoroutine(RaiseTile(go, pos));
             }
         }
@@ -156,6 +156,17 @@ public class MapController : MonoBehaviour
         tile.transform.position = finalPos;
     }
 
+    private static void PlayAttachedSfx(GameObject target)
+    {
+        if (target == null) return;
+
+        var source = target.GetComponentInChildren<AudioSource>(true);
+        if (source == null || source.clip == null) return;
+
+        source.Stop();
+        source.Play();
+    }
+
     public void RefreshPlaceableCells()
     {
         if (_mapManager == null) return;
@@ -184,9 +195,11 @@ public class MapController : MonoBehaviour
 
     public void ApplyServerState(PlanetStageStateDto state)
     {
+        bool animateNewTiles = _hasLoadedServerMap;
         _lastPlacedCoord = null;
 
-        LoadPlacedTilesFromServer(state.map?.placedTiles, _tileFactory);
+        LoadPlacedTilesFromServer(state.map?.placedTiles, _tileFactory, animateNewTiles);
+        _hasLoadedServerMap = true;
 
         if (state.progress != null)
         {
@@ -337,6 +350,7 @@ public class MapController : MonoBehaviour
             star.transform.position = midpoint;
             star.transform.localScale = Vector3.one * 0.1f;
             star.SetActive(true);
+            PlayAttachedSfx(star);
             StartCoroutine(StarRiseAnimation(star));
         }
     }
