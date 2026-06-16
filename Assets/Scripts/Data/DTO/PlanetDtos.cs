@@ -116,6 +116,8 @@ public class PlanetStageStateDto
     public List<CoordDto> scoredConnections;
     public int bonusPoints;
     public List<RoamingClusterDto> roamingClusters;
+    public List<UnlockedAchievementDto> achievementRewards;
+    public int achievementCoinsAwarded;
 }
 
 [System.Serializable]

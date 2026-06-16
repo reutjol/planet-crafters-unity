@@ -19,6 +19,8 @@ public class MatchManager : MonoBehaviour
     private const int DefaultDuration = 180;
 
     private Coroutine _pollCoroutine;
+    private Coroutine _loadingCoroutine;
+    private bool _matchLoadingActive;
     private bool _finishSubmitted;
 
     private void Awake()
@@ -141,13 +143,18 @@ public class MatchManager : MonoBehaviour
         if (!string.IsNullOrEmpty(match.matchStageId))
             AppSession.Instance.SetSelectedStage(match.matchStageId);
 
+        // Subscribe here so opponentLeft is handled even during the loading phase
+        if (MatchSocketClient.Instance != null)
+            MatchSocketClient.Instance.OnOpponentLeft += HandleOpponentLeft;
+
         var config = Resources.Load<GameConfig>("GameConfig");
         if (config == null) return;
 
-        StartCoroutine(EnterMatchWithLoadingRoutine(config.gameplaySceneIndex));
+        _matchLoadingActive = true;
+        _loadingCoroutine = StartCoroutine(EnterMatchWithLoadingRoutine(config.gameplaySceneIndex, config.planetSceneIndex));
     }
 
-    private IEnumerator EnterMatchWithLoadingRoutine(int sceneIndex)
+    private IEnumerator EnterMatchWithLoadingRoutine(int sceneIndex, int fallbackSceneIndex)
     {
         // Hold the loading screen open while we prefetch stage state
         SceneLoader.HoldActivation = true;
@@ -171,8 +178,47 @@ public class MatchManager : MonoBehaviour
         GameManager.Instance.OnPlanetStageStateLoaded -= onLoaded;
         GameManager.Instance.OnError -= onError;
 
+        // Verify match is still active — opponent may have disconnected during loading
+        if (MatchSession.Instance != null && MatchSession.Instance.IsActive)
+        {
+            var verifyMatchId = MatchSession.Instance.MatchId;
+            var verifyToken = AppSession.Instance?.AccessToken;
+            MatchDto matchCheck = null;
+            yield return MatchApiClient.Instance.GetMatch(verifyMatchId, verifyToken,
+                m => matchCheck = m,
+                _ => { });
+
+            if (matchCheck != null && matchCheck.status != "active")
+            {
+                Debug.Log("[MatchManager] Match already finished during loading — aborting");
+                DisconnectSocket();
+                MatchSession.Instance?.Clear();
+                GameManager.Instance?.ClearCache();
+                _loadingCoroutine = null;
+                _matchLoadingActive = false;
+                SceneLoader.Instance?.AbortPendingAndLoad(fallbackSceneIndex);
+                yield break;
+            }
+        }
+
+        _loadingCoroutine = null;
+        _matchLoadingActive = false;
+
         // Release loading screen — gameplay scene will activate
         SceneLoader.HoldActivation = false;
+    }
+
+    private void AbortLoading(int sceneIndex)
+    {
+        if (!_matchLoadingActive) return;
+        if (_loadingCoroutine != null)
+        {
+            StopCoroutine(_loadingCoroutine);
+            _loadingCoroutine = null;
+        }
+        _matchLoadingActive = false;
+        GameManager.Instance?.ClearCache();
+        SceneLoader.Instance?.AbortPendingAndLoad(sceneIndex);
     }
 
     public void NotifyStageReady()
@@ -209,7 +255,8 @@ public class MatchManager : MonoBehaviour
         {
             MatchSocketClient.Instance.OnMatchStateReceived += HandleSocketMatchState;
             MatchSocketClient.Instance.OnReactionReceived += HandleSocketReaction;
-            MatchSocketClient.Instance.OnOpponentLeft += HandleOpponentLeft;
+            MatchSocketClient.Instance.OnOpponentFinished += HandleOpponentFinished;
+            // OnOpponentLeft already subscribed in EnterMatch — do not add twice
             MatchSocketClient.Instance.Connect(serverUrl, matchId, userId);
         }
 
@@ -256,11 +303,9 @@ public class MatchManager : MonoBehaviour
 
         while (MatchSession.Instance != null && MatchSession.Instance.IsActive)
         {
-            yield return new WaitForSeconds(GameplayPollInterval);
-
             if (string.IsNullOrEmpty(matchId)) yield break;
 
-            // Poll only to sync startTime until it arrives; safety net for match finish
+            // Poll to sync startTime and detect match end; first iteration runs immediately
             MatchDto match = null;
             yield return MatchApiClient.Instance.GetMatch(matchId, token,
                 m => match = m,
@@ -283,6 +328,8 @@ public class MatchManager : MonoBehaviour
                     yield break;
                 }
             }
+
+            yield return new WaitForSeconds(GameplayPollInterval);
         }
     }
 
@@ -298,7 +345,6 @@ public class MatchManager : MonoBehaviour
         _finishSubmitted = true;
 
         StopPolling();
-        DisconnectSocket();
 
         var matchId = MatchSession.Instance?.MatchId;
         var token = AppSession.Instance?.AccessToken;
@@ -309,6 +355,9 @@ public class MatchManager : MonoBehaviour
         yield return MatchApiClient.Instance.FinishMatch(matchId, finalScore, token,
             m => result = m,
             err => { finishErr = err; Debug.LogWarning($"[MatchManager] FinishMatch failed: {err}"); });
+
+        // Disconnect AFTER the API call so the server doesn't treat this as a forfeit
+        DisconnectSocket();
 
         if (result == null)
         {
@@ -326,7 +375,10 @@ public class MatchManager : MonoBehaviour
             m => finalResult = m,
             _ => { });
 
-        OnMatchFinished?.Invoke(finalResult ?? result);
+        var finishedMatch = finalResult ?? result;
+        AchievementNotifier.Notify(finishedMatch?.achievementRewards);
+
+        OnMatchFinished?.Invoke(finishedMatch);
         MatchSession.Instance?.Clear();
     }
 
@@ -366,6 +418,18 @@ public class MatchManager : MonoBehaviour
     public void ChallengeRandom() =>
         MatchSocketClient.Instance?.ChallengeRandom();
 
+    public void RejoinLobby()
+    {
+        var (planetId, stageId) = GetMatchStage();
+        EnsureSocketConnected(() =>
+        {
+            MatchSocketClient.Instance.JoinLobby(
+                AppSession.Instance?.UserId,
+                AppSession.Instance?.Username,
+                planetId, stageId);
+        });
+    }
+
     private void OnLobbyPlayersUpdated(System.Collections.Generic.List<LobbyPlayerDto> players) =>
         OnLobbyUpdated?.Invoke(players);
 
@@ -398,10 +462,37 @@ public class MatchManager : MonoBehaviour
         MatchSession.Instance?.Clear();
     }
 
+    public void AbandonMatch()
+    {
+        DisconnectSocket();
+        MatchSession.Instance?.Clear();
+        var config = Resources.Load<GameConfig>("GameConfig");
+        AbortLoading(config?.planetSceneIndex ?? 5);
+    }
+
+    private void HandleOpponentFinished()
+    {
+        Debug.Log("[MatchManager] Opponent finished their deck — submitting final score");
+        SubmitFinalScore();
+    }
+
     private void HandleOpponentLeft()
     {
-        Debug.Log("[MatchManager] Opponent left — submitting final score");
-        SubmitFinalScore();
+        Debug.Log("[MatchManager] Opponent left");
+        if (_matchLoadingActive)
+        {
+            // Opponent left while we were still loading — abort and go back to planet
+            Debug.Log("[MatchManager] Opponent left during loading — aborting load");
+            DisconnectSocket();
+            MatchSession.Instance?.Clear();
+            var config = Resources.Load<GameConfig>("GameConfig");
+            AbortLoading(config?.planetSceneIndex ?? 5);
+        }
+        else
+        {
+            Debug.Log("[MatchManager] Opponent left during gameplay — submitting final score");
+            SubmitFinalScore();
+        }
     }
 
     private void DisconnectSocket()
@@ -410,6 +501,7 @@ public class MatchManager : MonoBehaviour
         MatchSocketClient.Instance.OnMatchStateReceived -= HandleSocketMatchState;
         MatchSocketClient.Instance.OnReactionReceived -= HandleSocketReaction;
         MatchSocketClient.Instance.OnOpponentLeft -= HandleOpponentLeft;
+        MatchSocketClient.Instance.OnOpponentFinished -= HandleOpponentFinished;
         MatchSocketClient.Instance.Disconnect();
     }
 

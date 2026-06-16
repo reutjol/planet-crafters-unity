@@ -119,6 +119,7 @@ public class GameManager : MonoBehaviour
             onSuccess: (planet) =>
             {
                 AppSession.Instance.ActivePlanet = planet;
+                UserCoinsDisplay.UpdateCoins(planet.totalCoins);
                 OnPlanetLoaded?.Invoke(planet);
             },
             onError: (err) => errMsg = err

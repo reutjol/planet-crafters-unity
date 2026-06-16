@@ -11,11 +11,14 @@ public class MatchLobbyController : MonoBehaviour
 
     [Header("Lobby Screen")]
     [SerializeField] private TextMeshProUGUI statusText;
+    [SerializeField] private TextMeshProUGUI errorText;
     [SerializeField] private Button randomButton;
     [SerializeField] private Transform playerListContent;
     [SerializeField] private GameObject playerRowPrefab;
 
     private readonly List<GameObject> _playerRows = new List<GameObject>();
+    private bool _wasChallenged;
+    private Coroutine _errorCoroutine;
 
     private void Start()
     {
@@ -48,6 +51,7 @@ public class MatchLobbyController : MonoBehaviour
 
     public void Open()
     {
+        _wasChallenged = false;
         lobbyPanel?.SetActive(true);
         ShowStatus(L("text.looking_for_players", "Looking for players..."));
         PopupManager.OnPopupOpened();
@@ -57,7 +61,17 @@ public class MatchLobbyController : MonoBehaviour
 
     private void OnCloseClicked()
     {
-        MatchManager.Instance?.CloseLobby();
+        if (MatchSession.Instance != null && MatchSession.Instance.IsActive)
+        {
+            MatchManager.Instance?.AbandonMatch();
+        }
+        else
+        {
+            MatchManager.Instance?.CloseLobby();
+            // Disconnect so server can clean up any pending challenge
+            MatchSocketClient.Instance?.Disconnect();
+        }
+
         lobbyPanel?.SetActive(false);
         PopupManager.OnPopupClosed();
     }
@@ -67,6 +81,8 @@ public class MatchLobbyController : MonoBehaviour
     private void OnLobbyUpdated(List<LobbyPlayerDto> players)
     {
         Debug.Log($"[Lobby] OnLobbyUpdated: {players?.Count ?? 0} players total");
+        if (_wasChallenged) return;
+
         var myId = AppSession.Instance?.UserId;
         var others = players?.FindAll(p => p.userId != myId) ?? new List<LobbyPlayerDto>();
 
@@ -103,13 +119,24 @@ public class MatchLobbyController : MonoBehaviour
 
     private void OnChallenged()
     {
+        _wasChallenged = true;
         DisableAllButtons();
         ShowStatus(L("text.someone_selected_you", "Someone selected you! Starting match..."));
     }
 
     private void OnChallengeError(string err)
     {
-        ShowStatus($"Error: {err}");
+        _wasChallenged = false;
+        ShowError(err);
+        MatchManager.Instance?.RejoinLobby();
+        if (_errorCoroutine != null) StopCoroutine(_errorCoroutine);
+        _errorCoroutine = StartCoroutine(ClearErrorAfterDelay(4f));
+    }
+
+    private System.Collections.IEnumerator ClearErrorAfterDelay(float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+        ClearError();
     }
 
     // ── Buttons ──
@@ -150,5 +177,18 @@ public class MatchLobbyController : MonoBehaviour
         statusText.text = msg;
         var svc = UnityLocalizationService.Instance;
         if (svc != null) statusText.isRightToLeftText = svc.IsRightToLeft;
+    }
+
+    private void ShowError(string msg)
+    {
+        if (errorText == null) return;
+        errorText.text = msg;
+        var svc = UnityLocalizationService.Instance;
+        if (svc != null) errorText.isRightToLeftText = svc.IsRightToLeft;
+    }
+
+    private void ClearError()
+    {
+        if (errorText != null) errorText.text = string.Empty;
     }
 }

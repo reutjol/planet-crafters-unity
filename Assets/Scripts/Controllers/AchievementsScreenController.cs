@@ -1,65 +1,86 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class AchievementsScreenController : MonoBehaviour
 {
-    [Header("Section References")]
-    [SerializeField] private GameObject singleListSection;
-    [SerializeField] private GameObject multiListSection;
+    [Header("Scroll")]
+    [SerializeField] private ScrollRect scrollRect;
+
+    [Header("Tab Buttons")]
+    [SerializeField] private Button tabSingleButton;
+    [SerializeField] private Button tabMultiButton;
 
     [Header("List View References")]
     [SerializeField] private AchievementListView singleListView;
     [SerializeField] private AchievementListView multiListView;
 
-    private AchievementService achievementService;
+    private AchievementService fallbackService;
 
     private void Awake()
     {
-        IAchievementRepository achievementRepository = new JsonAchievementRepository();
-        achievementService = new AchievementService(achievementRepository);
+        fallbackService = new AchievementService(new JsonAchievementRepository());
     }
 
     private void Start()
     {
-        LoadAchievementLists();
         OpenSingleTab();
+
+        if (AchievementApiClient.Instance != null && AppSession.Instance != null && AppSession.Instance.HasAccess())
+            StartCoroutine(LoadFromServer());
+        else
+            LoadFromLocalJson();
     }
 
-    private void LoadAchievementLists()
+    private IEnumerator LoadFromServer()
     {
-        if (singleListView != null)
-        {
-            singleListView.Show(achievementService.GetSingleAchievements());
-        }
+        yield return AchievementApiClient.Instance.GetUserAchievements(
+            AppSession.Instance.AccessToken,
+            onSuccess: response =>
+            {
+                if (response?.achievements == null)
+                {
+                    LoadFromLocalJson();
+                    return;
+                }
+                ShowAchievements(response.achievements);
+            },
+            onError: _ => LoadFromLocalJson()
+        );
+    }
 
-        if (multiListView != null)
-        {
-            multiListView.Show(achievementService.GetMultiAchievements());
-        }
+    private void LoadFromLocalJson()
+    {
+        ShowAchievements(fallbackService.GetAllAchievements());
+    }
+
+    private void ShowAchievements(List<AchievementDto> achievements)
+    {
+        var single = achievements.FindAll(a => a.category == "Single");
+        var multi = achievements.FindAll(a => a.category == "Multi");
+
+        singleListView?.Show(single);
+        multiListView?.Show(multi);
     }
 
     public void OpenSingleTab()
     {
-        if (singleListSection != null)
-        {
-            singleListSection.SetActive(true);
-        }
-
-        if (multiListSection != null)
-        {
-            multiListSection.SetActive(false);
-        }
+        singleListView?.gameObject.SetActive(true);
+        multiListView?.gameObject.SetActive(false);
+        if (scrollRect != null && singleListView != null)
+            scrollRect.content = singleListView.GetComponent<RectTransform>();
+        if (tabSingleButton != null) tabSingleButton.interactable = false;
+        if (tabMultiButton != null)  tabMultiButton.interactable  = true;
     }
 
     public void OpenMultiTab()
     {
-        if (singleListSection != null)
-        {
-            singleListSection.SetActive(false);
-        }
-
-        if (multiListSection != null)
-        {
-            multiListSection.SetActive(true);
-        }
+        singleListView?.gameObject.SetActive(false);
+        multiListView?.gameObject.SetActive(true);
+        if (scrollRect != null && multiListView != null)
+            scrollRect.content = multiListView.GetComponent<RectTransform>();
+        if (tabSingleButton != null) tabSingleButton.interactable = true;
+        if (tabMultiButton != null)  tabMultiButton.interactable  = false;
     }
 }

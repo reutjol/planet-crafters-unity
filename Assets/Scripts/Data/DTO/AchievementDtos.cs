@@ -10,17 +10,37 @@ using UnityEngine;
 [System.Serializable]
 public class AchievementDto
 {
-    public string id;            // Unique identifier of the achievement
-    public string title;         // Visible name shown to the player
-    public string description;   // Explanation of how to unlock the achievement
+    public string id;
+    public string title;
+    public string description;
     public string category;      // "Single" or "Multi"
-    public int targetValue;      // Required progress value to complete the achievement
-    public string rewardType;    // Type of reward (Coins, Boost, etc.)
-    public int rewardAmount;     // Amount of reward granted
+    public int targetValue;
+    public string rewardType;
+    public int rewardAmount;
+    // Populated when loaded from server (0 / false when loaded from local JSON)
+    public int currentProgress;
+    public bool isCompleted;
+    public bool rewardGranted;
 }
 
 [System.Serializable]
 public class AchievementDatabaseDto
 {
     public List<AchievementDto> achievements;
+}
+
+[System.Serializable]
+public class UserAchievementsResponseDto
+{
+    public List<AchievementDto> achievements;
+}
+
+[System.Serializable]
+public class UnlockedAchievementDto
+{
+    public string id;
+    public string title;
+    public string rewardType;
+    public int rewardAmount;
+    public bool rewardGranted;
 }

@@ -13,14 +13,12 @@ public class AchievementListView : MonoBehaviour
         Clear();
 
         if (achievements == null || achievements.Count == 0)
-        {
             return;
-        }
 
         for (int i = 0; i < achievements.Count; i++)
         {
             AchievementItemView itemInstance = Instantiate(itemPrefab, contentRoot);
-            itemInstance.Bind(achievements[i], 0);
+            itemInstance.Bind(achievements[i], achievements[i].currentProgress);
         }
     }
 

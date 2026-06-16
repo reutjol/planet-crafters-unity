@@ -137,8 +137,8 @@ MonoBehaviour:
   _r: 0
   _isPlusCell: 1
   _occupied: 0
-  _rend: {fileID: 0}
-  _highlightColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  _rend: {fileID: 6576523660262487622}
+  _highlightColor: {r: 0.43529412, g: 0.6082373, b: 0.90588236, a: 1}
 --- !u!114 &-8385275816846115504
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -151,7 +151,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89829ab1f5eda4f458533a95e897d886, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseRotationOffset: 0
+--- !u!23 &6576523660262487622 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 8442510506162454399, guid: 97b1bf248c99d1f4f9a4ae42a48d7ad1, type: 3}
+  m_PrefabInstance: {fileID: 3345422456758552889}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &7418154256480737257 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5233112405309087440, guid: 97b1bf248c99d1f4f9a4ae42a48d7ad1, type: 3}

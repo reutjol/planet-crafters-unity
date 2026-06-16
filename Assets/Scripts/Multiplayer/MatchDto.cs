@@ -23,7 +23,8 @@ public class MatchDto
     public List<MatchPlayerDto> players;
     public string winnerId;
     public string matchStageId;
-    public string myUserId; // set by server based on authenticated user
+    public string myUserId;
+    public List<UnlockedAchievementDto> achievementRewards;
 }
 
 [Serializable]

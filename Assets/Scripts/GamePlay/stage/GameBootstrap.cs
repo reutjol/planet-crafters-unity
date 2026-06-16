@@ -174,6 +174,13 @@ public class GameBootstrap : MonoBehaviour
     {
         if (_stageCompleted) return;
 
+        if (MatchSession.Instance != null && MatchSession.Instance.IsActive)
+        {
+            // In multiplayer, deck empty = submit score and end match
+            MatchManager.Instance?.SubmitFinalScore();
+            return;
+        }
+
         if (_gameOverPanel != null)
         {
             _gameOverPanel.SetActive(true);

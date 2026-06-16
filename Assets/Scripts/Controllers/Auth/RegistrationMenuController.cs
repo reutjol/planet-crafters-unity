@@ -85,10 +85,7 @@ public class RegistrationMenuController : MonoBehaviour
             authApi = FindObjectOfType<AuthApiClient>(true);
 
         if (authApi == null)
-        {
-            Debug.LogWarning("[RegistrationMenu] AuthApiClient not found, skipping auto-login");
-            yield break;
-        }
+            authApi = gameObject.AddComponent<AuthApiClient>();
 
         string newToken = null;
         string refreshError = null;
@@ -153,11 +150,7 @@ public class RegistrationMenuController : MonoBehaviour
             authApi = FindObjectOfType<AuthApiClient>(true);
 
         if (authApi == null)
-        {
-            googleSignInInProgress = false;
-            Debug.LogError("[RegistrationMenu] AuthApiClient not found, cannot sign in with Google");
-            return;
-        }
+            authApi = gameObject.AddComponent<AuthApiClient>();
 
         if (AppSession.Instance == null)
         {
@@ -182,6 +175,11 @@ public class RegistrationMenuController : MonoBehaviour
     private IEnumerator GoogleSignInRoutine()
     {
 #if !UNITY_EDITOR && (UNITY_ANDROID || UNITY_IOS)
+        // Reset previous sign-in state so Configuration can be set again on repeated logins.
+        // The setter throws if theInstance exists and theConfiguration is already non-null.
+        if (Google.GoogleSignIn.Configuration != null)
+            Google.GoogleSignIn.DefaultInstance.SignOut();
+
         Google.GoogleSignIn.Configuration = new Google.GoogleSignInConfiguration
         {
             WebClientId = googleWebClientId,
@@ -222,6 +220,17 @@ public class RegistrationMenuController : MonoBehaviour
             {
                 AppSession.Instance.SetTokens(resp.accessToken, resp.refreshToken);
                 AppSession.Instance.SetUser(resp.user?.id, resp.user?.userName, resp.user?.selectedAvatar);
+
+                if (gameConfig == null)
+                    gameConfig = Resources.Load<GameConfig>("GameConfig");
+
+                if (SceneLoader.Instance == null)
+                {
+                    Debug.LogError("[RegistrationMenu] SceneLoader.Instance is null — falling back to direct scene load");
+                    UnityEngine.SceneManagement.SceneManager.LoadScene(gameConfig != null ? gameConfig.planetSceneIndex : 5);
+                    return;
+                }
+
                 SceneLoader.Instance.LoadScene(gameConfig.planetSceneIndex);
             },
             onError: err =>

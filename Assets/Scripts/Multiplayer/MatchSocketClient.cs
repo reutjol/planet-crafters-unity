@@ -19,6 +19,7 @@ public class MatchSocketClient : MonoBehaviour
     public event Action<MatchDto> OnMatchReady;
     public event Action<string> OnChallengeError;
     public event Action OnOpponentLeft;
+    public event Action OnOpponentFinished;
     public event Action OnChallenged;
 
     private ClientWebSocket _ws;
@@ -93,7 +94,14 @@ public class MatchSocketClient : MonoBehaviour
     {
         _cts?.Cancel();
         _isConnected = false;
-        try { _ws?.Abort(); } catch { }
+        try
+        {
+            if (_ws?.State == WebSocketState.Open)
+                _ = _ws.CloseAsync(WebSocketCloseStatus.NormalClosure, "", System.Threading.CancellationToken.None);
+            else
+                _ws?.Abort();
+        }
+        catch { }
     }
 
     // ── Connection ──────────────────────────────────────────────
@@ -229,6 +237,9 @@ public class MatchSocketClient : MonoBehaviour
                     break;
                 case "opponentLeft":
                     OnOpponentLeft?.Invoke();
+                    break;
+                case "opponentFinished":
+                    OnOpponentFinished?.Invoke();
                     break;
                 case "challenged":
                     OnChallenged?.Invoke();

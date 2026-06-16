@@ -167,7 +167,24 @@ public class ProfilePopupView : MonoBehaviour
 
     private void SetFieldValue(TMP_Text label, TMP_InputField input, string value)
     {
-        if (label != null) label.text = value ?? "";
-        if (input != null) input.text = value ?? "";
+        bool rtl = ContainsHebrew(value);
+        if (label != null)
+        {
+            label.isRightToLeftText = rtl;
+            label.text = value ?? "";
+        }
+        if (input != null)
+        {
+            input.textComponent.isRightToLeftText = rtl;
+            input.text = value ?? "";
+        }
+    }
+
+    private static bool ContainsHebrew(string text)
+    {
+        if (string.IsNullOrEmpty(text)) return false;
+        foreach (char c in text)
+            if (c >= '֐' && c <= '׿') return true;
+        return false;
     }
 }

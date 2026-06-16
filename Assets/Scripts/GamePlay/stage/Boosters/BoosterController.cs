@@ -174,6 +174,7 @@ public class BoosterController : MonoBehaviour
                 _inventory.cancelPlacement = Mathf.Max(0, _inventory.cancelPlacement - 1);
                 _mapController?.ApplyServerState(state);
                 _handController?.LoadFromServer(state.hand, state.deck);
+                AchievementNotifier.Notify(state.achievementRewards);
                 UpdateUI();
             },
             onError: err =>
@@ -220,6 +221,7 @@ public class BoosterController : MonoBehaviour
             {
                 _inventory.addHex = Mathf.Max(0, _inventory.addHex - 1);
                 _handController?.LoadFromServer(state.hand, state.deck);
+                AchievementNotifier.Notify(state.achievementRewards);
                 UpdateUI();
             },
             onError: err =>

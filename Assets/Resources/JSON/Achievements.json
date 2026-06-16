@@ -7,7 +7,7 @@
             "category": "Single",
             "targetValue": 1,
             "rewardType": "Coins",
-            "rewardAmount": 50
+            "rewardAmount": 10
         },
         {
             "id": "single_002",
@@ -16,16 +16,7 @@
             "category": "Single",
             "targetValue": 25,
             "rewardType": "Coins",
-            "rewardAmount": 50
-        },
-        {
-            "id": "single_003",
-            "title": "Speed Runner",
-            "description": "Complete a level in under 60 seconds",
-            "category": "Single",
-            "targetValue": 60,
-            "rewardType": "Spin",
-            "rewardAmount": 1
+            "rewardAmount": 15
         },
         {
             "id": "single_004",
@@ -52,7 +43,7 @@
             "category": "Single",
             "targetValue": 100,
             "rewardType": "Coins",
-            "rewardAmount": 50
+            "rewardAmount": 20
         },
         {
             "id": "single_007",
@@ -70,7 +61,7 @@
             "category": "Single",
             "targetValue": 26,
             "rewardType": "Coins",
-            "rewardAmount": 50
+            "rewardAmount": 25
         },
         {
             "id": "single_009",
@@ -79,7 +70,7 @@
             "category": "Single",
             "targetValue": 200,
             "rewardType": "Coins",
-            "rewardAmount": 50
+            "rewardAmount": 20
         },
         {
             "id": "single_010",
@@ -88,7 +79,7 @@
             "category": "Single",
             "targetValue": 300,
             "rewardType": "Coins",
-            "rewardAmount": 100
+            "rewardAmount": 25
         },
         {
             "id": "single_011",
@@ -97,7 +88,7 @@
             "category": "Single",
             "targetValue": 400,
             "rewardType": "Coins",
-            "rewardAmount": 100
+            "rewardAmount": 25
         },
         {
             "id": "single_012",
@@ -115,7 +106,7 @@
             "category": "Single",
             "targetValue": 600,
             "rewardType": "Coins",
-            "rewardAmount": 150
+            "rewardAmount": 30
         },
         {
             "id": "single_014",
@@ -124,7 +115,7 @@
             "category": "Single",
             "targetValue": 700,
             "rewardType": "Coins",
-            "rewardAmount": 150
+            "rewardAmount": 30
         },
         {
             "id": "single_015",
@@ -133,7 +124,7 @@
             "category": "Single",
             "targetValue": 800,
             "rewardType": "Coins",
-            "rewardAmount": 200
+            "rewardAmount": 35
         },
         {
             "id": "single_016",
@@ -142,7 +133,7 @@
             "category": "Single",
             "targetValue": 900,
             "rewardType": "Coins",
-            "rewardAmount": 200
+            "rewardAmount": 35
         },
         {
             "id": "single_017",
@@ -169,7 +160,7 @@
             "category": "Single",
             "targetValue": 30,
             "rewardType": "Coins",
-            "rewardAmount": 100
+            "rewardAmount": 25
         },
         {
             "id": "single_020",
@@ -178,7 +169,7 @@
             "category": "Single",
             "targetValue": 40,
             "rewardType": "Coins",
-            "rewardAmount": 100
+            "rewardAmount": 25
         },
         {
             "id": "single_021",
@@ -196,7 +187,7 @@
             "category": "Single",
             "targetValue": 60,
             "rewardType": "Coins",
-            "rewardAmount": 150
+            "rewardAmount": 30
         },
         {
             "id": "single_023",
@@ -205,7 +196,7 @@
             "category": "Single",
             "targetValue": 70,
             "rewardType": "Coins",
-            "rewardAmount": 150
+            "rewardAmount": 30
         },
         {
             "id": "single_024",
@@ -214,7 +205,7 @@
             "category": "Single",
             "targetValue": 80,
             "rewardType": "Coins",
-            "rewardAmount": 200
+            "rewardAmount": 35
         },
         {
             "id": "single_025",
@@ -223,7 +214,7 @@
             "category": "Single",
             "targetValue": 90,
             "rewardType": "Coins",
-            "rewardAmount": 200
+            "rewardAmount": 35
         },
         {
             "id": "single_026",
@@ -253,33 +244,15 @@
             "rewardAmount": 1
         },
         {
-            "id": "single_029",
-            "title": "Pure Victory",
-            "description": "Complete a level without using boosts",
-            "category": "Single",
-            "targetValue": 1,
-            "rewardType": "Boost",
-            "rewardAmount": 1
-        },
-        {
             "id": "single_030",
             "title": "Star Master",
             "description": "Score 3 stars on 10 levels",
             "category": "Single",
             "targetValue": 10,
             "rewardType": "Coins",
-            "rewardAmount": 100
+            "rewardAmount": 30
         },
 
-        {
-            "id": "multi_001",
-            "title": "Multiplayer Unlocked",
-            "description": "Unlock Multiplayer mode",
-            "category": "Multi",
-            "targetValue": 1,
-            "rewardType": "Coins",
-            "rewardAmount": 50
-        },
         {
             "id": "multi_002",
             "title": "First Match",
@@ -287,7 +260,7 @@
             "category": "Multi",
             "targetValue": 1,
             "rewardType": "Coins",
-            "rewardAmount": 50
+            "rewardAmount": 10
         },
         {
             "id": "multi_003",
@@ -305,7 +278,7 @@
             "category": "Multi",
             "targetValue": 5,
             "rewardType": "Coins",
-            "rewardAmount": 50
+            "rewardAmount": 15
         },
         {
             "id": "multi_035",
@@ -314,7 +287,7 @@
             "category": "Multi",
             "targetValue": 10,
             "rewardType": "Coins",
-            "rewardAmount": 100
+            "rewardAmount": 20
         },
         {
             "id": "multi_006",
@@ -323,7 +296,7 @@
             "category": "Multi",
             "targetValue": 25,
             "rewardType": "Coins",
-            "rewardAmount": 100
+            "rewardAmount": 25
         },
         {
             "id": "multi_007",
@@ -350,7 +323,7 @@
             "category": "Multi",
             "targetValue": 5,
             "rewardType": "Coins",
-            "rewardAmount": 100
+            "rewardAmount": 25
         },
         {
             "id": "multi_010",
@@ -368,7 +341,7 @@
             "category": "Multi",
             "targetValue": 5,
             "rewardType": "Coins",
-            "rewardAmount": 50
+            "rewardAmount": 20
         },
         {
             "id": "multi_012",
@@ -377,7 +350,7 @@
             "category": "Multi",
             "targetValue": 10,
             "rewardType": "Coins",
-            "rewardAmount": 100
+            "rewardAmount": 25
         },
         {
             "id": "multi_013",
@@ -404,7 +377,7 @@
             "category": "Multi",
             "targetValue": 100,
             "rewardType": "Coins",
-            "rewardAmount": 50
+            "rewardAmount": 15
         },
         {
             "id": "multi_016",
@@ -413,7 +386,7 @@
             "category": "Multi",
             "targetValue": 300,
             "rewardType": "Coins",
-            "rewardAmount": 100
+            "rewardAmount": 25
         },
         {
             "id": "multi_017",
@@ -431,7 +404,7 @@
             "category": "Multi",
             "targetValue": 800,
             "rewardType": "Coins",
-            "rewardAmount": 150
+            "rewardAmount": 35
         },
         {
             "id": "multi_019",
@@ -452,15 +425,6 @@
             "rewardAmount": 1
         },
         {
-            "id": "multi_021",
-            "title": "Battle Marathon",
-            "description": "Play 5 matches in one session",
-            "category": "Multi",
-            "targetValue": 5,
-            "rewardType": "Coins",
-            "rewardAmount": 150
-        },
-        {
             "id": "multi_022",
             "title": "Comeback Player",
             "description": "Win a match after losing",
@@ -476,7 +440,7 @@
             "category": "Multi",
             "targetValue": 100,
             "rewardType": "Coins",
-            "rewardAmount": 100
+            "rewardAmount": 35
         },
         {
             "id": "multi_024",
@@ -485,7 +449,7 @@
             "category": "Multi",
             "targetValue": 500,
             "rewardType": "Coins",
-            "rewardAmount": 200
+            "rewardAmount": 50
         },
         {
             "id": "multi_025",
@@ -503,7 +467,7 @@
             "category": "Multi",
             "targetValue": 100,
             "rewardType": "Coins",
-            "rewardAmount": 150
+            "rewardAmount": 40
         },
         {
             "id": "multi_027",
@@ -521,7 +485,7 @@
             "category": "Multi",
             "targetValue": 20,
             "rewardType": "Coins",
-            "rewardAmount": 150
+            "rewardAmount": 35
         },
         {
             "id": "multi_029",
@@ -530,7 +494,7 @@
             "category": "Multi",
             "targetValue": 5,
             "rewardType": "Coins",
-            "rewardAmount": 75
+            "rewardAmount": 20
         },
         {
             "id": "multi_030",

@@ -5,6 +5,7 @@ using UnityEngine;
 public class DraggableTile : MonoBehaviour
 {
     [SerializeField] private LayerMask _hexCellMask;
+    [SerializeField] private float _touchOffsetY = 150f;
 
     private Camera _cam;
     private bool _dragging;
@@ -130,19 +131,22 @@ public class DraggableTile : MonoBehaviour
     }
 
     // Follows the specific finger that started the drag, or falls back to mouse position.
+    // On touch, shifts the ray upward by _touchOffsetY pixels so the tile appears above the finger.
     private Vector2 GetPointerScreenPosition()
     {
+        Vector2 touchOffset = Input.touchCount > 0 ? Vector2.up * _touchOffsetY : Vector2.zero;
+
         if (_activeFingerId >= 0)
         {
             for (int i = 0; i < Input.touchCount; i++)
             {
                 var t = Input.GetTouch(i);
                 if (t.fingerId == _activeFingerId)
-                    return t.position;
+                    return t.position + touchOffset;
             }
         }
         if (Input.touchCount > 0)
-            return Input.GetTouch(0).position;
+            return Input.GetTouch(0).position + touchOffset;
         return Input.mousePosition;
     }
 
@@ -220,6 +224,8 @@ public class DraggableTile : MonoBehaviour
         {
             if (usingDoubleScore)
                 BoosterController.Instance?.OnDoubleScoreConsumed();
+
+            AchievementNotifier.Notify(newState.achievementRewards);
 
             _mapController.ApplyServerState(newState);
             _handController.LoadFromServer(newState.hand, newState.deck);

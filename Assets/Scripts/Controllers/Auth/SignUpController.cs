@@ -153,6 +153,7 @@ public class SignUpController : MonoBehaviour
             },
             onError: (err) =>
             {
+                if (submitButton != null) submitButton.interactable = true;
                 Debug.LogError($"[SignUp] Registration failed: {err}");
 
                 if (err.Contains("409") || err.Contains("already exists") || err.Contains("duplicate"))

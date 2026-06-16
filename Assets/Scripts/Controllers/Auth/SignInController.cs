@@ -148,6 +148,7 @@ public class SignInController : MonoBehaviour
             },
             onError: (err) =>
             {
+                if (submitButton != null) submitButton.interactable = true;
                 Debug.LogError($"[SignIn] Login failed: {err}");
 
                 if (err.Contains("401") || err.Contains("Unauthorized") || err.Contains("Invalid credentials"))

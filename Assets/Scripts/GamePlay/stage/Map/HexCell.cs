@@ -21,7 +21,7 @@ public class HexCell : MonoBehaviour
     public bool isPlusCell => _isPlusCell;
     public bool occupied => _occupied;
 
-    private static readonly int ColorPropId = Shader.PropertyToID("_Color");
+    private static readonly int ColorPropId = Shader.PropertyToID("_BaseColor");
     private static readonly Dictionary<int, HexCell> s_ColliderMap = new();
 
     private MaterialPropertyBlock _mpb;
@@ -33,8 +33,8 @@ public class HexCell : MonoBehaviour
             _rend = GetComponentInChildren<Renderer>();
 
         _mpb = new MaterialPropertyBlock();
-        _rend.GetPropertyBlock(_mpb);
-        _defaultColor = _rend.sharedMaterial.color;
+        _rend.GetPropertyBlock(_mpb, 0);
+        _defaultColor = _rend.sharedMaterials[0].GetColor(ColorPropId);
 
         foreach (var col in GetComponentsInChildren<Collider>(true))
             s_ColliderMap[col.GetInstanceID()] = this;
@@ -61,6 +61,6 @@ public class HexCell : MonoBehaviour
     {
         if (_rend == null) return;
         _mpb.SetColor(ColorPropId, on ? _highlightColor : _defaultColor);
-        _rend.SetPropertyBlock(_mpb);
+        _rend.SetPropertyBlock(_mpb, 0);
     }
 }

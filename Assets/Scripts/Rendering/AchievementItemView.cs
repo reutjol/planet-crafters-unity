@@ -9,6 +9,9 @@ public class AchievementItemView : MonoBehaviour
     [SerializeField] private TMP_Text progressText;
     [SerializeField] private TMP_Text rewardText;
 
+    [Header("Completed State")]
+    [SerializeField] private GameObject completedBadge;
+
     private ILocalizationService localizationService;
     private AchievementDto currentAchievement;
     private int currentProgress;
@@ -50,12 +53,20 @@ public class AchievementItemView : MonoBehaviour
         if (currentAchievement == null)
             return;
 
+        bool isCompleted = currentAchievement.isCompleted ||
+                           currentProgress >= currentAchievement.targetValue;
+
+        int displayProgress = Mathf.Min(currentProgress, currentAchievement.targetValue);
+
         SetLocalizedText(titleText, LocalizeSource(currentAchievement.title));
         SetLocalizedText(descriptionText, LocalizeSource(currentAchievement.description));
 
-        progressText.text = $"{currentProgress} / {currentAchievement.targetValue}";
+        progressText.text = $"{displayProgress} / {currentAchievement.targetValue}";
 
         SetLocalizedText(rewardText, $"{currentAchievement.rewardAmount} {LocalizeSource(currentAchievement.rewardType)}");
+
+        if (completedBadge != null)
+            completedBadge.SetActive(isCompleted);
     }
 
     private void HandleLanguageChanged(string languageCode)

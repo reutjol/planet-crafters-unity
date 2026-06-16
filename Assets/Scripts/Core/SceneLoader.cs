@@ -68,6 +68,15 @@ public class SceneLoader : MonoBehaviour
         StartCoroutine(AsyncLoadRoutine());
     }
 
+    // Cancels any in-progress async load (keeps scene from activating) and starts a fresh load.
+    public void AbortPendingAndLoad(int sceneIndex)
+    {
+        StopAllCoroutines();
+        isLoading = false;
+        HoldActivation = false;
+        LoadScene(sceneIndex);
+    }
+
     IEnumerator AsyncLoadRoutine()
     {
         AsyncOperation async = SceneManager.LoadSceneAsync(targetSceneIndex);

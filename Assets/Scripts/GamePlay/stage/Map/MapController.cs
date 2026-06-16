@@ -17,6 +17,10 @@ public class MapController : MonoBehaviour
     [FormerlySerializedAs("starRiseHeight")]  [SerializeField] private float _starRiseHeight = 1.5f;
     [FormerlySerializedAs("starDuration")]    [SerializeField] private float _starDuration = 0.8f;
 
+    [Header("SFX")]
+    [SerializeField] private AudioClip _tilePlacementClip;
+    [SerializeField] private AudioClip _starClip;
+
     [Header("Cluster Roamers")]
     [SerializeField] private List<ResourceRoamerConfig> _roamerConfigs = new();
     [SerializeField] private GameObject _defaultRoamerPrefab;
@@ -114,7 +118,7 @@ public class MapController : MonoBehaviour
             if (animateNewTiles)
             {
                 _lastPlacedCoord = key;
-                PlayAttachedSfx(go);
+                SoundEffectService.Instance?.Play(_tilePlacementClip, 1f);
                 StartCoroutine(RaiseTile(go, pos));
             }
         }
@@ -156,17 +160,6 @@ public class MapController : MonoBehaviour
         tile.transform.position = finalPos;
     }
 
-    private static void PlayAttachedSfx(GameObject target)
-    {
-        if (target == null) return;
-
-        var source = target.GetComponentInChildren<AudioSource>(true);
-        if (source == null || source.clip == null) return;
-
-        source.Stop();
-        source.Play();
-    }
-
     public void RefreshPlaceableCells()
     {
         if (_mapManager == null) return;
@@ -195,6 +188,7 @@ public class MapController : MonoBehaviour
 
     public void ApplyServerState(PlanetStageStateDto state)
     {
+        bool isInitialLoad = !_hasLoadedServerMap;
         bool animateNewTiles = _hasLoadedServerMap;
         _lastPlacedCoord = null;
 
@@ -218,7 +212,8 @@ public class MapController : MonoBehaviour
             if (state.progress.isCompleted)
             {
                 OnStageCompleted?.Invoke();
-                OnStageCompletedWithCoins?.Invoke(state.coinsAwarded);
+                if (!isInitialLoad)
+                    OnStageCompletedWithCoins?.Invoke(state.coinsAwarded);
             }
         }
     }
@@ -341,6 +336,8 @@ public class MapController : MonoBehaviour
     {
         Vector3 newWorldPos = _mapManager.AxialToWorld(newCoord.x, newCoord.y) + Vector3.up * _tileHeightY;
 
+        SoundEffectService.Instance?.Play(_starClip, 1f);
+
         foreach (var conn in scoredConnections)
         {
             Vector3 neighborWorldPos = _mapManager.AxialToWorld(conn.q, conn.r) + Vector3.up * _tileHeightY;
@@ -350,7 +347,6 @@ public class MapController : MonoBehaviour
             star.transform.position = midpoint;
             star.transform.localScale = Vector3.one * 0.1f;
             star.SetActive(true);
-            PlayAttachedSfx(star);
             StartCoroutine(StarRiseAnimation(star));
         }
     }

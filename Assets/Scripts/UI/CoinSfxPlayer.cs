@@ -1,56 +1,33 @@
 using UnityEngine;
 
-[RequireComponent(typeof(AudioSource))]
 public class CoinSfxPlayer : MonoBehaviour
 {
-    [SerializeField] private AudioSource audioSource;
+    public static CoinSfxPlayer Instance { get; private set; }
 
-    private bool hasLastCoins;
-    private int lastCoins;
+    [SerializeField] private AudioClip coinClip;
 
-    private void Reset()
-    {
-        CacheAudioSource();
-    }
+    private int _lastCoins = int.MaxValue;
 
     private void Awake()
     {
-        CacheAudioSource();
+        if (Instance != null) { Destroy(gameObject); return; }
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
     }
 
     private void OnEnable()
     {
+        if (UserCoinsDisplay.LastKnownCoins >= 0)
+            _lastCoins = UserCoinsDisplay.LastKnownCoins;
         UserCoinsDisplay.OnCoinsChanged += HandleCoinsChanged;
     }
-
-    private void OnDisable()
-    {
-        UserCoinsDisplay.OnCoinsChanged -= HandleCoinsChanged;
-    }
+    private void OnDisable() => UserCoinsDisplay.OnCoinsChanged -= HandleCoinsChanged;
 
     private void HandleCoinsChanged(int coins)
     {
-        if (hasLastCoins && coins > lastCoins)
-            PlaySfx();
+        if (coins > _lastCoins)
+            SoundEffectService.Instance?.Play(coinClip, 1f);
 
-        lastCoins = coins;
-        hasLastCoins = true;
-    }
-
-    private void PlaySfx()
-    {
-        if (audioSource == null || audioSource.clip == null)
-            return;
-
-        audioSource.Stop();
-        audioSource.Play();
-    }
-
-    private void CacheAudioSource()
-    {
-        if (audioSource != null)
-            return;
-
-        TryGetComponent(out audioSource);
+        _lastCoins = coins;
     }
 }
