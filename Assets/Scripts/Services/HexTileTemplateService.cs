@@ -50,6 +50,5 @@ public class HexTileTemplateService : MonoBehaviour
         }
 
         IsReady = true;
-        Debug.Log($"Loaded templates: {byId.Count}");
     }
 }

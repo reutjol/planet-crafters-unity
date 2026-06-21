@@ -34,30 +34,35 @@ public class RestartStageButton : MonoBehaviour
             yield break;
         }
 
-        // ── 1. Reset server state (fast) ──────────────────────────────────
-        bool resetDone = false;
-        bool resetSuccess = false;
-
-        GameManager.Instance.ResetCurrentStage(
-            onSuccess: () => { resetDone = true; resetSuccess = true; },
-            onError: (err) =>
-            {
-                resetDone = true;
-                Debug.LogError($"[Restart] Reset failed: {err}");
-            }
-        );
-
+        // ── 1. Reset server state — skip if already done (e.g. HandleGameOver resets immediately) ──
+        bool alreadyReset = GameManager.Instance.GetCachedPlanetStageState() == null;
         float elapsed = 0f;
-        while (!resetDone && elapsed < 15f)
-        {
-            elapsed += Time.unscaledDeltaTime;
-            yield return null;
-        }
 
-        if (!resetSuccess)
+        if (!alreadyReset)
         {
-            Debug.LogError("[Restart] Failed to reset stage");
-            yield break;
+            bool resetDone    = false;
+            bool resetSuccess = false;
+
+            GameManager.Instance.ResetCurrentStage(
+                onSuccess: () => { resetDone = true; resetSuccess = true; },
+                onError: (err) =>
+                {
+                    resetDone = true;
+                    Debug.LogError($"[Restart] Reset failed: {err}");
+                }
+            );
+
+            while (!resetDone && elapsed < 15f)
+            {
+                elapsed += Time.unscaledDeltaTime;
+                yield return null;
+            }
+
+            if (!resetSuccess)
+            {
+                Debug.LogError("[Restart] Failed to reset stage");
+                yield break;
+            }
         }
 
         // ── 2. Show loading screen and start pre-fetching state ───────────

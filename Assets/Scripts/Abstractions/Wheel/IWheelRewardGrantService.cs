@@ -1,4 +1,4 @@
 public interface IWheelRewardGrantService
 {
-    void GrantReward(WheelRewardDto reward);
+    string GrantReward(WheelRewardDto reward);
 }

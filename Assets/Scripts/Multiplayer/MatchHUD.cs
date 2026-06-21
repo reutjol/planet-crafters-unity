@@ -57,10 +57,9 @@ public class MatchHUD : MonoBehaviour
 
         if (MatchManager.Instance != null)
         {
-            MatchManager.Instance.OnMatchFinished += OnMatchFinished;
-            MatchManager.Instance.OnMatchUpdated += OnMatchUpdated;
+            MatchManager.Instance.OnMatchFinished        += OnMatchFinished;
             MatchManager.Instance.OnOpponentScoreUpdated += OnOpponentScoreUpdated;
-            MatchManager.Instance.OnAiReaction += ShowReaction;
+            MatchManager.Instance.OnAiReaction           += ShowReaction;
         }
 
         if (reactionPanel != null) reactionPanel.SetActive(false);
@@ -78,10 +77,9 @@ public class MatchHUD : MonoBehaviour
 
         if (MatchManager.Instance != null)
         {
-            MatchManager.Instance.OnMatchFinished -= OnMatchFinished;
-            MatchManager.Instance.OnMatchUpdated -= OnMatchUpdated;
+            MatchManager.Instance.OnMatchFinished        -= OnMatchFinished;
             MatchManager.Instance.OnOpponentScoreUpdated -= OnOpponentScoreUpdated;
-            MatchManager.Instance.OnAiReaction -= ShowReaction;
+            MatchManager.Instance.OnAiReaction           -= ShowReaction;
         }
     }
 
@@ -90,7 +88,7 @@ public class MatchHUD : MonoBehaviour
         if (!_initialScoreSet)
         {
             MatchSession.Instance?.SetInitialScore(progress.score);
-            MatchManager.Instance?.BeginGameplayPolling(progress.score);
+            MatchManager.Instance?.BeginGameplay(progress.score);
             _initialScoreSet = true;
             MatchSession.Instance?.UpdateCurrentScore(progress.score);
             _myMatchScore = 0;
@@ -113,24 +111,7 @@ public class MatchHUD : MonoBehaviour
 
         var remaining = MatchSession.Instance.GetSecondsRemaining();
         if (remaining <= 0f)
-        {
-            _matchActive = false;
-            MatchManager.Instance?.SubmitFinalScore();
-        }
-    }
-
-    private void OnMatchUpdated(MatchDto match)
-    {
-        var myId = MatchSession.Instance?.MyUserId;
-        foreach (var p in match.players)
-        {
-            if (p.userId != myId)
-            {
-                _opponentMatchScore = p.score;
-                break;
-            }
-        }
-        RefreshScoreDisplay();
+            _matchActive = false; // Timer display stopped; server fires matchFinished when time is up
     }
 
     private void OnMatchFinished(MatchDto match)
@@ -175,7 +156,6 @@ public class MatchHUD : MonoBehaviour
 
     private void ShowReaction(string message)
     {
-        Debug.Log($"[MatchHUD] ShowReaction called: '{message}' panel={reactionPanel} text={reactionText}");
         if (reactionPanel == null || reactionText == null) return;
         reactionText.text = message;
         reactionPanel.SetActive(true);

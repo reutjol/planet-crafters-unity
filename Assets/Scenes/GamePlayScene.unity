@@ -1867,8 +1867,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 239, y: 37}
-  m_SizeDelta: {x: 200, y: 50}
+  m_AnchoredPosition: {x: 149.98468, y: 38.74998}
+  m_SizeDelta: {x: 276.3906, y: 46.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &373597191
 MonoBehaviour:
@@ -3520,8 +3520,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 32, y: 37}
-  m_SizeDelta: {x: 200, y: 50}
+  m_AnchoredPosition: {x: -69.254, y: 37}
+  m_SizeDelta: {x: 162.09, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &713291042
 MonoBehaviour:
@@ -4624,13 +4624,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: abc257e565bc2b54689ed496a7f2feee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _panBoundX: 25
-  _panBoundZ: 25
+  _panBoundX: 8
+  _panBoundZ: 8
   _keyPanSpeed: 8
   _zoomSpeed: 8
   _minSize: 2
   _maxSize: 15
-  _handCamera: {fileID: 0}
 --- !u!114 &963194230
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5254,8 +5253,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -182, y: 37}
-  m_SizeDelta: {x: 200, y: 50}
+  m_AnchoredPosition: {x: -216.14795, y: 37}
+  m_SizeDelta: {x: 131.7041, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1043396934
 MonoBehaviour:
@@ -5277,7 +5276,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 
+  m_text: 00:00
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 0e3ed8431660cf84f8eae34440eb2529, type: 2}
   m_sharedMaterial: {fileID: 8415435666526095410, guid: 0e3ed8431660cf84f8eae34440eb2529, type: 2}
@@ -5788,7 +5787,7 @@ MonoBehaviour:
   m_AntialiasingQuality: 2
   m_StopNaN: 0
   m_Dithering: 0
-  m_ClearDepth: 0
+  m_ClearDepth: 1
   m_AllowXRRendering: 1
   m_AllowHDROutput: 1
   m_UseScreenCoordOverride: 0

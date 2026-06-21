@@ -28,36 +28,9 @@ public class MatchDto
 }
 
 [Serializable]
-public class CreateMatchRequestDto
-{
-    public string planetId;
-    public string stageId;
-    public int duration;
-}
-
-[Serializable]
-public class JoinMatchRequestDto
-{
-    public string code;
-    public string planetId;
-    public string stageId;
-}
-
-[Serializable]
-public class MatchScoreRequestDto
-{
-    public int score;
-}
-
-[Serializable]
-public class MatchFinishRequestDto
-{
-    public int finalScore;
-}
-
-[Serializable]
 public class LobbyPlayerDto
 {
     public string userId;
     public string username;
+    public string avatarId;
 }

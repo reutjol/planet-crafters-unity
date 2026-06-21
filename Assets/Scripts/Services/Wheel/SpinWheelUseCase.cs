@@ -103,13 +103,13 @@ public class SpinWheelUseCase
 
         wheelRotationAnimation.Play(finalSpinAngle, wheelConfig.spinDuration, () =>
         {
-            wheelRewardGrantService.GrantReward(selectedReward);
+            string rewardDescription = wheelRewardGrantService.GrantReward(selectedReward);
 
             result.success = true;
             result.reward = selectedReward;
             result.targetAngle = targetAngle;
             result.remainingCooldown = spinAvailabilityService.GetRemainingCooldown();
-            result.message = "Spin completed.";
+            result.message = rewardDescription;
 
             onCompleted?.Invoke(result);
         });

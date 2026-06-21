@@ -1,25 +1,27 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.Serialization;
 
 public class MapCameraController : MonoBehaviour
 {
-    [Header("Pan Bounds (camera XZ position clamp)")]
-    [FormerlySerializedAs("panBoundX")] [SerializeField] private float _panBoundX = 25f;
-    [FormerlySerializedAs("panBoundZ")] [SerializeField] private float _panBoundZ = 25f;
+    [Header("Pan Bounds")]
+    [FormerlySerializedAs("panBoundX")] [SerializeField] private float _panBoundX = 8f;
+    [FormerlySerializedAs("panBoundZ")] [SerializeField] private float _panBoundZ = 8f;
 
     [Header("Keyboard Pan")]
     [FormerlySerializedAs("keyPanSpeed")] [SerializeField] private float _keyPanSpeed = 8f;
 
-    [Header("Zoom (Orthographic Size)")]
+    [Header("Zoom")]
     [FormerlySerializedAs("zoomSpeed")] [SerializeField] private float _zoomSpeed = 2f;
     [FormerlySerializedAs("minSize")]   [SerializeField] private float _minSize = 2f;
     [FormerlySerializedAs("maxSize")]   [SerializeField] private float _maxSize = 15f;
 
-    [Header("Sync")]
-    [SerializeField] private Camera _handCamera;
-
     private Camera _cam;
-    private bool _panning;
+    private Vector3 _originPos;
+    private Vector3 _camRight;
+    private Vector3 _camFwd;
+    private bool _mousePanning;
+    private bool _touchPanning;
     private Vector3 _grabWorldPoint;
     private int _panFingerId = -1;
 
@@ -29,6 +31,10 @@ public class MapCameraController : MonoBehaviour
     {
         _cam = GetComponent<Camera>();
         if (_cam == null) _cam = Camera.main;
+
+        _originPos = transform.position;
+        _camRight = transform.right;   _camRight.y = 0f; _camRight.Normalize();
+        _camFwd   = transform.forward; _camFwd.y   = 0f; _camFwd.Normalize();
     }
 
     private void Update()
@@ -52,12 +58,9 @@ public class MapCameraController : MonoBehaviour
         if (dir == Vector3.zero) return;
 
         dir.y = 0f;
-        if (dir.sqrMagnitude > 0f) dir.Normalize();
+        dir.Normalize();
 
-        Vector3 newPos = transform.position + dir * _keyPanSpeed * Time.deltaTime;
-        newPos.x = Mathf.Clamp(newPos.x, -_panBoundX, _panBoundX);
-        newPos.z = Mathf.Clamp(newPos.z, -_panBoundZ, _panBoundZ);
-        transform.position = newPos;
+        transform.position = ClampToMapBounds(transform.position + dir * _keyPanSpeed * Time.deltaTime);
     }
 
     private void HandleMousePan()
@@ -66,20 +69,16 @@ public class MapCameraController : MonoBehaviour
         {
             if (TryGetWorldPoint(Input.mousePosition, out Vector3 wp))
                 _grabWorldPoint = wp;
-            _panning = true;
+            _mousePanning = true;
         }
 
         if (Input.GetMouseButtonUp(1))
-            _panning = false;
+            _mousePanning = false;
 
-        if (!_panning) return;
+        if (!_mousePanning) return;
         if (!TryGetWorldPoint(Input.mousePosition, out Vector3 current)) return;
 
-        Vector3 delta = _grabWorldPoint - current;
-        Vector3 newPos = transform.position + delta;
-        newPos.x = Mathf.Clamp(newPos.x, -_panBoundX, _panBoundX);
-        newPos.z = Mathf.Clamp(newPos.z, -_panBoundZ, _panBoundZ);
-        transform.position = newPos;
+        transform.position = ClampToMapBounds(transform.position + (_grabWorldPoint - current));
     }
 
     private void HandleZoom()
@@ -94,56 +93,61 @@ public class MapCameraController : MonoBehaviour
         );
     }
 
-    // Single-finger drag to pan the camera (only when no tile is being dragged).
     private void HandleTouchPan()
     {
-        if (Input.touchCount != 1 || DraggableTile.IsDragging) return;
+        if (DraggableTile.IsDragging)
+        {
+            _touchPanning = false;
+            _panFingerId = -1;
+            return;
+        }
+
+        if (Input.touchCount != 1) return;
 
         Touch touch = Input.GetTouch(0);
 
         if (touch.phase == TouchPhase.Began)
         {
-            _panFingerId = touch.fingerId;
+            _touchPanning = false;
+            _panFingerId = -1;
+
+            if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject(touch.fingerId))
+                return;
+
             if (TryGetWorldPoint(touch.position, out Vector3 wp))
+            {
                 _grabWorldPoint = wp;
-            _panning = true;
+                _panFingerId = touch.fingerId;
+                _touchPanning = true;
+            }
         }
         else if (touch.phase == TouchPhase.Ended || touch.phase == TouchPhase.Canceled)
         {
             if (touch.fingerId == _panFingerId)
             {
-                _panning = false;
+                _touchPanning = false;
                 _panFingerId = -1;
             }
         }
-        else if (_panning && touch.fingerId == _panFingerId)
+        else if (_touchPanning && touch.fingerId == _panFingerId)
         {
             if (!TryGetWorldPoint(touch.position, out Vector3 current)) return;
 
-            Vector3 delta = _grabWorldPoint - current;
-            Vector3 newPos = transform.position + delta;
-            newPos.x = Mathf.Clamp(newPos.x, -_panBoundX, _panBoundX);
-            newPos.z = Mathf.Clamp(newPos.z, -_panBoundZ, _panBoundZ);
-            transform.position = newPos;
+            transform.position = ClampToMapBounds(transform.position + (_grabWorldPoint - current));
         }
     }
 
-    // Two-finger pinch to zoom.
     private void HandlePinchZoom()
     {
         if (Input.touchCount != 2) return;
 
-        // Stop single-finger pan while pinching
-        _panning = false;
+        _touchPanning = false;
 
         Touch t0 = Input.GetTouch(0);
         Touch t1 = Input.GetTouch(1);
 
         float currentDist = Vector2.Distance(t0.position, t1.position);
-        float prevDist = Vector2.Distance(
-            t0.position - t0.deltaPosition,
-            t1.position - t1.deltaPosition
-        );
+        float prevDist    = Vector2.Distance(t0.position - t0.deltaPosition, t1.position - t1.deltaPosition);
 
         float delta = prevDist - currentDist;
         if (Mathf.Abs(delta) < 0.5f) return;
@@ -153,6 +157,14 @@ public class MapCameraController : MonoBehaviour
             _minSize,
             _maxSize
         );
+    }
+
+    private Vector3 ClampToMapBounds(Vector3 pos)
+    {
+        Vector3 offset = pos - _originPos;
+        float right = Mathf.Clamp(Vector3.Dot(offset, _camRight), -_panBoundX, _panBoundX);
+        float fwd   = Mathf.Clamp(Vector3.Dot(offset, _camFwd),   -_panBoundZ, _panBoundZ);
+        return _originPos + _camRight * right + _camFwd * fwd;
     }
 
     private bool TryGetWorldPoint(Vector2 screenPos, out Vector3 worldPoint)

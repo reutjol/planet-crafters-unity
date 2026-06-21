@@ -128,7 +128,17 @@ public class GameManager : MonoBehaviour
         isLoadingPlanet = false;
 
         if (!string.IsNullOrEmpty(errMsg))
+        {
+            if ((errMsg.Contains("401") || errMsg.Contains("Unauthorized")) &&
+                AppSession.Instance != null && AppSession.Instance.HasRefresh())
+            {
+                pendingRequestsAfterRefresh.Enqueue(() => RequestActivePlanet(forceRefresh: true));
+                if (!isRefreshingToken)
+                    StartCoroutine(RefreshTokenAndRetry());
+                yield break;
+            }
             HandleError(errMsg);
+        }
     }
 
     // ---------- Stage selection ----------
@@ -181,10 +191,7 @@ public class GameManager : MonoBehaviour
         }
 
         if (isLoadingPlanetStageState)
-        {
-            Debug.Log("[GameManager] Already loading PlanetStageState - SKIPPING");
             return;
-        }
 
         EnsureApiRefs();
         _loadStageStateCoroutine = StartCoroutine(LoadPlanetStageStateRoutine(planetId, stageId));
@@ -224,9 +231,12 @@ public class GameManager : MonoBehaviour
         if (!string.IsNullOrEmpty(errMsg))
         {
             if ((errMsg.Contains("401") || errMsg.Contains("Unauthorized")) &&
-                AppSession.Instance != null && AppSession.Instance.HasRefresh() && !isRefreshingToken)
+                AppSession.Instance != null && AppSession.Instance.HasRefresh())
             {
                 pendingRequestsAfterRefresh.Enqueue(() => RequestPlanetStageState(forceRefresh: true));
+                if (!isRefreshingToken)
+                    StartCoroutine(RefreshTokenAndRetry());
+                yield break;
             }
             HandleError(errMsg);
         }
@@ -255,7 +265,7 @@ public class GameManager : MonoBehaviour
         RequestPlanetStageState(forceRefresh: true);
 
         float elapsed = 0f;
-        while (!done && elapsed < 30f) { elapsed += Time.unscaledDeltaTime; yield return null; }
+        while (!done && elapsed < 120f) { elapsed += Time.unscaledDeltaTime; yield return null; }
 
         OnPlanetStageStateLoaded -= onLoaded;
         OnError -= onError;
@@ -370,7 +380,6 @@ public class GameManager : MonoBehaviour
             // Try to refresh the token before logging out
             if (AppSession.Instance != null && AppSession.Instance.HasRefresh() && !isRefreshingToken)
             {
-                Debug.Log("[GameManager] 401 detected, attempting token refresh...");
                 StartCoroutine(RefreshTokenAndRetry());
                 return;
             }

@@ -2,40 +2,39 @@ using UnityEngine;
 
 public class WheelRewardGrantService : IWheelRewardGrantService
 {
-    public void GrantReward(WheelRewardDto reward)
+    public string GrantReward(WheelRewardDto reward)
     {
         if (reward == null)
-            return;
+            return string.Empty;
 
         switch (reward.rewardType)
         {
             case WheelRewardType.Coins:
                 GrantCoins(reward.amount);
-                break;
+                return string.Empty;
 
             case WheelRewardType.Spin:
                 GrantExtraSpin(reward.amount);
-                break;
+                return "You got a bonus spin!";
 
             case WheelRewardType.AddTile:
                 GrantBooster("addHex", reward.amount);
-                break;
+                return $"You got Add Tile x{reward.amount}!";
 
             case WheelRewardType.RemoveTile:
                 GrantBooster("cancelPlacement", reward.amount);
-                break;
+                return $"You got Remove Tile x{reward.amount}!";
 
             case WheelRewardType.Multiply:
                 GrantBooster("doubleScore", reward.amount);
-                break;
+                return $"You got Double Score x{reward.amount}!";
 
             case WheelRewardType.Random:
-                GrantRandomBooster(reward.amount);
-                break;
+                return GrantRandomBooster(reward.amount);
 
             default:
                 Debug.LogWarning($"[WheelRewardGrantService] Unknown reward type: {reward.rewardType}");
-                break;
+                return string.Empty;
         }
     }
 
@@ -52,11 +51,7 @@ public class WheelRewardGrantService : IWheelRewardGrantService
 
         api.StartCoroutine(api.AddCoins(
             token, amount,
-            result =>
-            {
-                Debug.Log($"[WheelRewardGrantService] +{amount} coins → total: {result.coins}");
-                UserCoinsDisplay.UpdateCoins(result.coins);
-            },
+            result => UserCoinsDisplay.UpdateCoins(result.coins),
             err => Debug.LogError($"[WheelRewardGrantService] AddCoins failed: {err}")
         ));
     }
@@ -76,11 +71,7 @@ public class WheelRewardGrantService : IWheelRewardGrantService
         {
             api.StartCoroutine(api.GrantBooster(
                 boosterType, token,
-                inventory =>
-                {
-                    Debug.Log($"[WheelRewardGrantService] Granted {boosterType}");
-                    BoosterController.Instance?.RefreshFromInventory(inventory);
-                },
+                inventory => BoosterController.Instance?.RefreshFromInventory(inventory),
                 err => Debug.LogError($"[WheelRewardGrantService] GrantBooster {boosterType} failed: {err}")
             ));
         }
@@ -101,16 +92,25 @@ public class WheelRewardGrantService : IWheelRewardGrantService
         {
             api.StartCoroutine(api.GrantSpin(
                 token,
-                status => Debug.Log($"[WheelRewardGrantService] +1 spin → credits: {status.spinCredits}"),
+                _ => { },
                 err => Debug.LogError($"[WheelRewardGrantService] GrantSpin failed: {err}")
             ));
         }
     }
 
-    private void GrantRandomBooster(int amount)
+    private string GrantRandomBooster(int amount)
     {
         string[] types = { "addHex", "cancelPlacement", "doubleScore" };
         string chosen = types[Random.Range(0, types.Length)];
         GrantBooster(chosen, amount);
+
+        string boosterName = chosen switch
+        {
+            "addHex"           => "Add Tile",
+            "cancelPlacement"  => "Remove Tile",
+            "doubleScore"      => "Double Score",
+            _                  => chosen
+        };
+        return $"Random booster: {boosterName} x{amount}!";
     }
 }

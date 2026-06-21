@@ -1,4 +1,5 @@
 using System.Collections;
+using TMPro;
 using UnityEngine;
 
 public class WheelScreenController : MonoBehaviour
@@ -9,6 +10,7 @@ public class WheelScreenController : MonoBehaviour
     [Header("Views")]
     [SerializeField] private SpinButtonView spinButtonView;
     [SerializeField] private CooldownTextView cooldownTextView;
+    [SerializeField] private TMP_Text rewardResultText;
 
     [Header("Animation")]
     [SerializeField] private WheelRotationAnimation wheelRotationAnimation;
@@ -82,7 +84,8 @@ public class WheelScreenController : MonoBehaviour
             spinButtonView,
             cooldownTextView,
             spinAvailabilityService,
-            localizationService
+            localizationService,
+            rewardResultText
         );
 
         spinWheelUseCase = new SpinWheelUseCase(

@@ -78,7 +78,6 @@ public abstract class BaseApiClient : MonoBehaviour
             yield break;
         }
 
-        Debug.Log($"[{GetType().Name}] GET {endpoint} succeeded ({req.responseCode})");
         onSuccess?.Invoke(response);
     }
 
@@ -128,7 +127,6 @@ public abstract class BaseApiClient : MonoBehaviour
             yield break;
         }
 
-        Debug.Log($"[{GetType().Name}] POST {endpoint} succeeded ({req.responseCode})");
         onSuccess?.Invoke(response);
     }
 
@@ -162,7 +160,6 @@ public abstract class BaseApiClient : MonoBehaviour
             yield break;
         }
 
-        Debug.Log($"[{GetType().Name}] POST {endpoint} succeeded ({req.responseCode})");
         onSuccess?.Invoke();
     }
 
@@ -212,7 +209,6 @@ public abstract class BaseApiClient : MonoBehaviour
             yield break;
         }
 
-        Debug.Log($"[{GetType().Name}] PUT {endpoint} succeeded ({req.responseCode})");
         onSuccess?.Invoke(response);
     }
 
@@ -249,7 +245,6 @@ public abstract class BaseApiClient : MonoBehaviour
             yield break;
         }
 
-        Debug.Log($"[{GetType().Name}] PUT {endpoint} succeeded ({req.responseCode})");
         onSuccess?.Invoke();
     }
 }

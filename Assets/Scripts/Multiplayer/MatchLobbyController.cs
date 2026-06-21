@@ -47,15 +47,22 @@ public class MatchLobbyController : MonoBehaviour
             MatchSocketClient.Instance.OnChallenged -= OnChallenged;
     }
 
-    // ── Public: open from PlanetScreenController ──
-
     public void Open()
     {
         _wasChallenged = false;
         lobbyPanel?.SetActive(true);
         ShowStatus(L("text.looking_for_players", "Looking for players..."));
         PopupManager.OnPopupOpened();
-        Debug.Log($"[Lobby] Open called. MatchManager={MatchManager.Instance} AppSession.UserId={AppSession.Instance?.UserId}");
+
+        var pendingError = MatchManager.PendingLobbyError;
+        if (!string.IsNullOrEmpty(pendingError))
+        {
+            MatchManager.ClearPendingLobbyError();
+            ShowError(pendingError);
+            if (_errorCoroutine != null) StopCoroutine(_errorCoroutine);
+            _errorCoroutine = StartCoroutine(ClearErrorAfterDelay(4f));
+        }
+
         MatchManager.Instance?.OpenLobby();
     }
 
@@ -76,25 +83,19 @@ public class MatchLobbyController : MonoBehaviour
         PopupManager.OnPopupClosed();
     }
 
-    // ── Lobby events ──
-
     private void OnLobbyUpdated(List<LobbyPlayerDto> players)
     {
-        Debug.Log($"[Lobby] OnLobbyUpdated: {players?.Count ?? 0} players total");
         if (_wasChallenged) return;
 
         var myId = AppSession.Instance?.UserId;
         var others = players?.FindAll(p => p.userId != myId) ?? new List<LobbyPlayerDto>();
 
-        // Update status text
         ShowStatus(others.Count == 0
             ? L("text.waiting_for_players", "Waiting for players...")
             : $"{others.Count} {L("text.players_online", "player(s) online")}");
 
-        // Enable/disable random button
         if (randomButton != null) randomButton.interactable = others.Count > 0;
 
-        // Rebuild player rows
         foreach (var row in _playerRows) Destroy(row);
         _playerRows.Clear();
 
@@ -107,6 +108,15 @@ public class MatchLobbyController : MonoBehaviour
 
             var nameText = row.GetComponentInChildren<TextMeshProUGUI>();
             if (nameText != null) nameText.text = player.username;
+
+            var avatarId = string.IsNullOrEmpty(player.avatarId) ? "avatar" : player.avatarId;
+            var avatarT  = row.transform.Find("AvatarImage");
+            if (avatarT != null)
+            {
+                var sp  = Resources.Load<Sprite>($"Sprites/avatar Sprites/{avatarId}");
+                var img = avatarT.GetComponent<Image>();
+                if (img != null && sp != null) img.sprite = sp;
+            }
 
             var btn = row.GetComponentInChildren<Button>();
             if (btn != null)
@@ -138,8 +148,6 @@ public class MatchLobbyController : MonoBehaviour
         yield return new WaitForSeconds(seconds);
         ClearError();
     }
-
-    // ── Buttons ──
 
     private void OnRandomClicked()
     {

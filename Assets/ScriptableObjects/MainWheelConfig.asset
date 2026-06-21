@@ -21,7 +21,7 @@ MonoBehaviour:
     sliceIndex: 0
     iconKey: Coins
   - id: Booster_AddTile
-    title: AddTile
+    title: Add Tile
     rewardType: 2
     amount: 2
     weight: 12

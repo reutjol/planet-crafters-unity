@@ -23,4 +23,34 @@ public static class WheelRewardTextFormatter
                 return string.Empty;
         }
     }
+
+    public static string GetDescription(WheelRewardDto reward)
+    {
+        if (reward == null)
+            return string.Empty;
+
+        switch (reward.rewardType)
+        {
+            case WheelRewardType.Coins:
+                return $"You got {reward.amount} coins!";
+
+            case WheelRewardType.Spin:
+                return "You got a bonus spin!";
+
+            case WheelRewardType.AddTile:
+                return $"Draw {reward.amount} extra tile(s) from your deck!";
+
+            case WheelRewardType.RemoveTile:
+                return $"Remove {reward.amount} tile(s) from your hand!";
+
+            case WheelRewardType.Multiply:
+                return $"Score multiplied x{reward.amount}!";
+
+            case WheelRewardType.Random:
+                return $"Random booster x{reward.amount} activated!";
+
+            default:
+                return string.Empty;
+        }
+    }
 }

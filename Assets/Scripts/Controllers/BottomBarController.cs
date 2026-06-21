@@ -10,6 +10,8 @@ public class BottomBarController : MonoBehaviour
 
     void GoTo(GameSceneId target)
     {
+        if (PopupManager.IsAnyPopupOpen) return;
+
         int sceneIndex = (int)target;
 
         if (SceneManager.GetActiveScene().buildIndex == sceneIndex)

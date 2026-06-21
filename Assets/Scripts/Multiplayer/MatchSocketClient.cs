@@ -18,8 +18,9 @@ public class MatchSocketClient : MonoBehaviour
     public event Action<System.Collections.Generic.List<LobbyPlayerDto>> OnLobbyUpdated;
     public event Action<MatchDto> OnMatchReady;
     public event Action<string> OnChallengeError;
-    public event Action OnOpponentLeft;
-    public event Action OnOpponentFinished;
+    public event Action<long>    OnMatchStarted;  // startTime ms — timer begins
+    public event Action<MatchDto> OnMatchFinished; // final result for all end cases
+    public event Action<string>  OnMatchError;    // server-side error (e.g. playerReady failed)
     public event Action OnChallenged;
 
     private ClientWebSocket _ws;
@@ -58,9 +59,9 @@ public class MatchSocketClient : MonoBehaviour
             onConnected?.Invoke();
             return;
         }
-        _pendingMatchId       = matchId;
-        _pendingUserId        = userId;
-        _onConnectedCallback  = onConnected;
+        _pendingMatchId      = matchId;
+        _pendingUserId       = userId;
+        _onConnectedCallback = onConnected;
         _ = ConnectAsync(serverUrl);
     }
 
@@ -70,9 +71,21 @@ public class MatchSocketClient : MonoBehaviour
         _ = SendEventAsync("vsScore", new { matchId, userId, score });
     }
 
-    public void JoinLobby(string userId, string username, string planetId, string stageId)
+    public void EmitPlayerReady(string matchId, string userId)
     {
-        _ = SendEventAsync("joinLobby", new { userId, username, planetId, stageId });
+        if (!_isConnected || string.IsNullOrEmpty(matchId)) return;
+        _ = SendEventAsync("playerReady", new { matchId, userId });
+    }
+
+    public void EmitSubmitScore(string matchId, string userId, int finalScore)
+    {
+        if (!_isConnected || string.IsNullOrEmpty(matchId)) return;
+        _ = SendEventAsync("submitScore", new { matchId, userId, finalScore });
+    }
+
+    public void JoinLobby(string userId, string username, string avatarId, string planetId, string stageId)
+    {
+        _ = SendEventAsync("joinLobby", new { userId, username, avatarId, planetId, stageId });
     }
 
     public void LeaveLobby()
@@ -120,9 +133,7 @@ public class MatchSocketClient : MonoBehaviour
             var wsUrl = serverUrl.Replace("https://", "wss://").Replace("http://", "ws://");
             var uri   = new Uri($"{wsUrl}/socket.io/?EIO=4&transport=websocket");
 
-            Debug.Log($"[MatchSocket] Connecting to {uri}");
             await _ws.ConnectAsync(uri, _cts.Token);
-            Debug.Log("[MatchSocket] WebSocket open — starting receive loop");
 
             _ = ReceiveLoopAsync();
         }
@@ -143,7 +154,6 @@ public class MatchSocketClient : MonoBehaviour
                 if (result.MessageType == WebSocketMessageType.Close) break;
 
                 var msg = Encoding.UTF8.GetString(buffer, 0, result.Count);
-                Debug.Log($"[MatchSocket] RX: {msg.Substring(0, Math.Min(60, msg.Length))}");
                 await HandleMessageAsync(msg);
             }
             catch (OperationCanceledException) { break; }
@@ -154,7 +164,6 @@ public class MatchSocketClient : MonoBehaviour
             }
         }
         _isConnected = false;
-        Debug.Log("[MatchSocket] Receive loop ended");
     }
 
     private async Task HandleMessageAsync(string msg)
@@ -163,7 +172,6 @@ public class MatchSocketClient : MonoBehaviour
         if (msg.StartsWith("0") && !_namespaceSent)
         {
             _namespaceSent = true;
-            Debug.Log("[MatchSocket] Got open packet — sending 40");
             await SendRawAsync("40");
             return;
         }
@@ -171,12 +179,11 @@ public class MatchSocketClient : MonoBehaviour
         // Engine.IO ping → pong
         if (msg == "2") { await SendRawAsync("3"); return; }
 
-        // socket.io namespace ACK
+        // Socket.IO namespace ACK
         if (msg.StartsWith("40") && !_handshakeDone)
         {
             _handshakeDone = true;
             _isConnected   = true;
-            Debug.Log("[MatchSocket] Namespace ACK — socket ready");
             if (!string.IsNullOrEmpty(_pendingMatchId))
                 await SendEventAsync("joinVsMatch", new { matchId = _pendingMatchId, userId = _pendingUserId });
             var cb = _onConnectedCallback;
@@ -185,7 +192,7 @@ public class MatchSocketClient : MonoBehaviour
             return;
         }
 
-        // socket.io event
+        // Socket.IO event
         if (msg.StartsWith("42"))
         {
             _mainThreadQueue.Enqueue(() => DispatchEvent(msg.Substring(2)));
@@ -229,17 +236,23 @@ public class MatchSocketClient : MonoBehaviour
                     OnLobbyUpdated?.Invoke(players);
                     break;
                 case "matchReady":
-                    var match = data?.ToObject<MatchDto>();
-                    OnMatchReady?.Invoke(match);
+                    var matchReady = data?.ToObject<MatchDto>();
+                    OnMatchReady?.Invoke(matchReady);
                     break;
                 case "challengeError":
                     OnChallengeError?.Invoke(data?.ToString());
                     break;
-                case "opponentLeft":
-                    OnOpponentLeft?.Invoke();
+                case "matchStarted":
+                    var startTime = data?["startTime"]?.Value<long>() ?? 0L;
+                    OnMatchStarted?.Invoke(startTime);
                     break;
-                case "opponentFinished":
-                    OnOpponentFinished?.Invoke();
+                case "matchFinished":
+                    var matchFinished = data?.ToObject<MatchDto>();
+                    OnMatchFinished?.Invoke(matchFinished);
+                    break;
+                case "matchError":
+                    var errMsg = data?["message"]?.ToString() ?? "Unknown match error";
+                    OnMatchError?.Invoke(errMsg);
                     break;
                 case "challenged":
                     OnChallenged?.Invoke();

@@ -21,13 +21,10 @@ public class WheelSlicesBuilder : MonoBehaviour
     public void Initialize(IWheelRewardIconProvider iconProvider)
     {
         this.iconProvider = iconProvider;
-        Debug.Log("WheelSlicesBuilder: Initialize called");
     }
 
     public void Build()
     {
-        Debug.Log("WheelSlicesBuilder: Build called");
-
         if (wheelConfig == null)
         {
             Debug.LogWarning("WheelSlicesBuilder: wheelConfig is missing");
@@ -94,8 +91,6 @@ public class WheelSlicesBuilder : MonoBehaviour
 
             activeSlices.Add(slice);
         }
-
-        Debug.Log("WheelSlicesBuilder: Build finished");
     }
 
     public void ApplyCounterRotation(float wheelZRotation)

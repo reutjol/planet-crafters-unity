@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class MatchSession : MonoBehaviour
@@ -15,6 +16,21 @@ public class MatchSession : MonoBehaviour
     public string OpponentUsername { get; private set; }
     public int InitialScore { get; private set; }
     public int CurrentMatchScore { get; private set; }
+
+    private readonly List<UnlockedAchievementDto> _pendingAchievements = new List<UnlockedAchievementDto>();
+
+    public void AccumulateAchievements(List<UnlockedAchievementDto> unlocked)
+    {
+        if (unlocked == null || unlocked.Count == 0) return;
+        _pendingAchievements.AddRange(unlocked);
+    }
+
+    public List<UnlockedAchievementDto> TakeAchievements()
+    {
+        var result = new List<UnlockedAchievementDto>(_pendingAchievements);
+        _pendingAchievements.Clear();
+        return result;
+    }
 
     private void Awake()
     {
@@ -79,5 +95,6 @@ public class MatchSession : MonoBehaviour
         OpponentUserId = null;
         OpponentUsername = null;
         InitialScore = 0;
+        _pendingAchievements.Clear();
     }
 }

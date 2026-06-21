@@ -1,4 +1,5 @@
 using System;
+using TMPro;
 
 public class WheelScreenPresenter
 {
@@ -6,17 +7,20 @@ public class WheelScreenPresenter
     private readonly CooldownTextView cooldownTextView;
     private readonly ISpinAvailabilityService spinAvailabilityService;
     private readonly ILocalizationService localizationService;
+    private readonly TMP_Text rewardResultText;
 
     public WheelScreenPresenter(
         SpinButtonView spinButtonView,
         CooldownTextView cooldownTextView,
         ISpinAvailabilityService spinAvailabilityService,
-        ILocalizationService localizationService)
+        ILocalizationService localizationService,
+        TMP_Text rewardResultText = null)
     {
         this.spinButtonView = spinButtonView;
         this.cooldownTextView = cooldownTextView;
         this.spinAvailabilityService = spinAvailabilityService;
         this.localizationService = localizationService;
+        this.rewardResultText = rewardResultText;
     }
 
     public void PresentInitial()
@@ -30,6 +34,7 @@ public class WheelScreenPresenter
     public void PresentSpinning()
     {
         spinButtonView?.SetInteractable(false);
+        SetResultText(null);
     }
 
     public void PresentBlocked(TimeSpan remainingCooldown)
@@ -48,6 +53,9 @@ public class WheelScreenPresenter
             return;
 
         spinAvailabilityService.Refresh(RefreshAvailability);
+
+        if (!string.IsNullOrEmpty(result?.message))
+            SetResultText(result.message);
     }
 
     public void RefreshAvailability()
@@ -86,5 +94,12 @@ public class WheelScreenPresenter
         return localizationService != null
             ? localizationService.GetText(key, fallbackText)
             : fallbackText;
+    }
+
+    private void SetResultText(string text)
+    {
+        if (rewardResultText == null) return;
+        rewardResultText.text = text ?? string.Empty;
+        rewardResultText.gameObject.SetActive(!string.IsNullOrEmpty(text));
     }
 }

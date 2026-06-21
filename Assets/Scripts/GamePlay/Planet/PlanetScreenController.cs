@@ -23,6 +23,12 @@ public class PlanetScreenController : MonoBehaviour
 
         if (GameManager.Instance != null)
             GameManager.Instance.RequestActivePlanet(forceRefresh: true);
+
+        if (!string.IsNullOrEmpty(MatchManager.PendingLobbyError))
+        {
+            var lobby = FindObjectOfType<MatchLobbyController>(true);
+            lobby?.Open(); // Open() reads and clears PendingLobbyError and shows the error
+        }
     }
 
     public void Open()

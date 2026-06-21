@@ -195,7 +195,6 @@ public class RegistrationMenuController : MonoBehaviour
         if (signInTask.IsCanceled)
         {
             googleSignInInProgress = false;
-            Debug.Log("[RegistrationMenu] Google Sign-In canceled");
             yield break;
         }
 

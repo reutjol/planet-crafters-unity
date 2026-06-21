@@ -225,7 +225,10 @@ public class DraggableTile : MonoBehaviour
             if (usingDoubleScore)
                 BoosterController.Instance?.OnDoubleScoreConsumed();
 
-            AchievementNotifier.Notify(newState.achievementRewards);
+            if (MatchSession.Instance != null && MatchSession.Instance.IsActive)
+                MatchSession.Instance.AccumulateAchievements(newState.achievementRewards);
+            else
+                AchievementNotifier.Notify(newState.achievementRewards);
 
             _mapController.ApplyServerState(newState);
             _handController.LoadFromServer(newState.hand, newState.deck);

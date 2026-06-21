@@ -154,6 +154,7 @@ public class WaypointRoamer : MonoBehaviour
             for (int i = 0; i < path.Count; i++)
             {
                 int stepIdx = path[i];
+                if (stepIdx < 0 || stepIdx >= _tiles.Count) break;
                 var tile = _tiles[stepIdx];
                 if (tile == null) break;
 
