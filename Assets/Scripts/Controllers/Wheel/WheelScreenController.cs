@@ -77,7 +77,7 @@ public class WheelScreenController : MonoBehaviour
         );
 
         wheelRewardResolver = WheelServicesFactory.CreateRewardResolver();
-        wheelRewardGrantService = WheelServicesFactory.CreateRewardGrantService();
+        wheelRewardGrantService = WheelServicesFactory.CreateRewardGrantService(spinAvailabilityService);
         wheelAngleCalculator = WheelServicesFactory.CreateAngleCalculator();
 
         wheelScreenPresenter = new WheelScreenPresenter(

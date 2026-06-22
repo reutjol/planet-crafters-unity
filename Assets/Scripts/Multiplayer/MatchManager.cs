@@ -22,6 +22,9 @@ public class MatchManager : MonoBehaviour
     private bool _matchLoadingActive;
     private bool _finishSubmitted; // guard: prevent emitting submitScore twice
     private bool _resultShown;     // guard: prevent processing matchFinished twice
+    private System.Action<string> _challengeErrorHandler;
+    private System.Action<PlanetStageStateDto> _loadingStateCallback;
+    private System.Action<string> _loadingErrorCallback;
 
     private void Awake()
     {
@@ -45,8 +48,9 @@ public class MatchManager : MonoBehaviour
         // Subscribe early — covers the loading phase too (opponent may disconnect before scene activates)
         if (MatchSocketClient.Instance != null)
         {
-            MatchSocketClient.Instance.OnMatchFinished += HandleMatchFinished;
-            MatchSocketClient.Instance.OnMatchError    += HandleMatchError;
+            MatchSocketClient.Instance.OnMatchFinished      += HandleMatchFinished;
+            MatchSocketClient.Instance.OnMatchError         += HandleMatchError;
+            MatchSocketClient.Instance.OnAchievementRewards += HandleLateAchievements;
         }
 
         var config = Resources.Load<GameConfig>("GameConfig");
@@ -62,22 +66,28 @@ public class MatchManager : MonoBehaviour
         SceneLoader.Instance.LoadScene(sceneIndex);
 
         bool done = false;
-        System.Action<PlanetStageStateDto> onLoaded = _ => done = true;
-        System.Action<string> onError = _ => { done = true; SceneLoader.HoldActivation = false; };
+        _loadingStateCallback = _ => done = true;
+        _loadingErrorCallback = _ => { done = true; SceneLoader.HoldActivation = false; };
 
-        GameManager.Instance.OnPlanetStageStateLoaded += onLoaded;
-        GameManager.Instance.OnError += onError;
+        GameManager.Instance.OnPlanetStageStateLoaded += _loadingStateCallback;
+        GameManager.Instance.OnError                  += _loadingErrorCallback;
         GameManager.Instance.RequestPlanetStageState(forceRefresh: true);
 
         float elapsed = 0f;
         while (!done && elapsed < 30f) { elapsed += Time.unscaledDeltaTime; yield return null; }
 
-        GameManager.Instance.OnPlanetStageStateLoaded -= onLoaded;
-        GameManager.Instance.OnError -= onError;
+        ClearLoadingCallbacks();
 
-        _loadingCoroutine  = null;
+        _loadingCoroutine   = null;
         _matchLoadingActive = false;
         SceneLoader.HoldActivation = false;
+    }
+
+    private void ClearLoadingCallbacks()
+    {
+        if (GameManager.Instance == null) return;
+        if (_loadingStateCallback != null) { GameManager.Instance.OnPlanetStageStateLoaded -= _loadingStateCallback; _loadingStateCallback = null; }
+        if (_loadingErrorCallback != null) { GameManager.Instance.OnError                  -= _loadingErrorCallback; _loadingErrorCallback = null; }
     }
 
     private void AbortLoading(int sceneIndex)
@@ -85,6 +95,7 @@ public class MatchManager : MonoBehaviour
         if (!_matchLoadingActive) return;
         if (_loadingCoroutine != null) { StopCoroutine(_loadingCoroutine); _loadingCoroutine = null; }
         _matchLoadingActive = false;
+        ClearLoadingCallbacks();
         GameManager.Instance?.ClearCache();
         SceneLoader.Instance?.AbortPendingAndLoad(sceneIndex);
     }
@@ -185,6 +196,8 @@ public class MatchManager : MonoBehaviour
         if (_resultShown) return;
         _resultShown = true;
 
+        if (_readyTimeoutCoroutine != null) { StopCoroutine(_readyTimeoutCoroutine); _readyTimeoutCoroutine = null; }
+
         var config = Resources.Load<GameConfig>("GameConfig");
 
         if (_matchLoadingActive)
@@ -197,7 +210,17 @@ public class MatchManager : MonoBehaviour
             return;
         }
 
-        DisconnectSocket();
+        // Unsubscribe gameplay events but keep socket open so the server's async
+        // achievementRewards event (sent after matchFinished) can still arrive.
+        // Full disconnect happens when the user presses Back (CancelMatch → DisconnectSocket).
+        if (MatchSocketClient.Instance != null)
+        {
+            MatchSocketClient.Instance.OnMatchStateReceived -= HandleSocketMatchState;
+            MatchSocketClient.Instance.OnReactionReceived   -= HandleSocketReaction;
+            MatchSocketClient.Instance.OnMatchStarted       -= HandleMatchStarted;
+            MatchSocketClient.Instance.OnMatchFinished      -= HandleMatchFinished;
+            MatchSocketClient.Instance.OnMatchError         -= HandleMatchError;
+        }
 
         var midGameAchievements = MatchSession.Instance?.TakeAchievements() ?? new System.Collections.Generic.List<UnlockedAchievementDto>();
         var endAchievements     = match?.achievementRewards ?? new System.Collections.Generic.List<UnlockedAchievementDto>();
@@ -234,9 +257,10 @@ public class MatchManager : MonoBehaviour
     {
         var (planetId, stageId) = GetMatchStage();
 
+        _challengeErrorHandler = err => OnChallengeError?.Invoke(err);
         MatchSocketClient.Instance.OnLobbyUpdated   += OnLobbyPlayersUpdated;
         MatchSocketClient.Instance.OnMatchReady     += OnMatchReadyReceived;
-        MatchSocketClient.Instance.OnChallengeError += err => OnChallengeError?.Invoke(err);
+        MatchSocketClient.Instance.OnChallengeError += _challengeErrorHandler;
 
         EnsureSocketConnected(() =>
         {
@@ -253,7 +277,11 @@ public class MatchManager : MonoBehaviour
         if (MatchSocketClient.Instance == null) return;
         MatchSocketClient.Instance.OnLobbyUpdated   -= OnLobbyPlayersUpdated;
         MatchSocketClient.Instance.OnMatchReady     -= OnMatchReadyReceived;
-        MatchSocketClient.Instance.OnChallengeError -= err => OnChallengeError?.Invoke(err);
+        if (_challengeErrorHandler != null)
+        {
+            MatchSocketClient.Instance.OnChallengeError -= _challengeErrorHandler;
+            _challengeErrorHandler = null;
+        }
         MatchSocketClient.Instance.LeaveLobby();
     }
 
@@ -306,6 +334,12 @@ public class MatchManager : MonoBehaviour
         AbortLoading(config?.planetSceneIndex ?? 5);
     }
 
+    private void HandleLateAchievements(System.Collections.Generic.List<UnlockedAchievementDto> rewards)
+    {
+        if (rewards != null && rewards.Count > 0)
+            AchievementNotifier.Notify(rewards);
+    }
+
     private void DisconnectSocket()
     {
         if (MatchSocketClient.Instance == null) return;
@@ -314,6 +348,7 @@ public class MatchManager : MonoBehaviour
         MatchSocketClient.Instance.OnMatchStarted       -= HandleMatchStarted;
         MatchSocketClient.Instance.OnMatchFinished      -= HandleMatchFinished;
         MatchSocketClient.Instance.OnMatchError         -= HandleMatchError;
+        MatchSocketClient.Instance.OnAchievementRewards -= HandleLateAchievements;
         MatchSocketClient.Instance.Disconnect();
     }
 

@@ -95,6 +95,7 @@ public class MatchSession : MonoBehaviour
         OpponentUserId = null;
         OpponentUsername = null;
         InitialScore = 0;
+        CurrentMatchScore = 0;
         _pendingAchievements.Clear();
     }
 }

@@ -19,9 +19,9 @@ public static class WheelServicesFactory
         return new WeightedWheelRewardResolver();
     }
 
-    public static IWheelRewardGrantService CreateRewardGrantService()
+    public static IWheelRewardGrantService CreateRewardGrantService(ISpinAvailabilityService spinAvailabilityService)
     {
-        return new WheelRewardGrantService();
+        return new WheelRewardGrantService(spinAvailabilityService);
     }
 
     public static IWheelAngleCalculator CreateAngleCalculator()

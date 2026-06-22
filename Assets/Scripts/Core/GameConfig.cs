@@ -9,8 +9,8 @@ public class GameConfig : ScriptableObject
 {
     [Header("Server Settings")]
     [Tooltip("Base URL for the backend server API")]
-    public string serverBaseUrl = "https://planet-crafters-server.onrender.com";
-    //public string serverBaseUrl = "http://192.168.1.178:3000";
+    //public string serverBaseUrl = "https://planet-crafters-server.onrender.com";
+    public string serverBaseUrl = "http://192.168.1.178:3000";
     [Header("Scene Indices")]
     [Tooltip("Scene index for the Boot scene")]
     public int bootSceneIndex = 0;

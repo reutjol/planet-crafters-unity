@@ -22,10 +22,12 @@ public class MatchSocketClient : MonoBehaviour
     public event Action<MatchDto> OnMatchFinished; // final result for all end cases
     public event Action<string>  OnMatchError;    // server-side error (e.g. playerReady failed)
     public event Action OnChallenged;
+    public event Action<System.Collections.Generic.List<UnlockedAchievementDto>> OnAchievementRewards;
 
     private ClientWebSocket _ws;
     private CancellationTokenSource _cts;
     private readonly ConcurrentQueue<Action> _mainThreadQueue = new ConcurrentQueue<Action>();
+    private readonly System.Threading.SemaphoreSlim _sendLock = new System.Threading.SemaphoreSlim(1, 1);
     private bool _isConnected;
 
     // Handshake state
@@ -105,7 +107,6 @@ public class MatchSocketClient : MonoBehaviour
 
     public void Disconnect()
     {
-        _cts?.Cancel();
         _isConnected = false;
         try
         {
@@ -115,6 +116,8 @@ public class MatchSocketClient : MonoBehaviour
                 _ws?.Abort();
         }
         catch { }
+        // Cancel AFTER initiating the close frame so the server receives the graceful disconnect
+        _cts?.Cancel();
     }
 
     // ── Connection ──────────────────────────────────────────────
@@ -124,6 +127,7 @@ public class MatchSocketClient : MonoBehaviour
         try
         {
             _cts?.Cancel();
+            _ws?.Dispose();
             _cts = new CancellationTokenSource();
             _ws  = new ClientWebSocket();
 
@@ -146,14 +150,23 @@ public class MatchSocketClient : MonoBehaviour
     private async Task ReceiveLoopAsync()
     {
         var buffer = new byte[8192];
+        var accum  = new System.IO.MemoryStream();
+
         while (_ws?.State == WebSocketState.Open && !(_cts?.IsCancellationRequested ?? true))
         {
             try
             {
-                var result = await _ws.ReceiveAsync(new ArraySegment<byte>(buffer), _cts.Token);
-                if (result.MessageType == WebSocketMessageType.Close) break;
+                accum.SetLength(0);
+                WebSocketReceiveResult result;
 
-                var msg = Encoding.UTF8.GetString(buffer, 0, result.Count);
+                do
+                {
+                    result = await _ws.ReceiveAsync(new ArraySegment<byte>(buffer), _cts.Token);
+                    if (result.MessageType == WebSocketMessageType.Close) { _isConnected = false; return; }
+                    accum.Write(buffer, 0, result.Count);
+                } while (!result.EndOfMessage);
+
+                var msg = Encoding.UTF8.GetString(accum.GetBuffer(), 0, (int)accum.Length);
                 await HandleMessageAsync(msg);
             }
             catch (OperationCanceledException) { break; }
@@ -212,7 +225,16 @@ public class MatchSocketClient : MonoBehaviour
     {
         if (_ws?.State != WebSocketState.Open) return;
         var bytes = Encoding.UTF8.GetBytes(msg);
-        await _ws.SendAsync(new ArraySegment<byte>(bytes), WebSocketMessageType.Text, true, _cts.Token);
+        await _sendLock.WaitAsync(_cts.Token);
+        try
+        {
+            if (_ws?.State != WebSocketState.Open) return;
+            await _ws.SendAsync(new ArraySegment<byte>(bytes), WebSocketMessageType.Text, true, _cts.Token);
+        }
+        finally
+        {
+            _sendLock.Release();
+        }
     }
 
     private void DispatchEvent(string json)
@@ -256,6 +278,11 @@ public class MatchSocketClient : MonoBehaviour
                     break;
                 case "challenged":
                     OnChallenged?.Invoke();
+                    break;
+                case "achievementRewards":
+                    var achRewards = data?["rewards"]?.ToObject<System.Collections.Generic.List<UnlockedAchievementDto>>();
+                    if (achRewards != null && achRewards.Count > 0)
+                        OnAchievementRewards?.Invoke(achRewards);
                     break;
             }
         }

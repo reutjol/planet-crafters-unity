@@ -2,6 +2,13 @@ using UnityEngine;
 
 public class WheelRewardGrantService : IWheelRewardGrantService
 {
+    private readonly ISpinAvailabilityService spinAvailabilityService;
+
+    public WheelRewardGrantService(ISpinAvailabilityService spinAvailabilityService)
+    {
+        this.spinAvailabilityService = spinAvailabilityService;
+    }
+
     public string GrantReward(WheelRewardDto reward)
     {
         if (reward == null)
@@ -92,7 +99,7 @@ public class WheelRewardGrantService : IWheelRewardGrantService
         {
             api.StartCoroutine(api.GrantSpin(
                 token,
-                _ => { },
+                _ => spinAvailabilityService?.Refresh(null),
                 err => Debug.LogError($"[WheelRewardGrantService] GrantSpin failed: {err}")
             ));
         }
