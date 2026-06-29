@@ -1,11 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// Controller for the stage map scene.
-/// Loads planet data from GameManager and spawns stage nodes in a hex layout.
-/// Each resource type has its own prefab; locked stages are darkened, completed stages are brightened.
-/// </summary>
 public class MapStageController : MonoBehaviour
 {
     [Header("Prefabs by Resource Type")]
@@ -26,7 +21,13 @@ public class MapStageController : MonoBehaviour
     [Header("Layout")]
     [SerializeField] private float hexSize = 1.0f;
     [SerializeField] private bool pointyTop = true;
-    private readonly List<GameObject> spawned = new List<GameObject>();
+
+    // Survive scene reloads
+    private static Transform _persistentParent;
+    private static readonly Dictionary<string, GameObject> _stageObjects = new();
+    private static readonly Dictionary<string, bool> _lockedState = new();
+    // Original shared materials saved before tinting, used to restore on unlock
+    private static readonly Dictionary<string, List<(Renderer r, Material[] mats)>> _originalMaterials = new();
 
     private void OnEnable()
     {
@@ -42,6 +43,30 @@ public class MapStageController : MonoBehaviour
         GameManager.Instance.OnPlanetLoaded -= HandlePlanetLoaded;
         GameManager.Instance.OnUnauthorized -= HandleUnauthorized;
         GameManager.Instance.OnError -= HandleError;
+
+        if (_persistentParent != null)
+            _persistentParent.gameObject.SetActive(false);
+    }
+
+    [UnityEngine.RuntimeInitializeOnLoadMethod(UnityEngine.RuntimeInitializeLoadType.SubsystemRegistration)]
+    private static void ResetStaticState()
+    {
+        _persistentParent = null;
+        _stageObjects.Clear();
+        _lockedState.Clear();
+        _originalMaterials.Clear();
+    }
+
+    public static void ResetPersistentState()
+    {
+        if (_persistentParent != null)
+        {
+            UnityEngine.Object.Destroy(_persistentParent.gameObject);
+            _persistentParent = null;
+        }
+        _stageObjects.Clear();
+        _lockedState.Clear();
+        _originalMaterials.Clear();
     }
 
     private void Start()
@@ -67,6 +92,9 @@ public class MapStageController : MonoBehaviour
             return;
         }
 
+        if (_persistentParent != null)
+            _persistentParent.gameObject.SetActive(true);
+
         GameManager.Instance.RequestActivePlanet(forceRefresh: true);
     }
 
@@ -88,69 +116,82 @@ public class MapStageController : MonoBehaviour
             return;
         }
 
-        Clear();
-        DrawStages(planet);
-    }
-
-    private void Clear()
-    {
-        foreach (var go in spawned)
+        if (_persistentParent != null)
         {
-            if (go != null) Destroy(go);
-        }
-        spawned.Clear();
-    }
-
-    private void DrawStages(PlanetDto planet)
-    {
-        if (planet?.stages == null)
-        {
-            Debug.LogWarning("[MapStageController] planet.stages is NULL.");
+            UpdateStages(planet);
             return;
         }
 
+        stagesParent.SetParent(null);
+        DontDestroyOnLoad(stagesParent.gameObject);
+        _persistentParent = stagesParent;
+
+        DrawStages(planet);
+    }
+
+    // First load — instantiate all stage objects
+    private void DrawStages(PlanetDto planet)
+    {
+        if (planet?.stages == null) return;
+
         foreach (var stage in planet.stages)
         {
-            if (stage == null) continue;
-
-            if (stage.meta == null)
-            {
-                Debug.LogWarning($"[MapStageController] stage {stage.stageId}: meta is NULL -> skip");
-                continue;
-            }
-
-            if (stage.meta.isMatchStage) continue;
-
-            if (stage.meta.coord == null)
-            {
-                Debug.LogWarning($"[MapStageController] stage {stage.stageId}: meta.coord is NULL -> skip");
-                continue;
-            }
-
-            int q = stage.meta.coord.q;
-            int r = stage.meta.coord.r;
-            bool unlocked = stage.meta.isUnlocked;
-            bool completed = stage.meta.isCompleted;
+            if (stage?.meta == null || stage.meta.isMatchStage || stage.meta.coord == null) continue;
 
             var prefab = ChoosePrefab(stage);
             if (!prefab) continue;
 
-            var pos = AxialToWorld(q, r);
-            pos.y += prefab.transform.localPosition.y;
-            var go = Instantiate(prefab, pos, prefab.transform.rotation, stagesParent);
-            go.name = $"{stage.stageId} ({q},{r})";
-            spawned.Add(go);
+            bool unlocked = stage.meta.isUnlocked;
+            bool completed = stage.meta.isCompleted;
 
-            ApplyStateTint(go, unlocked, completed);
+            var pos = AxialToWorld(stage.meta.coord.q, stage.meta.coord.r);
+            pos.y += prefab.transform.localPosition.y;
+            var go = Instantiate(prefab, pos, prefab.transform.rotation, _persistentParent);
+            go.name = $"{stage.stageId} ({stage.meta.coord.q},{stage.meta.coord.r})";
+
+            _stageObjects[stage.stageId] = go;
+            _lockedState[stage.stageId] = !unlocked;
+
+            if (!unlocked)
+                SaveOriginalMaterials(stage.stageId, go);
+
+            ApplyStateTint(go, unlocked);
 
             var view = go.GetComponent<StageNodeView>();
             if (view != null)
+                view.Init(stage.stageId, unlocked, completed, stage.meta.resourceType,
+                    stage.state?.progress?.score ?? 0,
+                    stage.state?.progress?.developedPercent ?? 0f,
+                    stage.meta?.coinsAwarded ?? 0);
+        }
+    }
+
+    // Subsequent loads — only update what changed
+    private void UpdateStages(PlanetDto planet)
+    {
+        if (planet?.stages == null) return;
+
+        foreach (var stage in planet.stages)
+        {
+            if (stage?.meta == null || !_stageObjects.TryGetValue(stage.stageId, out var go)) continue;
+
+            bool unlocked = stage.meta.isUnlocked;
+            bool completed = stage.meta.isCompleted;
+            bool wasLocked = _lockedState.GetValueOrDefault(stage.stageId, true);
+
+            // If stage just became unlocked — restore original materials to remove dark tint
+            if (unlocked && wasLocked)
             {
-                int stageScore = stage.state?.progress?.score ?? 0;
-                float developedPercent = stage.state?.progress?.developedPercent ?? 0f;
-                int coinsAwarded = stage.meta?.coinsAwarded ?? 0;
-                view.Init(stage.stageId, unlocked, completed, stage.meta.resourceType, stageScore, developedPercent, coinsAwarded);
+                RestoreOriginalMaterials(stage.stageId);
+                _lockedState[stage.stageId] = false;
             }
+
+            var view = go.GetComponent<StageNodeView>();
+            if (view != null)
+                view.Init(stage.stageId, unlocked, completed, stage.meta.resourceType,
+                    stage.state?.progress?.score ?? 0,
+                    stage.state?.progress?.developedPercent ?? 0f,
+                    stage.meta?.coinsAwarded ?? 0);
         }
     }
 
@@ -170,22 +211,33 @@ public class MapStageController : MonoBehaviour
         return prefab;
     }
 
-    private void ApplyStateTint(GameObject go, bool unlocked, bool completed)
+    private void SaveOriginalMaterials(string stageId, GameObject go)
     {
-        if (unlocked && !completed) return;
+        var list = new List<(Renderer r, Material[] mats)>();
+        foreach (var r in go.GetComponentsInChildren<Renderer>())
+            list.Add((r, r.sharedMaterials));
+        _originalMaterials[stageId] = list;
+    }
 
-        var renderers = go.GetComponentsInChildren<Renderer>();
-        foreach (var r in renderers)
+    private static void RestoreOriginalMaterials(string stageId)
+    {
+        if (!_originalMaterials.TryGetValue(stageId, out var list)) return;
+        foreach (var (r, mats) in list)
+            if (r != null) r.sharedMaterials = mats;
+        _originalMaterials.Remove(stageId);
+    }
+
+    private void ApplyStateTint(GameObject go, bool unlocked)
+    {
+        if (unlocked) return;
+
+        var tint = new Color(lockedDarkness, lockedDarkness, lockedDarkness, 1f);
+        foreach (var r in go.GetComponentsInChildren<Renderer>())
         {
             foreach (var mat in r.materials)
             {
                 if (mat.shader.name.Contains("TextMeshPro")) continue;
-
-                if (!unlocked)
-                {
-                    mat.color *= new Color(lockedDarkness, lockedDarkness, lockedDarkness, 1f);
-                }
-                // completed stages use default material — stars text indicates completion
+                mat.color *= tint;
             }
         }
     }

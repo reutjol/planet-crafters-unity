@@ -118,6 +118,7 @@ public class PlanetStageStateDto
     public List<RoamingClusterDto> roamingClusters;
     public List<UnlockedAchievementDto> achievementRewards;
     public int achievementCoinsAwarded;
+    public List<string> newlyGrantedAvatars;
 }
 
 [System.Serializable]

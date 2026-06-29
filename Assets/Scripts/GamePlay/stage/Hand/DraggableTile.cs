@@ -243,6 +243,56 @@ public class DraggableTile : MonoBehaviour
         else
         {
             Debug.LogError($"[DraggableTile] Place tile failed: {error}");
+
+            if (error != null && error.Contains("slot 0"))
+            {
+                // Hand is out of sync with server — re-fetch state and resync
+                yield return ResyncFromServer();
+            }
+            else
+            {
+                ReturnHome();
+                enabled = true;
+            }
+        }
+    }
+
+    private IEnumerator ResyncFromServer()
+    {
+        var planetId = AppSession.Instance?.ActivePlanet?.planetId;
+        var stageId  = AppSession.Instance?.SelectedStageId;
+        var token    = AppSession.Instance?.AccessToken;
+
+        if (string.IsNullOrEmpty(planetId) || string.IsNullOrEmpty(stageId) || string.IsNullOrEmpty(token))
+        {
+            ReturnHome();
+            enabled = true;
+            yield break;
+        }
+
+        var api = PlanetStateApiClient.Instance;
+        if (api == null)
+        {
+            ReturnHome();
+            enabled = true;
+            yield break;
+        }
+
+        PlanetStageStateDto freshState = null;
+        yield return api.GetPlanetStageState(
+            planetId, stageId, 30, token,
+            onSuccess: s => freshState = s,
+            onError:   _ => { }
+        );
+
+        if (freshState != null)
+        {
+            _mapController.ApplyServerState(freshState);
+            _handController.LoadFromServer(freshState.hand, freshState.deck);
+            // Tile is destroyed as part of LoadFromServer rebuilding the hand
+        }
+        else
+        {
             ReturnHome();
             enabled = true;
         }

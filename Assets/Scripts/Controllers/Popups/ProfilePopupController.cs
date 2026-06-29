@@ -70,6 +70,21 @@ public class ProfilePopupController : MonoBehaviour, IClosablePopup
         RefreshTopBarAvatar();
     }
 
+    private void Start()
+    {
+        if (service == null) return;
+        currentProfile = null;
+        shopProfile = null;
+        service.LoadProfileFromServer(
+            onSuccess: () =>
+            {
+                currentProfile = service.GetProfile();
+                RefreshTopBarAvatar();
+            },
+            onError: _ => { }
+        );
+    }
+
     public void OpenPopup()
     {
         if (view == null || service == null) return;

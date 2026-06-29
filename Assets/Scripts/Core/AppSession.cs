@@ -103,6 +103,7 @@ public class AppSession : MonoBehaviour
 
     public void Logout()
     {
+        MapStageController.ResetPersistentState();
         AccessToken = "";
         RefreshToken = "";
         ActivePlanet = null;

@@ -353,7 +353,7 @@ PrefabInstance:
     - target: {fileID: -7116313470106261811, guid: 2b9a2e3d004698b4f9c085debfc22eb6, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 72e8e6c26e9473b449dd17c3af49dc2e, type: 2}
+      objectReference: {fileID: 2100000, guid: 352cc39da829d80459935904141ea873, type: 2}
     - target: {fileID: 505060069390673709, guid: 2b9a2e3d004698b4f9c085debfc22eb6, type: 3}
       propertyPath: m_Name
       value: stageRock

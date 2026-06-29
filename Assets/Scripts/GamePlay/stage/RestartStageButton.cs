@@ -30,7 +30,7 @@ public class RestartStageButton : MonoBehaviour
     {
         if (GameManager.Instance == null)
         {
-            Debug.LogError("[Restart] GameManager.Instance is null!");
+            //Debug.LogError("[Restart] GameManager.Instance is null!");
             yield break;
         }
 
@@ -43,12 +43,13 @@ public class RestartStageButton : MonoBehaviour
             bool resetDone    = false;
             bool resetSuccess = false;
 
+            //Debug.Log("[Restart] Sending reset request to server...");
             GameManager.Instance.ResetCurrentStage(
-                onSuccess: () => { resetDone = true; resetSuccess = true; },
+                onSuccess: () => { resetDone = true; resetSuccess = true; /*Debug.Log("[Restart] Reset success");*/ },
                 onError: (err) =>
                 {
                     resetDone = true;
-                    Debug.LogError($"[Restart] Reset failed: {err}");
+                    //Debug.LogError($"[Restart] Reset failed: {err}");
                 }
             );
 
@@ -60,13 +61,16 @@ public class RestartStageButton : MonoBehaviour
 
             if (!resetSuccess)
             {
-                Debug.LogError("[Restart] Failed to reset stage");
+                //Debug.LogError("[Restart] Failed to reset stage");
                 yield break;
             }
         }
+        //else
+        //{
+        //    Debug.Log("[Restart] Stage already reset — skipping reset step");
+        //}
 
         // ── 2. Show loading screen and start pre-fetching state ───────────
-        // HoldActivation keeps the loading screen up until we release it.
         SceneLoader.HoldActivation = true;
 
         if (SceneLoader.Instance != null && gameConfig != null)
@@ -74,18 +78,19 @@ public class RestartStageButton : MonoBehaviour
 
         // ── 3. Pre-fetch fresh state while loading screen is visible ──────
         bool stateDone = false;
-        Action<PlanetStageStateDto> stateHandler = _ => stateDone = true;
-        Action<string>              errHandler   = _ => stateDone = true;
-        Action                      unauthHandler = () => stateDone = true;
+        Action<PlanetStageStateDto> stateHandler = _ => { stateDone = true; /*Debug.Log("[Restart] State received from server");*/ };
+        Action<string>              errHandler   = err => { stateDone = true; /*Debug.LogError($"[Restart] State error: {err}");*/ };
+        Action                      unauthHandler = () => { stateDone = true; /*Debug.LogWarning("[Restart] Unauthorized");*/ };
 
         GameManager.Instance.OnPlanetStageStateLoaded += stateHandler;
         GameManager.Instance.OnError                  += errHandler;
         GameManager.Instance.OnUnauthorized           += unauthHandler;
 
+        //Debug.Log("[Restart] Requesting fresh state from server...");
         GameManager.Instance.RequestPlanetStageState(forceRefresh: true);
 
         elapsed = 0f;
-        while (!stateDone && elapsed < 90f)
+        while (!stateDone && elapsed < 180f)
         {
             elapsed += Time.unscaledDeltaTime;
             yield return null;
@@ -94,6 +99,14 @@ public class RestartStageButton : MonoBehaviour
         GameManager.Instance.OnPlanetStageStateLoaded -= stateHandler;
         GameManager.Instance.OnError                  -= errHandler;
         GameManager.Instance.OnUnauthorized           -= unauthHandler;
+
+        if (!stateDone)
+        {
+            //Debug.LogWarning("[Restart] State fetch timed out after 180s — going back to map");
+            SceneLoader.HoldActivation = false;
+            SceneLoader.Instance?.LoadScene(gameConfig.stagesMapSceneIndex);
+            yield break;
+        }
 
         // ── 4. Release hold — loading screen will activate gameplay scene ─
         SceneLoader.HoldActivation = false;

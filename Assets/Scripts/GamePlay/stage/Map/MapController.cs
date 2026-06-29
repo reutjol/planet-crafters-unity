@@ -59,6 +59,7 @@ public class MapController : MonoBehaviour
     public event Action OnStageCompleted;
     public event Action<int> OnStageCompletedWithCoins;
     public event Action<int> OnBonusScored;
+    public event Action<List<string>> OnAvatarsUnlocked;
 
     public void SetTileFactory(TileFactory factory) => _tileFactory = factory;
 
@@ -209,6 +210,8 @@ public class MapController : MonoBehaviour
                 UpdateRoamingClusters(state.roamingClusters);
 
             OnProgressChanged?.Invoke(state.progress);
+            if (state.newlyGrantedAvatars != null && state.newlyGrantedAvatars.Count > 0)
+                OnAvatarsUnlocked?.Invoke(state.newlyGrantedAvatars);
             if (state.progress.isCompleted)
             {
                 OnStageCompleted?.Invoke();

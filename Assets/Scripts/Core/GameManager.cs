@@ -56,12 +56,12 @@ public class GameManager : MonoBehaviour
         if (boosterApi == null)
             boosterApi = FindObjectOfType<BoosterApiClient>(true);
 
-        if (planetApi == null)
-            Debug.LogWarning("[GameManager] PlanetApiClient not found at startup - will retry later");
-        if (planetStateApi == null)
-            Debug.LogWarning("[GameManager] PlanetStateApiClient not found at startup - will retry later");
-        if (boosterApi == null)
-            Debug.LogWarning("[GameManager] BoosterApiClient not found at startup - will retry later");
+        //if (planetApi == null)
+        //    Debug.LogWarning("[GameManager] PlanetApiClient not found at startup - will retry later");
+        //if (planetStateApi == null)
+        //    Debug.LogWarning("[GameManager] PlanetStateApiClient not found at startup - will retry later");
+        //if (boosterApi == null)
+        //    Debug.LogWarning("[GameManager] BoosterApiClient not found at startup - will retry later");
     }
 
     private void EnsureApiRefs()
@@ -69,12 +69,12 @@ public class GameManager : MonoBehaviour
         if (planetApi == null || planetStateApi == null || boosterApi == null)
             CacheApiReferences();
 
-        if (planetApi == null)
-            Debug.LogError("[GameManager] PlanetApiClient not found/assigned.");
-        if (planetStateApi == null)
-            Debug.LogError("[GameManager] PlanetStateApiClient not found/assigned.");
-        if (boosterApi == null)
-            Debug.LogError("[GameManager] BoosterApiClient not found/assigned.");
+        //if (planetApi == null)
+        //    Debug.LogError("[GameManager] PlanetApiClient not found/assigned.");
+        //if (planetStateApi == null)
+        //    Debug.LogError("[GameManager] PlanetStateApiClient not found/assigned.");
+        //if (boosterApi == null)
+        //    Debug.LogError("[GameManager] BoosterApiClient not found/assigned.");
     }
 
     public BoosterApiClient BoosterApi
@@ -161,7 +161,7 @@ public class GameManager : MonoBehaviour
     {
         if (!HasAccess())
         {
-            Debug.LogError("[GameManager] RequestPlanetStageState: No access token!");
+            //Debug.LogError("[GameManager] RequestPlanetStageState: No access token!");
             OnUnauthorized?.Invoke();
             return;
         }
@@ -171,14 +171,14 @@ public class GameManager : MonoBehaviour
 
         if (string.IsNullOrEmpty(planetId))
         {
-            Debug.LogError("[GameManager] RequestPlanetStageState: No active planet!");
+            //Debug.LogError("[GameManager] RequestPlanetStageState: No active planet!");
             OnError?.Invoke("No active planet. Call RequestActivePlanet() first.");
             return;
         }
 
         if (string.IsNullOrEmpty(stageId))
         {
-            Debug.LogError("[GameManager] RequestPlanetStageState: No selected stage!");
+            //Debug.LogError("[GameManager] RequestPlanetStageState: No selected stage!");
             OnError?.Invoke("No selected stage. Call SelectStage(stageId) first.");
             return;
         }
@@ -191,8 +191,12 @@ public class GameManager : MonoBehaviour
         }
 
         if (isLoadingPlanetStageState)
+        {
+            //Debug.Log("[GameManager] RequestPlanetStageState: request already in-flight, waiting for it");
             return;
+        }
 
+        //Debug.Log($"[GameManager] RequestPlanetStageState: starting HTTP request for stage {stageId}");
         EnsureApiRefs();
         _loadStageStateCoroutine = StartCoroutine(LoadPlanetStageStateRoutine(planetId, stageId));
     }
@@ -205,7 +209,7 @@ public class GameManager : MonoBehaviour
         var api = planetStateApi ?? PlanetStateApiClient.Instance;
         if (api == null)
         {
-            Debug.LogError("[GameManager] planetStateApi is null, cannot load stage state");
+            //Debug.LogError("[GameManager] planetStateApi is null, cannot load stage state");
             isLoadingPlanetStageState = false;
             OnError?.Invoke("PlanetStateApiClient not available");
             yield break;
@@ -218,11 +222,12 @@ public class GameManager : MonoBehaviour
             AppSession.Instance.AccessToken,
             onSuccess: (state) =>
             {
+                //Debug.Log($"[GameManager] Stage state loaded — hand={state?.hand?.tilesInHand?.Count ?? 0}, deck={state?.deck?.remainingTiles?.Count ?? 0}");
                 currentPlanetStageState = state;
                 currentStageId = stageId;
                 OnPlanetStageStateLoaded?.Invoke(state);
             },
-            onError: (err) => errMsg = err
+            onError: (err) => { errMsg = err; /*Debug.LogError($"[GameManager] Stage state HTTP error: {err}");*/ }
         ));
 
         isLoadingPlanetStageState = false;
@@ -265,13 +270,25 @@ public class GameManager : MonoBehaviour
         RequestPlanetStageState(forceRefresh: true);
 
         float elapsed = 0f;
-        while (!done && elapsed < 120f) { elapsed += Time.unscaledDeltaTime; yield return null; }
+        while (!done && elapsed < 180f) { elapsed += Time.unscaledDeltaTime; yield return null; }
 
         OnPlanetStageStateLoaded -= onLoaded;
         OnError -= onError;
         OnUnauthorized -= onUnauth;
 
-        SceneLoader.HoldActivation = false;
+        if (!done)
+        {
+            //Debug.LogWarning("[GameManager] LoadStageSceneWithHold timed out after 180s — going back to map");
+            SceneLoader.HoldActivation = false;
+            var cfg = Resources.Load<GameConfig>("GameConfig");
+            if (cfg != null)
+                SceneLoader.Instance?.LoadScene(cfg.stagesMapSceneIndex);
+        }
+        else
+        {
+            //Debug.Log("[GameManager] LoadStageSceneWithHold: state received — releasing hold");
+            SceneLoader.HoldActivation = false;
+        }
     }
 
     // ---------- Reset Stage ----------
@@ -372,7 +389,7 @@ public class GameManager : MonoBehaviour
 
     private void HandleError(string err)
     {
-        Debug.LogError($"[GameManager] Error: {err}");
+        //Debug.LogError($"[GameManager] Error: {err}");
 
         // Check if this is a 401 Unauthorized error
         if (err.Contains("401") || err.Contains("Unauthorized"))
@@ -384,8 +401,7 @@ public class GameManager : MonoBehaviour
                 return;
             }
 
-            // If no refresh token or already tried, logout
-            Debug.LogWarning("[GameManager] No refresh token available or refresh failed, logging out");
+            //Debug.LogWarning("[GameManager] No refresh token available or refresh failed, logging out");
             AppSession.Instance?.Logout();
             OnUnauthorized?.Invoke();
             return;
@@ -398,7 +414,7 @@ public class GameManager : MonoBehaviour
     {
         if (isRefreshingToken)
         {
-            Debug.LogWarning("[GameManager] Token refresh already in progress");
+            //Debug.LogWarning("[GameManager] Token refresh already in progress");
             yield break;
         }
 
@@ -431,7 +447,7 @@ public class GameManager : MonoBehaviour
             onError: (err) =>
             {
                 refreshSuccess = false;
-                Debug.LogError($"[GameManager] Token refresh failed: {err}");
+                //Debug.LogError($"[GameManager] Token refresh failed: {err}");
             }
         );
 
@@ -452,7 +468,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            Debug.LogError("[GameManager] Token refresh failed, logging out");
+            //Debug.LogError("[GameManager] Token refresh failed, logging out");
             AppSession.Instance?.Logout();
             OnUnauthorized?.Invoke();
         }

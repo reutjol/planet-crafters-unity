@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -31,7 +32,7 @@ public class GameBootstrap : MonoBehaviour
         yield return LoadTemplates();
         if (!_templateService.IsReady)
         {
-            Debug.LogError("[GameBootstrap] Templates not ready after loading");
+            //Debug.LogError("[GameBootstrap] Templates not ready after loading");
             SceneLoader.Instance?.GoBack();
             yield break;
         }
@@ -40,7 +41,7 @@ public class GameBootstrap : MonoBehaviour
 
         if (GameManager.Instance == null)
         {
-            Debug.LogError("[GameBootstrap] GameManager.Instance is null!");
+            //Debug.LogError("[GameBootstrap] GameManager.Instance is null!");
             SceneLoader.Instance?.GoBack();
             yield break;
         }
@@ -72,9 +73,10 @@ public class GameBootstrap : MonoBehaviour
         GameManager.Instance.OnUnauthorized += unauthorizedHandler;
 
         bool needsFresh = cachedState != null && cachedState.targetScore == 0;
+        //Debug.Log($"[GameBootstrap] Requesting stage state (forceRefresh={needsFresh})...");
         GameManager.Instance.RequestPlanetStageState(forceRefresh: needsFresh);
 
-        float timeout = 60f;
+        float timeout = 180f;
         float elapsed = 0f;
 
         while (!stateLoaded && elapsed < timeout)
@@ -83,6 +85,8 @@ public class GameBootstrap : MonoBehaviour
             yield return null;
         }
 
+        //Debug.Log($"[GameBootstrap] Wait done — loaded={stateLoaded}, elapsed={elapsed:F1}s, error={loadError ?? "none"}");
+
         GameManager.Instance.OnPlanetStageStateLoaded -= _currentStateLoadHandler;
         GameManager.Instance.OnError -= errorHandler;
         GameManager.Instance.OnUnauthorized -= unauthorizedHandler;
@@ -90,14 +94,15 @@ public class GameBootstrap : MonoBehaviour
 
         if (!string.IsNullOrEmpty(loadError))
         {
-            Debug.LogError($"[GameBootstrap] GameManager error: {loadError}");
+            //Debug.LogError($"[GameBootstrap] GameManager error: {loadError}");
             SceneLoader.Instance?.GoBack();
             yield break;
         }
 
         if (!stateLoaded || loadedState == null)
         {
-            Debug.LogError("[GameBootstrap] Failed to load stage state — timed out or null");
+            //Debug.LogError("[GameBootstrap] Failed to load stage state — timed out or null");
+            GameManager.Instance?.ClearCache();
             SceneLoader.Instance?.GoBack();
             yield break;
         }
@@ -108,10 +113,10 @@ public class GameBootstrap : MonoBehaviour
 
     private bool ValidateDependencies()
     {
-        if (_templateService == null) { Debug.LogError("[GameBootstrap] templateService is null"); return false; }
-        if (_tileFactory == null)     { Debug.LogError("[GameBootstrap] tileFactory is null"); return false; }
-        if (_handController == null)  { Debug.LogError("[GameBootstrap] handController is null"); return false; }
-        if (_mapController == null)   { Debug.LogError("[GameBootstrap] mapController is null"); return false; }
+        if (_templateService == null) { /*Debug.LogError("[GameBootstrap] templateService is null");*/ return false; }
+        if (_tileFactory == null)     { /*Debug.LogError("[GameBootstrap] tileFactory is null");*/ return false; }
+        if (_handController == null)  { /*Debug.LogError("[GameBootstrap] handController is null");*/ return false; }
+        if (_mapController == null)   { /*Debug.LogError("[GameBootstrap] mapController is null");*/ return false; }
 
         if (_scoreDisplay == null)
             _scoreDisplay = FindObjectOfType<ScoreDisplay>(true);
@@ -128,10 +133,10 @@ public class GameBootstrap : MonoBehaviour
     {
         if (_isInitialized)
         {
-            Debug.LogWarning("[GameBootstrap] Already initialized, skipping");
+            //Debug.LogWarning("[GameBootstrap] Already initialized, skipping");
             return;
         }
-
+        //Debug.Log($"[GameBootstrap] InitializeGameplay — hand={state?.hand?.tilesInHand?.Count ?? 0}, deck={state?.deck?.remainingTiles?.Count ?? 0}, map={state?.map?.placedTiles?.Count ?? 0}");
         if (_gameConfig == null)
             _gameConfig = Resources.Load<GameConfig>("GameConfig");
 
@@ -143,6 +148,7 @@ public class GameBootstrap : MonoBehaviour
 
         _mapController.OnStageCompleted += HandleStageCompleted;
         _mapController.OnStageCompletedWithCoins += HandleStageCompletedWithCoins;
+        _mapController.OnAvatarsUnlocked += HandleAvatarsUnlocked;
         _handController.OnHandAndDeckEmpty += HandleGameOver;
 
         _mapController.ApplyServerState(state);
@@ -198,6 +204,15 @@ public class GameBootstrap : MonoBehaviour
             GameManager.Instance.ClearCache();
     }
 
+    private void HandleAvatarsUnlocked(List<string> avatarIds)
+    {
+        if (avatarIds == null || avatarIds.Count == 0) return;
+        var notifications = new List<UnlockedAchievementDto>();
+        foreach (var id in avatarIds)
+            notifications.Add(new UnlockedAchievementDto { id = id, title = "New Avatar Unlocked!", rewardType = "avatar", rewardAmount = 0 });
+        AchievementNotifier.Notify(notifications);
+    }
+
     private void OnDestroy()
     {
         if (_currentStateLoadHandler != null && GameManager.Instance != null)
@@ -210,6 +225,7 @@ public class GameBootstrap : MonoBehaviour
         {
             _mapController.OnStageCompleted -= HandleStageCompleted;
             _mapController.OnStageCompletedWithCoins -= HandleStageCompletedWithCoins;
+            _mapController.OnAvatarsUnlocked -= HandleAvatarsUnlocked;
         }
 
         if (_handController != null)
